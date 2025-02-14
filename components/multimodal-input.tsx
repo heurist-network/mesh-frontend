@@ -206,6 +206,7 @@ function PureMultimodalInput({
         className="fixed -top-4 -left-4 size-0.5 opacity-0 pointer-events-none"
         ref={fileInputRef}
         multiple
+        accept="image/jpeg, image/png"
         onChange={handleFileChange}
         tabIndex={-1}
       />
@@ -242,7 +243,11 @@ function PureMultimodalInput({
         rows={2}
         autoFocus
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+          if (
+            event.key === 'Enter' &&
+            !event.shiftKey &&
+            !event.nativeEvent.isComposing
+          ) {
             event.preventDefault();
 
             if (isLoading) {
