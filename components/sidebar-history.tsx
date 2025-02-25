@@ -150,8 +150,11 @@ export const ChatItem = memo(PureChatItem, (prevProps, nextProps) => {
 
 export function SidebarHistory({ user }: { user: User | undefined }) {
   const { setOpenMobile } = useSidebar();
-  const { id } = useParams();
   const pathname = usePathname();
+  // when starting a new chat from the root path, the `useParams` hook doesn't detect the new chat id
+  // so we fallback to extracting the id from the pathname, fixing highlighting the new chat in the sidebar
+  const params = useParams();
+  const id = params.id ?? pathname.split('/').pop();
   const {
     data: history,
     isLoading,

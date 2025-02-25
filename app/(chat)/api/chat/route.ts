@@ -19,12 +19,12 @@ import {
   getMostRecentUserMessage,
   sanitizeResponseMessages,
 } from '@/lib/utils';
+import { getAvailableTools, initializeTools } from '@/lib/ai/tools/registry';
 
 import { generateTitleFromUserMessage } from '../../actions';
-import { createDocument } from '@/lib/ai/tools/create-document';
-import { updateDocument } from '@/lib/ai/tools/update-document';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
-import { getWeather } from '@/lib/ai/tools/get-weather';
+
+// initialize tools on server side (no ui configs needed)
+initializeTools();
 
 export const maxDuration = 60;
 
@@ -60,7 +60,21 @@ export async function POST(request: Request) {
   });
 
   return createDataStreamResponse({
-    execute: (dataStream) => {
+    execute: async (dataStream) => {
+      const availableTools = getAvailableTools();
+      const tools = {} as Record<string, any>;
+
+      for (const entry of availableTools) {
+        try {
+          tools[entry.config.name] = await entry.toolFn({
+            session,
+            dataStream,
+          });
+        } catch (error) {
+          console.error(`Error initializing tool ${entry.config.name}:`, error);
+        }
+      }
+
       const result = streamText({
         model: myProvider.languageModel(selectedChatModel),
         system: systemPrompt({ selectedChatModel }),
@@ -69,23 +83,10 @@ export async function POST(request: Request) {
         experimental_activeTools:
           selectedChatModel === 'chat-model-reasoning'
             ? []
-            : [
-                'getWeather',
-                'createDocument',
-                'updateDocument',
-                'requestSuggestions',
-              ],
+            : Object.keys(tools),
         experimental_transform: smoothStream({ chunking: 'word' }),
         experimental_generateMessageId: generateUUID,
-        tools: {
-          getWeather,
-          createDocument: createDocument({ session, dataStream }),
-          updateDocument: updateDocument({ session, dataStream }),
-          requestSuggestions: requestSuggestions({
-            session,
-            dataStream,
-          }),
-        },
+        tools,
         onFinish: async ({ response, reasoning }) => {
           if (session.user?.id) {
             try {
@@ -106,7 +107,7 @@ export async function POST(request: Request) {
                 }),
               });
             } catch (error) {
-              console.error('Failed to save chat');
+              console.error('Failed to save chat:', error);
             }
           }
         },
@@ -116,12 +117,15 @@ export async function POST(request: Request) {
         },
       });
 
+      result.consumeStream();
+
       result.mergeIntoDataStream(dataStream, {
         sendReasoning: true,
       });
     },
-    onError: () => {
-      return 'Oops, an error occured!';
+    onError: (error) => {
+      console.error('Stream error:', error);
+      return 'Oops, an error occurred!';
     },
   });
 }
