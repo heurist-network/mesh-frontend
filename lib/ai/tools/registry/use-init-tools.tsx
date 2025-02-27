@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Weather } from '@/components/weather';
 import { CoinGeckoCryptoPrice } from '@/components/coingecko-crypto-price';
 import { DocumentPreview } from '@/components/document-preview';
 import { DocumentToolCall, DocumentToolResult } from '@/components/document';
 import type { ArtifactKind } from '@/components/artifact';
-import { initializeTools } from './registry';
+import { initializeTools, subscribe, getRegistrySnapshot } from './registry';
 import type { WeatherResult } from '../get-weather';
 import type { ToolConfig } from './types';
 import { CoinGeckoTrendingCoins } from '@/components/coingecko-trending-coins';
@@ -95,7 +95,11 @@ const uiConfigs = {
 } satisfies Record<string, Pick<ToolConfig, 'renderResult' | 'renderLoading'>>;
 
 export function useInitTools() {
-  useEffect(() => {
-    initializeTools(uiConfigs);
-  }, []);
+  // initialize tools once on mount
+  useSyncExternalStore(subscribe, getRegistrySnapshot, getRegistrySnapshot);
+
+  // initialize tools on first render
+  initializeTools(uiConfigs);
+
+  return true;
 }

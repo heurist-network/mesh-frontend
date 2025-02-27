@@ -13,6 +13,9 @@ const registry: ToolRegistry = {
   agent: {},
 };
 
+let isInitialized = false;
+const listeners = new Set<() => void>();
+
 // register a tool in the registry
 export function registerTool(category: ToolCategory, entry: ToolRegistryEntry) {
   registry[category][entry.config.name] = entry;
@@ -40,6 +43,8 @@ export function getTool(name: string): ToolRegistryEntry | undefined {
 
 // initialize tools with optional ui configs
 export function initializeTools(uiConfigs?: Record<string, any>) {
+  if (isInitialized) return;
+
   Object.entries(tools).forEach(([name, tool]) => {
     const config = uiConfigs ? { ...tool, ...uiConfigs[name] } : tool;
     registerTool(
@@ -47,4 +52,17 @@ export function initializeTools(uiConfigs?: Record<string, any>) {
       wrapTool((config as ToolConfig).toolFn ?? null, config),
     );
   });
+
+  isInitialized = true;
+  listeners.forEach((listener) => listener());
+}
+
+// Registry subscription methods
+export function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+export function getRegistrySnapshot() {
+  return isInitialized;
 }
