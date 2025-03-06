@@ -61,7 +61,17 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       <SidebarContent>
         <SidebarHistory user={user} />
       </SidebarContent>
-      <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
+      <SidebarFooter className="px-2 pb-4">
+        {!user ? (
+          <Link href="/login" onClick={() => setOpenMobile(false)}>
+            <Button className="w-full h-10 text-base font-medium bg-white transition-colors hover:bg-white/90 text-black hover:text-black/90 shadow-sm">
+              Sign in
+            </Button>
+          </Link>
+        ) : (
+          <SidebarUserNav user={user} />
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 }

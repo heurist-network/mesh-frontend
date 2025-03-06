@@ -43,6 +43,8 @@ function PureMultimodalInput({
   append,
   handleSubmit,
   className,
+  disabled = false,
+  setShowLoginAnimation,
 }: {
   chatId: string;
   input: string;
@@ -64,6 +66,8 @@ function PureMultimodalInput({
     chatRequestOptions?: ChatRequestOptions,
   ) => void;
   className?: string;
+  disabled?: boolean;
+  setShowLoginAnimation?: (value: boolean) => void;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
@@ -209,6 +213,7 @@ function PureMultimodalInput({
         accept="image/jpeg, image/png"
         onChange={handleFileChange}
         tabIndex={-1}
+        disabled={disabled}
       />
 
       {(attachments.length > 0 || uploadQueue.length > 0) && (
@@ -252,6 +257,9 @@ function PureMultimodalInput({
 
             if (isLoading) {
               toast.error('Please wait for the model to finish its response!');
+            } else if (disabled) {
+              setShowLoginAnimation?.(true);
+              setTimeout(() => setShowLoginAnimation?.(false), 5000);
             } else {
               submitForm();
             }
@@ -260,7 +268,12 @@ function PureMultimodalInput({
       />
 
       <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
-        <AttachmentsButton fileInputRef={fileInputRef} isLoading={isLoading} />
+        <AttachmentsButton
+          fileInputRef={fileInputRef}
+          isLoading={isLoading}
+          disabled={disabled}
+          setShowLoginAnimation={setShowLoginAnimation}
+        />
       </div>
 
       <div className="absolute bottom-0 right-0 p-2 w-fit flex flex-row justify-end">
@@ -271,6 +284,8 @@ function PureMultimodalInput({
             input={input}
             submitForm={submitForm}
             uploadQueue={uploadQueue}
+            disabled={disabled}
+            setShowLoginAnimation={setShowLoginAnimation}
           />
         )}
       </div>
@@ -292,18 +307,32 @@ export const MultimodalInput = memo(
 function PureAttachmentsButton({
   fileInputRef,
   isLoading,
+  disabled,
+  setShowLoginAnimation,
 }: {
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   isLoading: boolean;
+  disabled?: boolean;
+  setShowLoginAnimation?: (value: boolean) => void;
 }) {
   return (
     <Button
-      className="rounded-md rounded-bl-lg p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200"
+      className={cx(
+        'rounded-md rounded-bl-lg p-[7px] h-fit dark:border-zinc-700 hover:dark:bg-zinc-900 hover:bg-zinc-200',
+        {
+          'opacity-50': isLoading,
+          'cursor-pointer': !isLoading,
+        },
+      )}
       onClick={(event) => {
         event.preventDefault();
+        if (disabled && setShowLoginAnimation) {
+          setShowLoginAnimation(true);
+          setTimeout(() => setShowLoginAnimation(false), 5000);
+          return;
+        }
         fileInputRef.current?.click();
       }}
-      disabled={isLoading}
       variant="ghost"
     >
       <PaperclipIcon size={14} />
@@ -340,19 +369,27 @@ function PureSendButton({
   submitForm,
   input,
   uploadQueue,
+  disabled = false,
+  setShowLoginAnimation,
 }: {
   submitForm: () => void;
   input: string;
   uploadQueue: Array<string>;
+  disabled?: boolean;
+  setShowLoginAnimation?: (value: boolean) => void;
 }) {
   return (
     <Button
       className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
       onClick={(event) => {
         event.preventDefault();
+        if (disabled && setShowLoginAnimation) {
+          setShowLoginAnimation(true);
+          setTimeout(() => setShowLoginAnimation(false), 5000);
+          return;
+        }
         submitForm();
       }}
-      disabled={input.length === 0 || uploadQueue.length > 0}
     >
       <ArrowUpIcon size={14} />
     </Button>

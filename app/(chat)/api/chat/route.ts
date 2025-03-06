@@ -39,13 +39,23 @@ export async function POST(request: Request) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.id) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   const userMessage = getMostRecentUserMessage(messages);
 
   if (!userMessage) {
-    return new Response('No user message found', { status: 400 });
+    return new Response(JSON.stringify({ error: 'No user message found' }), {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   const chat = await getChatById({ id });

@@ -15,6 +15,7 @@ export const authConfig = {
       const isOnChat = nextUrl.pathname.startsWith('/');
       const isOnRegister = nextUrl.pathname.startsWith('/register');
       const isOnLogin = nextUrl.pathname.startsWith('/login');
+      const isOnApi = nextUrl.pathname.startsWith('/api');
 
       if (isLoggedIn && (isOnLogin || isOnRegister)) {
         return Response.redirect(new URL('/', nextUrl as unknown as URL));
@@ -24,9 +25,16 @@ export const authConfig = {
         return true; // Always allow access to register and login pages
       }
 
-      if (isOnChat) {
+      // Allow unauthenticated users to view the chat page
+      if (isOnChat && !isOnApi) {
+        return true;
+      }
+
+      // API routes still require authentication
+      if (isOnApi) {
         if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
+        // Don't redirect, just return 401 (auth protection will be done in API handlers)
+        return isLoggedIn;
       }
 
       if (isLoggedIn) {
