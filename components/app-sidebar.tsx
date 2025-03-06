@@ -13,10 +13,13 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { Separator } from './ui/separator';
+import { Users } from 'lucide-react';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -35,7 +38,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               className="flex flex-row gap-3 items-center"
             >
               <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
+                Heurist
               </span>
             </Link>
             <Tooltip>
@@ -56,11 +59,25 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               <TooltipContent align="end">New Chat</TooltipContent>
             </Tooltip>
           </div>
+
+          <Link
+            href="/agents"
+            onClick={() => {
+              setOpenMobile(false);
+            }}
+            className="flex items-center font-medium"
+          >
+            <SidebarMenuButton>
+              <Users /> Agents Store
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <Separator />
+      <SidebarContent className="custom-scrollbar">
         <SidebarHistory user={user} />
       </SidebarContent>
+      <Separator />
       <SidebarFooter className="px-2 pb-4">
         {!user ? (
           <Link href="/login" onClick={() => setOpenMobile(false)}>
