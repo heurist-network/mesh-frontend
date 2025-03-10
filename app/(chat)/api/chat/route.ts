@@ -63,6 +63,10 @@ export async function POST(request: Request) {
   if (!chat) {
     const title = await generateTitleFromUserMessage({ message: userMessage });
     await saveChat({ id, userId: session.user.id, title });
+  } else {
+    if (chat.userId !== session.user.id) {
+      return new Response('Unauthorized', { status: 401 });
+    }
   }
 
   await saveMessages({
