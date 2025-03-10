@@ -7,6 +7,10 @@ import {
   bitquerySolanaAgentTools,
 } from '../agents/bitquery-solana';
 import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
+import {
+  AlloraPricePredictionAgent,
+  alloraPricePredictionAgentTools,
+} from '../agents/allora-price-prediction';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -18,6 +22,10 @@ export const bitquerySolanaAgent = new BitquerySolanaAgent({
 
 export const dexScreenerAgent = new DexScreenerAgent({
   agentId: 'DexScreenerTokenInfoAgent',
+});
+
+export const alloraPricePredictionAgent = new AlloraPricePredictionAgent({
+  agentId: 'AlloraPricePredictionAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -109,6 +117,13 @@ const agentTools = {
     ...dexScreenerAgentTools.getTokenProfiles,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.getTokenProfiles,
+  },
+
+  // allora price prediction agent
+  getAlloraPrediction: {
+    ...alloraPricePredictionAgentTools.getAlloraPrediction,
+    category: 'agent' as const,
+    toolFn: alloraPricePredictionAgent.getAlloraPrediction,
   },
 } satisfies Record<string, ToolConfig>;
 

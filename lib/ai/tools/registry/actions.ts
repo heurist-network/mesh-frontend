@@ -10,6 +10,7 @@ import {
   coinGeckoAgent,
   bitquerySolanaAgent,
   dexScreenerAgent,
+  alloraPricePredictionAgent,
 } from '../configs';
 
 const agentTools = {
@@ -28,6 +29,9 @@ const agentTools = {
   getSpecificPairInfo: dexScreenerAgent.getSpecificPairInfo,
   getTokenPairs: dexScreenerAgent.getTokenPairs,
   getTokenProfiles: dexScreenerAgent.getTokenProfiles,
+
+  // allora price prediction tools
+  getAlloraPrediction: alloraPricePredictionAgent.getAlloraPrediction,
 };
 
 const documentTools = {
