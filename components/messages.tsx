@@ -5,6 +5,7 @@ import { Overview } from './overview';
 import { memo } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import equal from 'fast-deep-equal';
+import { AgentItem } from './agent-item';
 
 interface MessagesProps {
   chatId: string;
@@ -40,7 +41,7 @@ function PureMessages({
         messages.length > 0 ? 'custom-scrollbar' : 'scrollbar-none'
       }`}
     >
-      {messages.length === 0 && <Overview />}
+      {messages.length === 0 && <AgentItem />}
 
       {messages.map((message, index) => (
         <PreviewMessage
