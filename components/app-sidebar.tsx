@@ -24,8 +24,7 @@ import { Users } from 'lucide-react';
 import Image from 'next/image';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
-  const router = useRouter();
-  const { setOpenMobile, state } = useSidebar();
+  const { setOpenMobile, state, isMobile } = useSidebar();
 
   return (
     <Sidebar className="group-data-[side=left]:border-r-0" collapsible="icon">
@@ -35,7 +34,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       <SidebarHeader>
         <SidebarMenu>
           <div className="flex flex-row h-10 justify-between items-center">
-            {state === 'expanded' &&  <Link
+            {state === 'expanded'  &&  <Link
                 href="/"
                 onClick={() => {
                 setOpenMobile(false);

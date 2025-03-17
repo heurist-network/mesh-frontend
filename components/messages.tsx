@@ -6,6 +6,22 @@ import { memo } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import equal from 'fast-deep-equal';
 import { AgentItem } from './agent-item';
+import { Badge } from "./ui/badge"
+import { Button } from "@/components/ui/button"
+import { Users } from 'lucide-react';
+
+import { SidebarToggle } from './sidebar-toggle';
+import {
+  useSidebar,
+} from '@/components/ui/sidebar';
+
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 interface MessagesProps {
   chatId: string;
@@ -20,6 +36,7 @@ interface MessagesProps {
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
   isArtifactVisible: boolean;
+  isMobile: boolean;
 }
 
 function PureMessages({
@@ -29,18 +46,29 @@ function PureMessages({
   messages,
   setMessages,
   reload,
+  isMobile,
   isReadonly,
 }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
-
+  
   return (
     <div
       ref={messagesContainerRef}
-      className={`flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto pt-4 ${
+      className={`flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto p-4 ${
         messages.length > 0 ? 'custom-scrollbar' : 'scrollbar-none'
       }`}
     >
+      <div className="flex flex-row justify-left items-center">
+        <div className={`hidden max-md:block`}>
+          <SidebarToggle/>
+        </div>
+
+        <Button variant="secondary">
+          <Users className="w-4 h-4 mr-2" />
+          All Agents
+        </Button>
+      </div>
       {messages.length === 0 && <AgentItem />}
 
       {messages.map((message, index) => (

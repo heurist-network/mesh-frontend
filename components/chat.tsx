@@ -18,6 +18,9 @@ import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
+import {
+  useSidebar,
+} from '@/components/ui/sidebar';
 
 export function Chat({
   id,
@@ -62,6 +65,7 @@ export function Chat({
       toast.error('An error occurred, please try again!');
     },
   });
+  const { isMobile } = useSidebar();
 
   const { data: votes } = useSWR<Array<Vote>>(
     `/api/vote?chatId=${id}`,
@@ -70,7 +74,6 @@ export function Chat({
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
   const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
-
   const handleMessageSubmit = (
     event?: { preventDefault?: () => void },
     chatRequestOptions?: any,
@@ -86,18 +89,12 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh bg-background">
-        <ChatHeader
-          chatId={id}
-          selectedModelId={selectedChatModel}
-          selectedVisibilityType={selectedVisibilityType}
-          isReadonly={isReadonly}
-        />
-
+      <div className={`flex flex-col min-w-0 h-dvh bg-background ${isMobile ? 'pt-0' : 'pt-10'}`}>
         <Messages
           chatId={id}
           isLoading={isLoading}
           votes={votes}
+          isMobile={isMobile}
           messages={messages}
           setMessages={setMessages}
           reload={reload}
@@ -125,32 +122,6 @@ export function Chat({
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* <form
-          className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl relative"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleMessageSubmit(e);
-          }}
-        >
-          {!isReadonly && (
-            <MultimodalInput
-              chatId={id}
-              input={input}
-              setInput={setInput}
-              handleSubmit={handleMessageSubmit}
-              isLoading={isLoading}
-              stop={stop}
-              attachments={attachments}
-              setAttachments={setAttachments}
-              messages={messages}
-              setMessages={setMessages}
-              append={append}
-              disabled={!user}
-              setShowLoginAnimation={setShowLoginAnimation}
-            />
-          )}
-        </form> */}
       </div>
 
       <Artifact
