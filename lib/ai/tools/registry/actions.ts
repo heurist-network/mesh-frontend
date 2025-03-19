@@ -10,6 +10,7 @@ import {
   coinGeckoAgent,
   bitquerySolanaAgent,
   dexScreenerAgent,
+  exaSearchAgent,
 } from '../configs';
 
 const agentTools = {
@@ -28,6 +29,11 @@ const agentTools = {
   getSpecificPairInfo: dexScreenerAgent.getSpecificPairInfo,
   getTokenPairs: dexScreenerAgent.getTokenPairs,
   getTokenProfiles: dexScreenerAgent.getTokenProfiles,
+
+  // exa search tools
+  search: exaSearchAgent.search,
+  answer: exaSearchAgent.answer,
+  searchAndAnswer: exaSearchAgent.searchAndAnswer,
 };
 
 const documentTools = {

@@ -7,6 +7,7 @@ import {
   bitquerySolanaAgentTools,
 } from '../agents/bitquery-solana';
 import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
+import { ExaSearchAgent, exaSearchAgentTools } from '../agents/exa-search';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -18,6 +19,10 @@ export const bitquerySolanaAgent = new BitquerySolanaAgent({
 
 export const dexScreenerAgent = new DexScreenerAgent({
   agentId: 'DexScreenerTokenInfoAgent',
+});
+
+export const exaSearchAgent = new ExaSearchAgent({
+  agentId: 'ExaSearchAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -109,6 +114,23 @@ const agentTools = {
     ...dexScreenerAgentTools.getTokenProfiles,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.getTokenProfiles,
+  },
+
+  // exa search agent
+  search: {
+    ...exaSearchAgentTools.search,
+    category: 'agent' as const,
+    toolFn: exaSearchAgent.search,
+  },
+  answer: {
+    ...exaSearchAgentTools.answer,
+    category: 'agent' as const,
+    toolFn: exaSearchAgent.answer,
+  },
+  searchAndAnswer: {
+    ...exaSearchAgentTools.searchAndAnswer,
+    category: 'agent' as const,
+    toolFn: exaSearchAgent.searchAndAnswer,
   },
 } satisfies Record<string, ToolConfig>;
 
