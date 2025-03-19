@@ -10,7 +10,8 @@ import type {
 export const exaSearchAgentTools = {
   search: {
     name: 'exa_web_search',
-    description: 'Search for webpages related to a query using Exa',
+    description:
+      'Search for webpages related to a query. Returns a list of results including titles, snippets, and URLs using Exa.',
     parameters: z
       .object({
         search_term: z.string().describe('The search term'),
@@ -23,7 +24,8 @@ export const exaSearchAgentTools = {
   },
   answer: {
     name: 'exa_answer_question',
-    description: "Get a direct answer to a question using Exa's answer API",
+    description:
+      "Get a direct, concise, factual answer to a specific question using Exa's answer API.",
     parameters: z
       .object({
         question: z.string().describe('The question to answer'),
@@ -33,7 +35,7 @@ export const exaSearchAgentTools = {
   searchAndAnswer: {
     name: 'exa_search_and_answer',
     description:
-      'Perform both search and answer operations for a query using Exa',
+      'Combines search and answer functionalities - searches the web for a topic, then synthesizes information into a direct answer using Exa.',
     parameters: z
       .object({
         topic: z.string().describe('The topic to search for and answer'),
