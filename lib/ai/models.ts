@@ -15,14 +15,14 @@ const openrouter = createOpenAICompatible({
 
 export const myProvider = customProvider({
   languageModels: {
-    'chat-model-small': openrouter('openai/gpt-4o-mini'),
-    'chat-model-large': openrouter('openai/gpt-4o'),
+    'chat-model-small': openrouter('openai/gpt-4o-mini') as any,
+    'chat-model-large': openrouter('openai/gpt-4o') as any,
     'chat-model-reasoning': wrapLanguageModel({
-      model: openrouter('deepseek/deepseek-r1'),
+      model: openrouter('deepseek/deepseek-r1') as any,
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
-    'title-model': openrouter('openai/gpt-4-turbo'),
-    'artifact-model': openrouter('openai/gpt-4o-mini'),
+    'title-model': openrouter('openai/gpt-4-turbo') as any,
+    'artifact-model': openrouter('openai/gpt-4o-mini') as any,
   },
 });
 
