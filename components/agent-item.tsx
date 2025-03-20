@@ -64,14 +64,15 @@ const mockAgents: Agent[] = [
   },
 ];
 
-// 模拟API获取函数
+// 修改API获取函数，使用服务端请求而非前端直接请求
 const fetchAgents = async (): Promise<Agent[]> => {
   try {
-    const response = await fetch(
-      "https://mesh.heurist.ai/mesh_agents_metadata.json"
-    );
+    // 替换为通过自己的API端点请求数据
+    const response = await fetch("/api/agents");
     const data = await response.json();
     console.log("得到数据 -- == --", data);
+
+    // 如果您的API返回格式与原始格式相同，则保持以下处理逻辑
     const agents = data.agents;
 
     // 将获取的数据转换为Agent对象数组
@@ -117,7 +118,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
   imageSrc,
 }) => {
   return (
-    <Card className="p-1 border-none h-full ">
+    <Card className="p-1 border-none h-full max-w-[500px]">
       <div className="rounded-md border-solid h-full flex flex-col justify-between border text-white overflow-hidden">
         <CardContent className="p-3">
           {/* 头部：头像、名称、作者和标签 */}
@@ -278,9 +279,13 @@ export const AgentItem: FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-10">
-      <Tabs defaultValue="all agent" className="w-full ">
-        <TabsList className="grid grid-cols-2 w-[400px]">
+    <div className="flex flex-col gap-4 p-2 md:p-10 pt-14">
+      <div className="absolute top-2 left-2 flex md:hidden flex-row justify-end items-center">
+        <SidebarToggle />
+      </div>
+
+      <Tabs defaultValue="all agent" className="w-full p-2">
+        <TabsList className="grid grid-cols-2 w-full md:w-[300px]">
           <TabsTrigger value="all agent">All Agents</TabsTrigger>
           <TabsTrigger value="recommended">Recommended</TabsTrigger>
         </TabsList>

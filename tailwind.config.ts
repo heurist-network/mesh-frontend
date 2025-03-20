@@ -8,13 +8,6 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-      sm: "576px",
-      md: "960px",
-      lg: "1024px",
-      xl: "1440px",
-      "2xl": "1680px",
-    },
     fontFamily: {
       sans: ["geist"],
       mono: ["geist-mono"],
