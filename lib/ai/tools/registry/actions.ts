@@ -33,7 +33,6 @@ const agentTools = {
   // exa search tools
   search: exaSearchAgent.search,
   answer: exaSearchAgent.answer,
-  searchAndAnswer: exaSearchAgent.searchAndAnswer,
 };
 
 const documentTools = {

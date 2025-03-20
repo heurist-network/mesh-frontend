@@ -1,11 +1,7 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import { BaseAgent } from '../base';
-import type {
-  SearchResponse,
-  AnswerResponse,
-  SearchAndAnswerResponse,
-} from './types';
+import type { SearchResponse, AnswerResponse } from './types';
 
 export const exaSearchAgentTools = {
   search: {
@@ -32,16 +28,6 @@ export const exaSearchAgentTools = {
       })
       .required(),
   },
-  searchAndAnswer: {
-    name: 'exa_search_and_answer',
-    description:
-      'Combines search and answer functionalities - searches the web for a topic, then synthesizes information into a direct answer using Exa.',
-    parameters: z
-      .object({
-        topic: z.string().describe('The topic to search for and answer'),
-      })
-      .required(),
-  },
 } as const;
 
 export class ExaSearchAgent extends BaseAgent {
@@ -63,19 +49,6 @@ export class ExaSearchAgent extends BaseAgent {
         return this.makeRequest<AnswerResponse>('exa_answer_question', {
           question,
         });
-      },
-    });
-
-  searchAndAnswer = () =>
-    tool({
-      ...exaSearchAgentTools.searchAndAnswer,
-      execute: async ({ topic }) => {
-        return this.makeRequest<SearchAndAnswerResponse>(
-          'exa_search_and_answer',
-          {
-            topic,
-          },
-        );
       },
     });
 }

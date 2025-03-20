@@ -19,9 +19,3 @@ export interface AnswerResponse {
   answer: string;
   sources: string[];
 }
-
-export interface SearchAndAnswerResponse {
-  search_results: SearchResult[];
-  answer: string;
-  sources: string[];
-}

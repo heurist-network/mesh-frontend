@@ -127,11 +127,6 @@ const agentTools = {
     category: 'agent' as const,
     toolFn: exaSearchAgent.answer,
   },
-  searchAndAnswer: {
-    ...exaSearchAgentTools.searchAndAnswer,
-    category: 'agent' as const,
-    toolFn: exaSearchAgent.searchAndAnswer,
-  },
 } satisfies Record<string, ToolConfig>;
 
 export const tools = {
