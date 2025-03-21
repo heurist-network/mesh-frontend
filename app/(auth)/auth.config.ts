@@ -1,9 +1,9 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   pages: {
-    signIn: '/login',
-    newUser: '/',
+    signIn: "/login",
+    newUser: "/",
   },
   providers: [
     // added later in auth.ts since it requires bcrypt which is only compatible with Node.js
@@ -12,13 +12,14 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnChat = nextUrl.pathname.startsWith('/');
-      const isOnRegister = nextUrl.pathname.startsWith('/register');
-      const isOnLogin = nextUrl.pathname.startsWith('/login');
-      const isOnApi = nextUrl.pathname.startsWith('/api');
+      const isOnChat = nextUrl.pathname.startsWith("/");
+      const isOnRegister = nextUrl.pathname.startsWith("/register");
+      const isOnLogin = nextUrl.pathname.startsWith("/login");
+      const isOnApi = nextUrl.pathname.startsWith("/api");
+      const isOnAgentsApi = nextUrl.pathname.startsWith("/api/agents");
 
       if (isLoggedIn && (isOnLogin || isOnRegister)) {
-        return Response.redirect(new URL('/', nextUrl as unknown as URL));
+        return Response.redirect(new URL("/", nextUrl as unknown as URL));
       }
 
       if (isOnRegister || isOnLogin) {
@@ -30,15 +31,19 @@ export const authConfig = {
         return true;
       }
 
-      // API routes still require authentication
+      // Allow unauthenticated users to view the /api/agents 路由
+      if (isOnAgentsApi) {
+        return true;
+      }
+
+      // 其他 API 路由仍然需要认证
       if (isOnApi) {
         if (isLoggedIn) return true;
-        // Don't redirect, just return 401 (auth protection will be done in API handlers)
         return isLoggedIn;
       }
 
       if (isLoggedIn) {
-        return Response.redirect(new URL('/', nextUrl as unknown as URL));
+        return Response.redirect(new URL("/", nextUrl as unknown as URL));
       }
 
       return true;
