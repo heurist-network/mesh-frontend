@@ -39,33 +39,8 @@ export interface Agent {
   recommended?: boolean;
 }
 
-// 模拟数据
-const mockAgents: Agent[] = [
-  {
-    id: "1",
-    name: "区块链猎手",
-    author: "Heurist",
-    description:
-      "A cutting-edge AI agent designed to scour blockchain networks for emerging memecoins. Leveraging real-time data analysis, it identifies potential opportunities before they gain mainstream attention.",
-    tags: ["区块链", "分析"],
-    imageSrc: "/images/agents/blockchain.png",
-    recommended: true,
-  },
-  {
-    id: "2",
-    name: "交易策略师",
-    author: "Heurist",
-    description:
-      "专注于加密货币市场分析的AI代理，实时追踪价格动向并提供交易建议，结合技术分析和市场情绪指标。",
-
-    tags: ["交易", "策略"],
-    imageSrc: "/images/agents/trading.png",
-    recommended: true,
-  },
-];
-
 // 修改API获取函数，使用服务端请求而非前端直接请求
-const fetchAgents = async (): Promise<Agent[]> => {
+const fetchAgents = async (): Promise<any[]> => {
   try {
     // 替换为通过自己的API端点请求数据
     const response = await fetch("/api/agents");
@@ -81,16 +56,16 @@ const fetchAgents = async (): Promise<Agent[]> => {
       const agentsArray = Object.keys(agents).map((key) => {
         const agent = agents[key];
         // 确保metadata存在，并包含所需的字段
-        const metadata = agent.metadata || {};
-        return {
+        const metadata = {
           id: key,
-          name: metadata.name || "Unnamed Agent",
-          author: metadata.author || "Heurist",
-          description: metadata.description || "",
-          tags: Array.isArray(metadata.tags) ? metadata.tags : [],
-          imageSrc: metadata.imageSrc,
-          recommended: metadata.recommended || false,
-        } as Agent;
+          name: "Unnamed Agent",
+          author: "Heurist",
+          description: "",
+          tags: [],
+          imageSrc: "",
+          recommended: false,
+        };
+        return Object.assign(metadata, agent.metadata);
       });
 
       const filteredAgents = agentsArray.filter(
@@ -165,7 +140,9 @@ const AgentItemCard: FC<AgentItemProps> = ({
           <div className="flex flex-1 gap-4 text-xs items-center">
             <div className="flex-grow-[4]">
               <p className="text-muted-foreground">Price per Use</p>
-              <p className="font-medium text-foreground">{price} {price == 1 ? "Credit" : "Credits"}</p>
+              <p className="font-medium text-foreground">
+                {price} {price == 1 ? "Credit" : "Credits"}
+              </p>
             </div>
 
             {/* 第一个分隔线 */}
@@ -220,8 +197,8 @@ const AgentItemCard: FC<AgentItemProps> = ({
 
 // 主组件 - 代理项容器
 export const AgentItem: FC = () => {
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [recommendedAgents, setRecommendedAgents] = useState<Agent[]>([]);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [recommendedAgents, setRecommendedAgents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { setSelectedAgent } = useAgent();
@@ -243,7 +220,7 @@ export const AgentItem: FC = () => {
   }, []);
 
   // 修改handleAgentClick函数
-  const handleAgentClick = async (agent: Agent) => {
+  const handleAgentClick = async (agent: any) => {
     const chatId = generateUUID();
     try {
       // 创建新的聊天记录
@@ -262,7 +239,7 @@ export const AgentItem: FC = () => {
       if (!response.ok) {
         throw new Error("Failed to create chat");
       }
-
+      console.log("agent --", agent);
       // 跳转到聊天页面
       // 新增状态存储
       setSelectedAgent(agent);

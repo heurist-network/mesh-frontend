@@ -1,10 +1,9 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import type { Agent } from "@/components/agent-item";
 
 type AgentContextType = {
-  selectedAgent: Agent | null;
-  setSelectedAgent: (agent: Agent | null) => void;
+  selectedAgent: any | null;
+  setSelectedAgent: (agent: any | null) => void;
 };
 
 const AgentContext = createContext<AgentContextType>({
@@ -13,7 +12,7 @@ const AgentContext = createContext<AgentContextType>({
 });
 
 export const AgentProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<any | null>(null);
   return (
     <AgentContext.Provider value={{ selectedAgent, setSelectedAgent }}>
       {children}

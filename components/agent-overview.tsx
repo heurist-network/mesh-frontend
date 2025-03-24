@@ -22,7 +22,7 @@ export const Overview = () => {
           By {selectedAgent?.author}
         </div> */}
         <h1 className="text-2xl font-semibold text-bold text-card-foreground">
-          What can I do for you?
+          {selectedAgent?.greeting_message || "What can I do for you?"}
         </h1>
       </div>
     </motion.div>

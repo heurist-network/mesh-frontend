@@ -7,6 +7,9 @@ import { memo } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
+import { ArrowRight } from "lucide-react";
+
+import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
 
 interface SuggestedActionsProps {
   chatId: string;
@@ -39,7 +42,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
     <div className="pb-4">
       <div
         className={`grid gap-4 w-full mb-2 ${
-          suggestedActions.length > 3 ? "grid-cols-2" : "grid-cols-3"
+          suggestedActions.length > 3 ? "grid-cols-1" : "grid-cols-1"
         }`}
       >
         {suggestedActions.map((suggestedAction, index) => (
@@ -52,7 +55,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
             className={index > 1 ? "hidden sm:block" : "block"}
           >
             <Card
-              className="p-1 border-none h-full rounded-2xl cursor-pointer"
+              className="p-1 border-none h-full rounded-2xl cursor-pointer group"
               onClick={async () => {
                 // 直接调用append函数发送消息，不进行页面跳转
                 append({
@@ -64,14 +67,16 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
               <div className="rounded-xl border-solid h-full flex flex-col justify-between border text-white overflow-hidden">
                 <CardContent className="p-3">
                   {/* 头部：头像、名称、作者和标签 */}
-                  <div className="flex flex-col mb-2">
+                  <div className="flex justify-between items-center">
                     <h2 className="text-lg font-medium">
-                      {suggestedAction.title}
+                      {suggestedAction.action}
                     </h2>
-
-                    <p className="text-xs text-muted-foreground">
-                      {suggestedAction.label}
-                    </p>
+                    <div>
+                      <ArrowRight
+                        size={20}
+                        className="text-muted-foreground text-2xl group-hover:text-foreground"
+                      />
+                    </div>
                   </div>
                 </CardContent>
               </div>

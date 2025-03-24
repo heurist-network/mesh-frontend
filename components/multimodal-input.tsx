@@ -29,6 +29,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { SuggestedActions } from "./agent-suggested-actions";
 import equal from "fast-deep-equal";
+import { ArrowUp } from "lucide-react";
 
 function PureMultimodalInput({
   chatId,
@@ -241,7 +242,7 @@ function PureMultimodalInput({
 
       <Textarea
         ref={textareaRef}
-        placeholder="Ask anything"
+        placeholder="Ask anything..."
         value={input}
         onChange={handleInput}
         className={cx(
@@ -383,7 +384,7 @@ function PureSendButton({
 }) {
   return (
     <Button
-      className="rounded-full p-1.5 h-fit border dark:border-zinc-600"
+      className="rounded-md p-1.5 h-fit border bg-secondary text-white"
       onClick={(event) => {
         event.preventDefault();
         if (disabled && setShowLoginAnimation) {
@@ -394,7 +395,7 @@ function PureSendButton({
         submitForm();
       }}
     >
-      <ArrowUpIcon size={14} />
+      <ArrowUp />
     </Button>
   );
 }
