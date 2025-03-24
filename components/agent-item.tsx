@@ -110,7 +110,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
   name = "Name",
   author = "Heurist",
   description = "A cutting-edge AI agent designed to scour blockchain networks for emerging memecoins. Leveraging real-time data analysis, it identifies potential opportunities before they gain mainstream attention.",
-  price = 2.2,
+  price = 1,
   usageCount = 1123329,
   apiCount = 2,
   tags = ["Tag", "Tag"],
@@ -164,8 +164,8 @@ const AgentItemCard: FC<AgentItemProps> = ({
         <CardFooter className="m-3 p-3 rounded-lg flex justify-between items-center bg-muted">
           <div className="flex flex-1 gap-4 text-xs items-center">
             <div className="flex-grow-[4]">
-              <p className="text-muted-foreground">Price per Token</p>
-              <p className="font-medium text-foreground">{price} Credits</p>
+              <p className="text-muted-foreground">Price per Use</p>
+              <p className="font-medium text-foreground">{price} {price == 1 ? "Credit" : "Credits"}</p>
             </div>
 
             {/* 第一个分隔线 */}
