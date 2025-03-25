@@ -1,17 +1,16 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { generateUUID } from "@/lib/utils";
-import { SidebarToggle } from "./sidebar-toggle";
-import { Users } from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useAgent } from "@/lib/context/agent-context";
+import { generateUUID } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Trophy, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FC, useEffect, useState } from "react";
+import { SidebarToggle } from "./sidebar-toggle";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -100,7 +99,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-2">
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Avatar className="w-10 h-10 rounded-lg bg-blue-600">
+                <Avatar className="size-10 rounded-lg bg-blue-600">
                   <AvatarImage src={imageSrc} />
                   <AvatarFallback className="rounded-lg bg-blue-600 text-white">
                     {name.charAt(0)}
@@ -138,7 +137,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
         {/* 底部：价格、使用次数、API 和箭头按钮 */}
         <CardFooter className="m-3 p-3 rounded-lg flex justify-between items-center bg-muted">
           <div className="flex flex-1 gap-4 text-xs items-center">
-            <div className="flex-grow-[4]">
+            <div className="grow-[4]">
               <p className="text-muted-foreground">Price per Use</p>
               <p className="font-medium text-foreground">
                 {price} {price == 1 ? "Credit" : "Credits"}
@@ -148,7 +147,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
             {/* 第一个分隔线 */}
             <div className="h-8 w-px bg-secondary"></div>
 
-            <div className="flex-grow-[3]">
+            <div className="grow-[3]">
               <p className="text-muted-foreground">Used</p>
               <p className="font-medium text-foreground">
                 {usageCount.toLocaleString()}x
@@ -158,7 +157,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
             {/* 第二个分隔线 */}
             <div className="h-8 w-px bg-secondary"></div>
 
-            <div className="flex-grow-[2]">
+            <div className="grow-[2]">
               <p className="text-muted-foreground">APIs</p>
               <div className="flex gap-1 mt-1 text-foreground">
                 {Array(apiCount)
@@ -167,7 +166,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
                     <motion.div
                       key={index}
                       whileHover={{ scale: 1.2 }}
-                      className="w-4 h-4 rounded-full border border-white"
+                      className="size-4 rounded-full border border-white"
                     />
                   ))}
               </div>
@@ -176,15 +175,15 @@ const AgentItemCard: FC<AgentItemProps> = ({
             {/* 第三个分隔线 */}
             <div className="h-8 w-px bg-secondary"></div>
 
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="w-8 h-8 group rotate-[-45deg] bg-[#cdf138] hover:bg-[#cdf138] rounded-full  "
+                  className="size-8 group -rotate-45 bg-[#cdf138] hover:bg-[#cdf138] rounded-full  "
                   onClick={onClick}
                 >
-                  <ArrowRight className="h-4 w-4 text-zinc-600 duration-150 group-hover:rotate-45" />
+                  <ArrowRight className="size-4 text-zinc-600 duration-150 group-hover:rotate-45" />
                 </Button>
               </motion.div>
             </div>
@@ -263,8 +262,13 @@ export const AgentItem: FC = () => {
 
       <Tabs defaultValue="all agent" className="w-full p-2">
         <TabsList className="grid grid-cols-2 w-full md:w-[300px]">
-          <TabsTrigger value="all agent">All Agents</TabsTrigger>
-          <TabsTrigger value="recommended">Recommended</TabsTrigger>
+          <TabsTrigger value="all agent">
+            <Users className="size-4 mr-2" />
+            All Agents</TabsTrigger>
+          <TabsTrigger value="recommended">
+            <Trophy className="size-4 mr-2" />
+            Recommended
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="all agent" className="w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
