@@ -18,8 +18,8 @@ A typical agent consists of:
 1. Agent class and types (`lib/ai/agents/your-agent/`)
    - `index.ts`: Agent class and tool definitions
    - `types.ts`: TypeScript interfaces for the domain
-2. UI components (`components/*.tsx`)
-3. Tool registration in the registry system
+   - UI components (`.tsx` files): React components to render tool results
+2. Tool registration in the registry system
 
 ## Step-by-Step Guide
 
@@ -78,10 +78,10 @@ export class CoinGeckoAgent extends BaseAgent {
 
 ### 2. Create the UI Components
 
-Create React components to display the agent's tool results:
+Create React components within your agent directory to display the agent's tool results:
 
 ```tsx
-// components/crypto-price.tsx
+// lib/ai/agents/coin-gecko/coingecko-crypto-price.tsx
 export interface CryptoMetrics {
   token_info: {
     name: string;
@@ -134,7 +134,7 @@ const agentTools = {
 #### b. Add UI Configs (`lib/ai/tools/registry/use-init-tools.tsx`)
 
 ```typescript
-import { CoinGeckoCryptoPrice } from "@/components/crypto-price";
+import { CoinGeckoCryptoPrice } from "@/lib/ai/agents/coin-gecko/coingecko-crypto-price";
 
 const agentToolConfigs = {
   // ... existing tools

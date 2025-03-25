@@ -6,7 +6,11 @@ import { updateDocument } from '../update-document';
 import { requestSuggestions } from '../request-suggestions';
 import type { BaseDocumentToolProps } from './types';
 import type { Tool } from 'ai';
-import { coinGeckoAgent, bitquerySolanaAgent } from '../configs';
+import {
+  coinGeckoAgent,
+  bitquerySolanaAgent,
+  dexScreenerAgent,
+} from '../configs';
 
 const agentTools = {
   getWeather,
@@ -18,6 +22,12 @@ const agentTools = {
   // solana tools
   getTokenTradingInfo: bitquerySolanaAgent.getTokenTradingInfo,
   getTopTrendingTokens: bitquerySolanaAgent.getTopTrendingTokens,
+
+  // dexscreener tools
+  searchPairs: dexScreenerAgent.searchPairs,
+  getSpecificPairInfo: dexScreenerAgent.getSpecificPairInfo,
+  getTokenPairs: dexScreenerAgent.getTokenPairs,
+  getTokenProfiles: dexScreenerAgent.getTokenProfiles,
 };
 
 const documentTools = {

@@ -6,6 +6,7 @@ import {
   BitquerySolanaAgent,
   bitquerySolanaAgentTools,
 } from '../agents/bitquery-solana';
+import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -13,6 +14,10 @@ export const coinGeckoAgent = new CoinGeckoAgent({
 
 export const bitquerySolanaAgent = new BitquerySolanaAgent({
   agentId: 'BitquerySolanaTokenInfoAgent',
+});
+
+export const dexScreenerAgent = new DexScreenerAgent({
+  agentId: 'DexScreenerTokenInfoAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -82,6 +87,28 @@ const agentTools = {
     ...bitquerySolanaAgentTools.getTopTrendingTokens,
     category: 'agent' as const,
     toolFn: bitquerySolanaAgent.getTopTrendingTokens,
+  },
+
+  // dexscreener agent
+  searchPairs: {
+    ...dexScreenerAgentTools.searchPairs,
+    category: 'agent' as const,
+    toolFn: dexScreenerAgent.searchPairs,
+  },
+  getSpecificPairInfo: {
+    ...dexScreenerAgentTools.getSpecificPairInfo,
+    category: 'agent' as const,
+    toolFn: dexScreenerAgent.getSpecificPairInfo,
+  },
+  getTokenPairs: {
+    ...dexScreenerAgentTools.getTokenPairs,
+    category: 'agent' as const,
+    toolFn: dexScreenerAgent.getTokenPairs,
+  },
+  getTokenProfiles: {
+    ...dexScreenerAgentTools.getTokenProfiles,
+    category: 'agent' as const,
+    toolFn: dexScreenerAgent.getTokenProfiles,
   },
 } satisfies Record<string, ToolConfig>;
 
