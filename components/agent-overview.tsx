@@ -1,8 +1,6 @@
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { useAgent } from "@/lib/context/agent-context";
-import { MessageIcon, VercelIcon } from "./icons";
-import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const Overview = () => {
   const { selectedAgent } = useAgent();
@@ -37,15 +35,22 @@ export const Overview = () => {
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="rounded-xl p-6 flex flex-col leading-relaxed text-center max-w-xl">
-        <h2 className="text-base text-bold text-card-foreground font-semibold">
+      <div className="rounded-xl p-6 flex flex-col leading-relaxed text-center justify-center items-center max-w-xl">
+        {selectedAgent?.image_url && (
+          <img
+            src={selectedAgent?.image_url}
+            alt={selectedAgent?.name}
+            className="size-10 rounded-full"
+          />
+        )}
+        <h2 className="text-base text-bold text-card-foreground my-2 font-semibold">
           {selectedAgent?.name}
         </h2>
-        <div className=" text-[#787878] text-sm mb-8">
+        <div className=" text-[#787878] text-sm">
           By {selectedAgent?.author}
         </div>
 
-        <h1 className="text-2xl font-semibold text-bold text-card-foreground">
+        <h1 className="text-2xl font-semibold text-bold mt-16 text-card-foreground">
           {displayText}
           <span className="inline-block animate-[blink_0.7s_ease-in-out_infinite]">
             |
