@@ -155,7 +155,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
             </div>
 
             {/* 第二个分隔线 */}
-            <div className="h-8 w-px bg-secondary"></div>
+            {/* <div className="h-8 w-px bg-secondary"></div>
 
             <div className="grow-[2]">
               <p className="text-muted-foreground">APIs</p>
@@ -170,7 +170,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
                     />
                   ))}
               </div>
-            </div>
+            </div> */}
 
             {/* 第三个分隔线 */}
             <div className="h-8 w-px bg-secondary"></div>
