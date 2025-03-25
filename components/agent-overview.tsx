@@ -18,9 +18,9 @@ export const Overview = () => {
         <h2 className="text-base text-bold text-card-foreground font-semibold">
           {selectedAgent?.name}
         </h2>
-        {/* <div className=" text-[#787878] text-sm mb-4">
+        <div className=" text-[#787878] text-sm mb-4">
           By {selectedAgent?.author}
-        </div> */}
+        </div>
         <h1 className="text-2xl font-semibold text-bold text-card-foreground">
           {selectedAgent?.greeting_message || "What can I do for you?"}
         </h1>

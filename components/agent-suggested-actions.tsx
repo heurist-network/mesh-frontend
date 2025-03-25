@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { ArrowRight } from "lucide-react";
 
+import { useAgent } from "@/lib/context/agent-context";
+
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
 
 interface SuggestedActionsProps {
@@ -20,23 +22,14 @@ interface SuggestedActionsProps {
 }
 
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
-  const suggestedActions = [
-    {
-      title: "What are the advantages",
-      label: "of using Next.js?",
-      action: "What are the advantages of using Next.js?",
-    },
-    {
-      title: "Write code to",
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
-    },
-    {
-      title: "What are the advantages",
-      label: "of using Next.js?",
-      action: "What are the advantages of using Next.js?",
-    },
-  ];
+  const { selectedAgent } = useAgent();
+  console.log("agent-suggested-actions selectedAgent", selectedAgent);
+  const { examples = [] } = selectedAgent;
+  const suggestedActions: any = examples.map((example: any) => ({
+    title: example,
+    label: example,
+    action: example,
+  }));
 
   return (
     <div className="pb-4">
@@ -45,7 +38,7 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
           suggestedActions.length > 3 ? "grid-cols-1" : "grid-cols-1"
         }`}
       >
-        {suggestedActions.map((suggestedAction, index) => (
+        {suggestedActions.map((suggestedAction: any, index: number) => (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
