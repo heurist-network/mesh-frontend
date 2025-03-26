@@ -58,10 +58,10 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
               }}
             >
               <div className="rounded-xl border-solid h-full flex flex-col justify-between border text-white overflow-hidden">
-                <CardContent className="p-3">
+                <CardContent className="px-3 py-2">
                   {/* 头部：头像、名称、作者和标签 */}
                   <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-medium">
+                    <h2 className="text-base font-medium">
                       {suggestedAction.action}
                     </h2>
                     <div>

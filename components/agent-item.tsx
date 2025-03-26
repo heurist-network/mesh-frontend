@@ -24,7 +24,7 @@ interface AgentItemProps {
   apiCount?: number;
   tags?: string[];
   onClick?: () => void;
-  imageSrc?: string;
+  image_url?: string;
 }
 
 // 代理项数据模型
@@ -34,7 +34,7 @@ export interface Agent {
   author: string;
   description: string;
   tags: string[];
-  imageSrc?: string;
+  image_url?: string;
   recommended?: boolean;
 }
 
@@ -61,7 +61,7 @@ const fetchAgents = async (): Promise<any[]> => {
           author: "Heurist",
           description: "",
           tags: [],
-          imageSrc: "",
+          image_url: "",
           recommended: false,
         };
         return Object.assign(metadata, agent.metadata);
@@ -70,6 +70,7 @@ const fetchAgents = async (): Promise<any[]> => {
       const filteredAgents = agentsArray.filter(
         (item) => item.name && !(item as any).hidden
       );
+      console.log("filteredAgents --", filteredAgents);
       return filteredAgents;
     }
     return [];
@@ -89,7 +90,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
   apiCount = 2,
   tags = ["Tag", "Tag"],
   onClick,
-  imageSrc,
+  image_url,
 }) => {
   return (
     <Card className="p-1 border-none h-full max-w-[500px]">
@@ -99,8 +100,8 @@ const AgentItemCard: FC<AgentItemProps> = ({
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-2">
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Avatar className="size-10 rounded-lg bg-blue-600">
-                  <AvatarImage src={imageSrc} />
+                <Avatar className="size-10 rounded-lg">
+                  <AvatarImage src={image_url} />
                   <AvatarFallback className="rounded-lg bg-blue-600 text-white">
                     {name.charAt(0)}
                   </AvatarFallback>
@@ -292,7 +293,7 @@ export const AgentItem: FC = () => {
                     author={agent.author}
                     description={agent.description}
                     tags={agent.tags}
-                    imageSrc={agent.imageSrc}
+                    image_url={agent.image_url}
                     onClick={() => handleAgentClick(agent)}
                   />
                 </motion.div>
@@ -322,7 +323,7 @@ export const AgentItem: FC = () => {
                     author={agent.author}
                     description={agent.description}
                     tags={agent.tags}
-                    imageSrc={agent.imageSrc}
+                    image_url={agent.image_url}
                     onClick={() => handleAgentClick(agent)}
                   />
                 </motion.div>
