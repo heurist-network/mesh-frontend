@@ -29,13 +29,13 @@ export const Overview = () => {
   return (
     <motion.div
       key="overview"
-      className="max-w-3xl mx-auto md:mt-20"
+      className="max-w-3xl mx-auto"
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="rounded-xl p-6 flex flex-col leading-relaxed text-center justify-center items-center max-w-xl">
+      <div className="rounded-xl p-6 pt-20 pb-0 flex flex-col leading-relaxed text-center justify-center items-center max-w-xl">
         {selectedAgent?.image_url && (
           <img
             src={selectedAgent?.image_url}
@@ -50,7 +50,7 @@ export const Overview = () => {
           By {selectedAgent?.author}
         </div>
 
-        <h1 className="text-2xl font-semibold text-bold mt-16 text-card-foreground">
+        <h1 className="text-2xl font-semibold text-bold mt-14 text-card-foreground">
           {displayText}
           <span className="inline-block animate-[blink_0.7s_ease-in-out_infinite]">
             |

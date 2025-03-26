@@ -36,7 +36,7 @@ function PureMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className={`flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto pt-10 ${
+      className={`flex flex-col min-w-0 gap-6 flex-1 overflow-y-auto ${
         messages.length > 0 ? "custom-scrollbar" : "scrollbar-none"
       }`}
     >

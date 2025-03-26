@@ -7,7 +7,7 @@ import { memo } from 'react';
 import { PlusIcon } from './icons';
 
 import { ExternalLink, MessageSquareMore } from 'lucide-react';
-
+import Image from 'next/image';
 import { useSidebar } from './ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { type VisibilityType } from './visibility-selector';
@@ -48,31 +48,40 @@ function PureChatHeader({
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
       ):(
-        <>
-        <Button
-          variant="outline"
-          className=" "
-          onClick={() => {
-            router.push('/');
-            router.refresh();
-          }}
-        >
-          <MessageSquareMore />
-          New Chat
-        </Button>
-        <Button
-          variant="outline"
-          className=""
-          onClick={() => {
-            window.open('https://docs.heurist.ai/dev-guide/heurist-mesh/endpoint', '_blank');
-          }}  
-        >
-          <ExternalLink />
-          API Key
-        </Button>
-        </>
+        <div className="flex flex-row justify-between items-center w-full">
+          <div>
+            <Button
+              variant="outline"
+              className=" "
+              onClick={() => {
+                router.push('/');
+                router.refresh();
+              }}
+            >
+              <MessageSquareMore />
+              New Chat
+            </Button>
+            <Button
+              variant="outline"
+              className=""
+              onClick={() => {
+                window.open('https://docs.heurist.ai/dev-guide/heurist-mesh/endpoint', '_blank');
+              }}  
+            >
+              <ExternalLink />
+              API Key
+            </Button>
+          </div>
+          <div>
+          <div className="logo">
+          <Image src="/images/logo-white.svg" width="100" height="41" alt="Logo" />
+        </div>
+          </div>
+          <div className="w-60"></div>
+        </div>
 
       )}
+      
     </header>
   );
 }
