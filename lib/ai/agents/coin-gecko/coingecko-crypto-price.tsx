@@ -8,7 +8,6 @@ import type {
 } from '@/lib/ai/agents/coin-gecko/types';
 import { motion } from 'framer-motion';
 
-// minimal sample for loading state and base for empty metrics
 const EMPTY_METRICS: CryptoMetrics = {
   token_info: {
     name: '',
@@ -56,7 +55,6 @@ const formatPercentage = (num: number) =>
     signDisplay: 'always',
   }).format(num / 100);
 
-// create empty metrics from token info by overriding the token_info in EMPTY_METRICS
 const createMetricsFromTokenInfo = (tokenInfo: TokenInfo): CryptoMetrics => ({
   ...EMPTY_METRICS,
   token_info: tokenInfo,
