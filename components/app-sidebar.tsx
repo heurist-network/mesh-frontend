@@ -1,12 +1,10 @@
 "use client";
 
 import type { User } from "next-auth";
-import { useRouter } from "next/navigation";
 
-import { PlusIcon } from "@/components/icons";
 import { SidebarHistory } from "@/components/sidebar-history";
-import { SidebarUserNav } from "@/components/sidebar-user-nav";
 import { SidebarToggle } from "@/components/sidebar-toggle";
+import { SidebarUserNav } from "@/components/sidebar-user-nav";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -17,30 +15,29 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { Separator } from "./ui/separator";
 import { Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { Separator } from "./ui/separator";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const { setOpenMobile, state, isMobile } = useSidebar();
 
   return (
     <Sidebar className="" collapsible="icon">
-      <div className="absolute top-2 right-2 flex flex-row justify-end items-center">
+      <div className="absolute top-5 right-2 flex flex-row justify-end items-center">
         <SidebarToggle />
       </div>
       <SidebarHeader>
-        <SidebarMenu>
-          <div className="flex flex-row h-10 justify-between items-center">
+        <SidebarMenu className="">
+          <div className="flex flex-row justify-between items-center">
             {state === "expanded" && (
               <Link
                 href="/"
                 onClick={() => {
                   setOpenMobile(false);
                 }}
-                className="flex flex-row gap-1 items-center p-2"
+                className="flex flex-row gap-1 items-center p-2 py-4"
               >
                 <Image
                   src="/images/logo.png"
