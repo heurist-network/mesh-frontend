@@ -25,6 +25,7 @@ interface AgentItemProps {
   tags?: string[];
   onClick?: () => void;
   image_url?: string;
+  total_calls?: number;
 }
 
 // 代理项数据模型
@@ -35,6 +36,7 @@ export interface Agent {
   description: string;
   tags: string[];
   image_url?: string;
+  total_calls?: number;
   recommended?: boolean;
 }
 
@@ -66,7 +68,12 @@ const fetchAgents = async (): Promise<any[]> => {
         };
         return Object.assign(metadata, agent.metadata);
       });
-
+      // 按照total_calls从高到低排序
+      agentsArray.sort((a, b) => {
+        const callsA = a.total_calls || 0;
+        const callsB = b.total_calls || 0;
+        return callsB - callsA;
+      });
       const filteredAgents = agentsArray.filter(
         (item) => item.name && !(item as any).hidden
       );
@@ -91,6 +98,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
   tags = ["Tag", "Tag"],
   onClick,
   image_url,
+  total_calls = 1123329,
 }) => {
   return (
     <Card className="p-1 border-none h-full max-w-[500px]">
@@ -151,7 +159,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
             <div className="grow-[3]">
               <p className="text-muted-foreground">Used</p>
               <p className="font-medium text-foreground">
-                {usageCount.toLocaleString()}x
+                {total_calls.toLocaleString()}x
               </p>
             </div>
 
@@ -294,6 +302,7 @@ export const AgentItem: FC = () => {
                     description={agent.description}
                     tags={agent.tags}
                     image_url={agent.image_url}
+                    total_calls={agent.total_calls}
                     onClick={() => handleAgentClick(agent)}
                   />
                 </motion.div>
@@ -324,6 +333,7 @@ export const AgentItem: FC = () => {
                     description={agent.description}
                     tags={agent.tags}
                     image_url={agent.image_url}
+                    total_calls={agent.total_calls}
                     onClick={() => handleAgentClick(agent)}
                   />
                 </motion.div>
