@@ -31,9 +31,20 @@ export function getAgentTool(name: string): ToolRegistryEntry | undefined {
   return registry.agent[name];
 }
 
-// get all available tools (base + agent)
-export function getAvailableTools(agentToolName?: string): ToolRegistryEntry[] {
-  return [...Object.values(registry.base), ...Object.values(registry.agent)];
+// get all available tools (base + current agent's tools)
+export function getAvailableTools(agentId?: string): ToolRegistryEntry[] {
+  const baseTools = Object.values(registry.base);
+  
+  if (!agentId) {
+    return baseTools;
+  }
+
+  // Only include agent tools that belong to the current agent
+  const agentTools = Object.values(registry.agent).filter(
+    tool => tool.config.agentId === agentId
+  );
+
+  return [...baseTools, ...agentTools];
 }
 
 // get tool by name from any category

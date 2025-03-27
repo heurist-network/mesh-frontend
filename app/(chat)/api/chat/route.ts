@@ -33,8 +33,13 @@ export async function POST(request: Request) {
     id,
     messages,
     selectedChatModel,
-  }: { id: string; messages: Array<Message>; selectedChatModel: string } =
-    await request.json();
+    activeAgent,
+  }: { 
+    id: string; 
+    messages: Array<Message>; 
+    selectedChatModel: string;
+    activeAgent?: string;
+  } = await request.json();
 
   const session = await auth();
 
@@ -75,7 +80,7 @@ export async function POST(request: Request) {
 
   return createDataStreamResponse({
     execute: async (dataStream) => {
-      const availableTools = getAvailableTools();
+      const availableTools = getAvailableTools(activeAgent);
       const tools = {} as Record<string, any>;
 
       for (const entry of availableTools) {

@@ -12,6 +12,7 @@ export interface ToolConfig<T = any> {
   renderResult?: (result: T) => ReactNode;
   renderLoading?: () => ReactNode;
   toolFn?: ToolFunction;
+  agentId?: string;
 }
 
 // props that document tools receive

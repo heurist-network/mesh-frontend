@@ -80,11 +80,13 @@ const agentTools = {
     ...coinGeckoAgentTools.getTokenInfo,
     category: 'agent' as const,
     toolFn: coinGeckoAgent.getTokenInfo,
+    agentId: 'CoinGeckoTokenInfoAgent',
   },
   getTrendingCoins: {
     ...coinGeckoAgentTools.getTrendingCoins,
     category: 'agent' as const,
     toolFn: coinGeckoAgent.getTrendingCoins,
+    agentId: 'CoinGeckoTokenInfoAgent',
   },
 
   // bitquery solana agent
@@ -92,11 +94,13 @@ const agentTools = {
     ...bitquerySolanaAgentTools.getTokenTradingInfo,
     category: 'agent' as const,
     toolFn: bitquerySolanaAgent.getTokenTradingInfo,
+    agentId: 'BitquerySolanaTokenInfoAgent',
   },
   getTopTrendingTokens: {
     ...bitquerySolanaAgentTools.getTopTrendingTokens,
     category: 'agent' as const,
     toolFn: bitquerySolanaAgent.getTopTrendingTokens,
+    agentId: 'BitquerySolanaTokenInfoAgent',
   },
 
   // dexscreener agent
@@ -104,21 +108,25 @@ const agentTools = {
     ...dexScreenerAgentTools.searchPairs,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.searchPairs,
+    agentId: 'DexScreenerTokenInfoAgent',
   },
   getSpecificPairInfo: {
     ...dexScreenerAgentTools.getSpecificPairInfo,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.getSpecificPairInfo,
+    agentId: 'DexScreenerTokenInfoAgent',
   },
   getTokenPairs: {
     ...dexScreenerAgentTools.getTokenPairs,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.getTokenPairs,
+    agentId: 'DexScreenerTokenInfoAgent',
   },
   getTokenProfiles: {
     ...dexScreenerAgentTools.getTokenProfiles,
     category: 'agent' as const,
     toolFn: dexScreenerAgent.getTokenProfiles,
+    agentId: 'DexScreenerTokenInfoAgent',
   },
 
   // exa search agent
@@ -126,11 +134,13 @@ const agentTools = {
     ...exaSearchAgentTools.search,
     category: 'agent' as const,
     toolFn: exaSearchAgent.search,
+    agentId: 'ExaSearchAgent',
   },
   answer: {
     ...exaSearchAgentTools.answer,
     category: 'agent' as const,
     toolFn: exaSearchAgent.answer,
+    agentId: 'ExaSearchAgent',
   },
 
   // masa search agent
@@ -138,6 +148,7 @@ const agentTools = {
     ...masaTwitterSearchAgentTools.twitterSearch,
     category: 'agent' as const,
     toolFn: masaTwitterSearchAgent.twitterSearch,
+    agentId: 'MasaTwitterSearchAgent',
   },
 } satisfies Record<string, ToolConfig>;
 
