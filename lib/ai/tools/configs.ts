@@ -8,6 +8,7 @@ import {
 } from '../agents/bitquery-solana';
 import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
 import { ExaSearchAgent, exaSearchAgentTools } from '../agents/exa-search';
+import { MasaTwitterSearchAgent, masaTwitterSearchAgentTools } from '../agents/masa';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -23,6 +24,10 @@ export const dexScreenerAgent = new DexScreenerAgent({
 
 export const exaSearchAgent = new ExaSearchAgent({
   agentId: 'ExaSearchAgent',
+});
+
+export const masaTwitterSearchAgent = new MasaTwitterSearchAgent({
+  agentId: 'MasaTwitterSearchAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -126,6 +131,13 @@ const agentTools = {
     ...exaSearchAgentTools.answer,
     category: 'agent' as const,
     toolFn: exaSearchAgent.answer,
+  },
+
+  // masa search agent
+  searchTwitter: {
+    ...masaTwitterSearchAgentTools.twitterSearch,
+    category: 'agent' as const,
+    toolFn: masaTwitterSearchAgent.twitterSearch,
   },
 } satisfies Record<string, ToolConfig>;
 

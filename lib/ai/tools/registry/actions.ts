@@ -11,6 +11,7 @@ import {
   bitquerySolanaAgent,
   dexScreenerAgent,
   exaSearchAgent,
+  masaTwitterSearchAgent,
 } from '../configs';
 
 const agentTools = {
@@ -33,6 +34,9 @@ const agentTools = {
   // exa search tools
   search: exaSearchAgent.search,
   answer: exaSearchAgent.answer,
+
+  // masa search tools
+  searchTwitter: masaTwitterSearchAgent.twitterSearch,
 };
 
 const documentTools = {
