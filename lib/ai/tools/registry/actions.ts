@@ -15,25 +15,25 @@ import {
 } from '../configs';
 
 const agentTools = {
-  getWeather,
+  // getWeather,
 
-  // coingecko tools
-  getTokenInfo: coinGeckoAgent.getTokenInfo,
-  getTrendingCoins: coinGeckoAgent.getTrendingCoins,
+  // // coingecko tools
+  // getTokenInfo: coinGeckoAgent.getTokenInfo,
+  // getTrendingCoins: coinGeckoAgent.getTrendingCoins,
 
-  // solana tools
-  getTokenTradingInfo: bitquerySolanaAgent.getTokenTradingInfo,
-  getTopTrendingTokens: bitquerySolanaAgent.getTopTrendingTokens,
+  // // solana tools
+  // getTokenTradingInfo: bitquerySolanaAgent.getTokenTradingInfo,
+  // getTopTrendingTokens: bitquerySolanaAgent.getTopTrendingTokens,
 
-  // dexscreener tools
-  searchPairs: dexScreenerAgent.searchPairs,
-  getSpecificPairInfo: dexScreenerAgent.getSpecificPairInfo,
-  getTokenPairs: dexScreenerAgent.getTokenPairs,
-  getTokenProfiles: dexScreenerAgent.getTokenProfiles,
+  // // dexscreener tools
+  // searchPairs: dexScreenerAgent.searchPairs,
+  // getSpecificPairInfo: dexScreenerAgent.getSpecificPairInfo,
+  // getTokenPairs: dexScreenerAgent.getTokenPairs,
+  // getTokenProfiles: dexScreenerAgent.getTokenProfiles,
 
-  // exa search tools
-  search: exaSearchAgent.search,
-  answer: exaSearchAgent.answer,
+  // // exa search tools
+  // search: exaSearchAgent.search,
+  // answer: exaSearchAgent.answer,
 
   // masa search tools
   searchTwitter: masaTwitterSearchAgent.twitterSearch,
