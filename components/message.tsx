@@ -42,7 +42,11 @@ const PurePreviewMessage = ({
   isReadonly: boolean;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
-
+  const { selectedAgent } = useAgent();
+  let image_url = '';
+  if(selectedAgent){
+    image_url = selectedAgent.image_url;
+  }
   return (
     <AnimatePresence>
       <motion.div
@@ -63,7 +67,8 @@ const PurePreviewMessage = ({
           {message.role === 'assistant' && (
             <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
               <div className="translate-y-px">
-                <SparklesIcon size={14} />
+              {image_url && <img src={image_url} alt="agent" className="size-8 rounded-full" />}
+              {!image_url && <SparklesIcon size={14} />}
               </div>
             </div>
           )}
