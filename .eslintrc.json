@@ -4,9 +4,13 @@
     "plugin:import/recommended",
     "plugin:import/typescript",
     "prettier",
-    "plugin:tailwindcss/recommended"
+    "plugin:tailwindcss/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
-  "plugins": ["tailwindcss"],
+  "plugins": [
+    "tailwindcss",
+    "@typescript-eslint"
+  ],
   "rules": {
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "off",
