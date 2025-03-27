@@ -1,66 +1,74 @@
-'use client';
+"use client";
 
-import type { User } from 'next-auth';
-import { useRouter } from 'next/navigation';
+import type { User } from "next-auth";
 
-import { PlusIcon } from '@/components/icons';
-import { SidebarHistory } from '@/components/sidebar-history';
-import { SidebarUserNav } from '@/components/sidebar-user-nav';
-import { Button } from '@/components/ui/button';
+import { SidebarHistory } from "@/components/sidebar-history";
+import { SidebarToggle } from "@/components/sidebar-toggle";
+import { SidebarUserNav } from "@/components/sidebar-user-nav";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   useSidebar,
-} from '@/components/ui/sidebar';
-import Link from 'next/link';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+} from "@/components/ui/sidebar";
+import { Users } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Separator } from "./ui/separator";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
-  const router = useRouter();
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, state, isMobile } = useSidebar();
 
   return (
-    <Sidebar className="group-data-[side=left]:border-r-0">
+    <Sidebar className="" collapsible="icon">
+      <div className="absolute top-5 right-2 flex flex-row justify-end items-center">
+        <SidebarToggle />
+      </div>
       <SidebarHeader>
-        <SidebarMenu>
+        <SidebarMenu className="">
           <div className="flex flex-row justify-between items-center">
-            <Link
-              href="/"
-              onClick={() => {
-                setOpenMobile(false);
-              }}
-              className="flex flex-row gap-3 items-center"
-            >
-              <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
-              </span>
-            </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  type="button"
-                  className="p-2 h-fit"
-                  onClick={() => {
-                    setOpenMobile(false);
-                    router.push('/');
-                    router.refresh();
-                  }}
-                >
-                  <PlusIcon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent align="end">New Chat</TooltipContent>
-            </Tooltip>
+            {state === "expanded" && (
+              <Link
+                href="/"
+                onClick={() => {
+                  setOpenMobile(false);
+                }}
+                className="flex flex-row gap-1 items-center p-2 py-4"
+              >
+                <Image
+                  src="/images/logo.png"
+                  alt="Heurist"
+                  width={28}
+                  height={28}
+                />
+                <span className="text-sm font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
+                  Heurist
+                </span>
+              </Link>
+            )}
           </div>
+          <Link
+            href="/"
+            onClick={() => {
+              setOpenMobile(false);
+            }}
+            className="flex items-center font-medium border-t pt-2"
+          >
+            <SidebarMenuButton>
+              <Users /> Agents Store
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <Separator />
+      <SidebarContent className="custom-scrollbar">
         <SidebarHistory user={user} />
       </SidebarContent>
+      <Separator />
       <SidebarFooter className="px-2 pb-4">
         {!user ? (
           <Link href="/login" onClick={() => setOpenMobile(false)}>

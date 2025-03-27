@@ -7,17 +7,18 @@ import { memo, useState } from 'react';
 
 import type { Vote } from '@/lib/db/schema';
 
+import { getTool } from '@/lib/ai/tools/registry';
+import { useAgent } from '@/lib/context/agent-context';
+import { cn } from '@/lib/utils';
+import equal from 'fast-deep-equal';
 import { PencilEditIcon, SparklesIcon } from './icons';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
-import { PreviewAttachment } from './preview-attachment';
-import equal from 'fast-deep-equal';
-import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
 import { MessageReasoning } from './message-reasoning';
-import { getTool } from '@/lib/ai/tools/registry';
+import { PreviewAttachment } from './preview-attachment';
+import { Button } from './ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 const PurePreviewMessage = ({
   chatId,
@@ -201,6 +202,11 @@ export const PreviewMessage = memo(
 
 export const ThinkingMessage = () => {
   const role = 'assistant';
+  const { selectedAgent } = useAgent();
+  let image_url = '';
+  if(selectedAgent){
+    image_url = selectedAgent.image_url;
+  }
 
   return (
     <motion.div
@@ -218,7 +224,8 @@ export const ThinkingMessage = () => {
         )}
       >
         <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-          <SparklesIcon size={14} />
+          {image_url && <img src={image_url} alt="agent" className="size-8 rounded-full" />}
+          {!image_url && <SparklesIcon size={14} />}
         </div>
 
         <div className="flex flex-col gap-2 w-full">

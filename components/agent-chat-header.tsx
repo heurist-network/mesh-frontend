@@ -2,14 +2,15 @@
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
 
-import { ModelSelector } from '@/components/model-selector';
-import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from './icons';
-import { useSidebar } from './ui/sidebar';
 import { memo } from 'react';
+import { PlusIcon } from './icons';
+
+import { ExternalLink, MessageSquareMore } from 'lucide-react';
+import Image from 'next/image';
+import { useSidebar } from './ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { type VisibilityType, VisibilitySelector } from './visibility-selector';
+import { type VisibilityType } from './visibility-selector';
 
 function PureChatHeader({
   chatId,
@@ -28,8 +29,8 @@ function PureChatHeader({
   const { width: windowWidth } = useWindowSize();
 
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
-      {(!open || windowWidth < 768) && (
+    <header className="flex sticky top-4 bg-background items-center px-2 md:px-2 gap-2">
+      {(!open || windowWidth < 768) ? (
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -46,8 +47,41 @@ function PureChatHeader({
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
-      )}
+      ):(
+        <div className="flex flex-row justify-between items-center w-full">
+          <div>
+            <Button
+              variant="outline"
+              className=" "
+              onClick={() => {
+                router.push('/');
+                router.refresh();
+              }}
+            >
+              <MessageSquareMore />
+              New Chat
+            </Button>
+            <Button
+              variant="outline"
+              className=""
+              onClick={() => {
+                window.open('https://docs.heurist.ai/dev-guide/heurist-mesh/endpoint', '_blank');
+              }}  
+            >
+              <ExternalLink />
+              API Key
+            </Button>
+          </div>
+          <div>
+          <div className="logo">
+          <Image src="/images/logo-white.svg" width="100" height="41" alt="Logo" />
+        </div>
+          </div>
+          <div className="w-60"></div>
+        </div>
 
+      )}
+      
     </header>
   );
 }
