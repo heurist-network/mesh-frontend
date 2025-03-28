@@ -8,6 +8,7 @@ import {
 import { auth } from '@/app/(auth)/auth';
 import { myProvider } from '@/lib/ai/models';
 import { systemPrompt } from '@/lib/ai/prompts';
+import { getAvailableTools, initializeTools } from '@/lib/ai/tools/registry';
 import {
   deleteChatById,
   getChatById,
@@ -19,7 +20,6 @@ import {
   getMostRecentUserMessage,
   sanitizeResponseMessages,
 } from '@/lib/utils';
-import { getAvailableTools, initializeTools } from '@/lib/ai/tools/registry';
 
 import { generateTitleFromUserMessage } from '../../actions';
 
@@ -38,8 +38,9 @@ export async function POST(request: Request) {
     id: string; 
     messages: Array<Message>; 
     selectedChatModel: string;
-    activeAgent?: string;
+    activeAgent?: { id: string };
   } = await request.json();
+  // console.log('--activeAgent--==',activeAgent);
 
   const session = await auth();
 
@@ -80,7 +81,8 @@ export async function POST(request: Request) {
 
   return createDataStreamResponse({
     execute: async (dataStream) => {
-      const availableTools = getAvailableTools(activeAgent);
+      const agentId = activeAgent?.id;
+      const availableTools = getAvailableTools(agentId);
       const tools = {} as Record<string, any>;
 
       for (const entry of availableTools) {
@@ -93,7 +95,7 @@ export async function POST(request: Request) {
           console.error(`Error initializing tool ${entry.config.name}:`, error);
         }
       }
-
+      // console.log('--tools--',tools);
       const result = streamText({
         model: myProvider.languageModel(selectedChatModel),
         system: systemPrompt({ selectedChatModel }),

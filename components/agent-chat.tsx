@@ -1,7 +1,8 @@
 "use client";
 
+import { useChat } from '@ai-sdk/react';
 import type { Attachment, Message } from "ai";
-import { useChat } from "ai/react";
+
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -9,16 +10,16 @@ import { ChatHeader } from "@/components/agent-chat-header";
 import type { Vote } from "@/lib/db/schema";
 import { fetcher, generateUUID } from "@/lib/utils";
 
-import { Artifact } from "./artifact";
-import { MultimodalInput } from "./multimodal-input";
-import { Messages } from "./agent-messages";
-import type { VisibilityType } from "./visibility-selector";
 import { useArtifactSelector } from "@/hooks/use-artifact";
-import { toast } from "sonner";
+import { useAgent } from "@/lib/context/agent-context";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Messages } from "./agent-messages";
+import { Artifact } from "./artifact";
+import { MultimodalInput } from "./multimodal-input";
 import { Button } from "./ui/button";
-
+import type { VisibilityType } from "./visibility-selector";
 export function Chat({
   id,
   initialMessages,
@@ -37,7 +38,7 @@ export function Chat({
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
-
+  const { selectedAgent } = useAgent();
   const {
     messages,
     setMessages,
@@ -50,7 +51,7 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel },
+    body: { id, selectedChatModel: selectedChatModel, activeAgent: selectedAgent },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
