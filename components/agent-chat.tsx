@@ -42,7 +42,6 @@ export function Chat({
   const router = useRouter();
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
   const { selectedAgent, setSelectedAgent } = useAgent();
-
   const {
     messages,
     setMessages,
@@ -55,7 +54,7 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel, activeAgent: agentId },
+    body: { id, selectedChatModel: selectedChatModel, activeAgent: selectedAgent },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
