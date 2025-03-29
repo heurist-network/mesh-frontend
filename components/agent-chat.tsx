@@ -42,6 +42,7 @@ export function Chat({
   const router = useRouter();
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
   const { selectedAgent, setSelectedAgent } = useAgent();
+  console.log('selectedAgent--', selectedAgent);
   const {
     messages,
     setMessages,
@@ -98,9 +99,18 @@ export function Chat({
             const data = await response.json();
             const agents = data.agents;
             const agent = agents[agentId];
-            console.log("==得到数据 -- == --", agent);
-
-            setSelectedAgent(agent.metadata);
+            // console.log("==得到数据 -- == --", agent);
+            const metadata = {
+              id: agentId,
+              name: "Unnamed Agent",
+              author: "Heurist",
+              description: "",
+              tags: [],
+              image_url: "",
+              recommended: false,
+            };
+            const newAgent = Object.assign(metadata, agent.metadata);
+            setSelectedAgent(newAgent);
           }
         } catch (error) {
           console.error("无法加载代理信息:", error);
