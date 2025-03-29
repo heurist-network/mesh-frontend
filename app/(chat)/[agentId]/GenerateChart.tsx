@@ -28,8 +28,8 @@ export  function GenerateChart({agentId}: {agentId: string}) {
     fetchData({ agentId});
   });
   return (
-    <div>
-      <h1>Generating...</h1>
+    <div className="flex justify-center items-center h-dvh">
+      Generating...
     </div>
   );
 }

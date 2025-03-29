@@ -112,7 +112,7 @@ export function Chat({
     loadAgentInfo();
   }, [agentId, setSelectedAgent, selectedAgent]);
   if (!selectedAgent) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-dvh">Loading...</div>;
   }
 
   return (
