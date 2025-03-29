@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react';
 import type { Attachment, Message } from "ai";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { ChatHeader } from "@/components/agent-chat-header";
@@ -20,6 +20,7 @@ import { Artifact } from "./artifact";
 import { MultimodalInput } from "./multimodal-input";
 import { Button } from "./ui/button";
 import type { VisibilityType } from "./visibility-selector";
+
 export function Chat({
   id,
   initialMessages,
@@ -40,7 +41,7 @@ export function Chat({
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
-
+  const { selectedAgent, setSelectedAgent } = useAgent();
 
   const {
     messages,
@@ -87,6 +88,32 @@ export function Chat({
     }
     handleSubmit(event, chatRequestOptions);
   };
+
+  useEffect(() => {
+    const loadAgentInfo = async () => {
+      console.log('loadAgentInfo', agentId, selectedAgent);
+      if (agentId && !selectedAgent) {
+        try {
+          const response = await fetch(`/api/agents`);
+          if (response.ok) {
+            const data = await response.json();
+            const agents = data.agents;
+            const agent = agents[agentId];
+            console.log("==得到数据 -- == --", agent);
+
+            setSelectedAgent(agent.metadata);
+          }
+        } catch (error) {
+          console.error("无法加载代理信息:", error);
+        }
+      }
+    };
+    
+    loadAgentInfo();
+  }, [agentId, setSelectedAgent, selectedAgent]);
+  if (!selectedAgent) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

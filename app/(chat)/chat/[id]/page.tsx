@@ -18,8 +18,6 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     const lastDashIndex = id.lastIndexOf('-');
     // 提取最后一个连字符后的部分作为额外参数
     agentId = id.substring(lastDashIndex + 1);
-    // 重置 id 为最后一个连字符前的部分
-    id = id.substring(0, lastDashIndex);
     console.log('提取的额外参数:', agentId);
     console.log('重置后的 id:', id);
   }
@@ -47,14 +45,14 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const cookieStore = await cookies();
   const chatModelFromCookie = cookieStore.get("chat-model");
-
+  console.log('chatModelFromCookie', chatModelFromCookie);
   if (!chatModelFromCookie) {
     return (
       <>
         <Chat
           id={chat.id}
           agentId={agentId}
-          initialMessages={[]}
+          initialMessages={convertToUIMessages(messagesFromDb)}
           selectedChatModel={DEFAULT_CHAT_MODEL}
           selectedVisibilityType={chat.visibility}
           isReadonly={session?.user?.id !== chat.userId}
@@ -71,7 +69,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         id={chat.id}
         agentId={agentId}
         initialMessages={convertToUIMessages(messagesFromDb)}
-        selectedChatModel={chatModelFromCookie.value}
+        selectedChatModel={chatModelFromCookie.value || DEFAULT_CHAT_MODEL}
         selectedVisibilityType={chat.visibility}
         isReadonly={session?.user?.id !== chat.userId}
         user={session?.user}

@@ -46,7 +46,6 @@ const fetchAgents = async (): Promise<any[]> => {
     // 替换为通过自己的API端点请求数据
     const response = await fetch("/api/agents");
     const data = await response.json();
-    console.log("得到数据 -- == --", data);
 
     // 如果您的API返回格式与原始格式相同，则保持以下处理逻辑
     const agents = data.agents;
@@ -238,7 +237,7 @@ export const AgentItem: FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: chatId,
+          id: `${chatId}-${agent.id}`,
           title: agent.name, // 使用代理名称作为初始标题
           agentId: agent.id,
         }),
