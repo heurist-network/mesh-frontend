@@ -1,16 +1,28 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
-import { auth } from "../../../(auth)/auth";
 import { Chat } from "@/components/agent-chat";
-import { getChatById, getMessagesByChatId } from "@/lib/db/queries";
-import { convertToUIMessages } from "@/lib/utils";
 import { DataStreamHandler } from "@/components/data-stream-handler";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
+import { getChatById, getMessagesByChatId } from "@/lib/db/queries";
+import { convertToUIMessages } from "@/lib/utils";
+import { auth } from "../../../(auth)/auth";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const { id } = params;
+  let { id } = params;
+  console.log('获取id', id);
+  let agentId = '';
+  // 检查 id 是否包含连字符，如果包含则提取最后一个连字符前的部分
+  if (id.includes('-')) {
+    const lastDashIndex = id.lastIndexOf('-');
+    // 提取最后一个连字符后的部分作为额外参数
+    agentId = id.substring(lastDashIndex + 1);
+    // 重置 id 为最后一个连字符前的部分
+    id = id.substring(0, lastDashIndex);
+    console.log('提取的额外参数:', agentId);
+    console.log('重置后的 id:', id);
+  }
   const chat = await getChatById({ id });
 
   if (!chat) {
@@ -41,6 +53,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <>
         <Chat
           id={chat.id}
+          agentId={agentId}
           initialMessages={[]}
           selectedChatModel={DEFAULT_CHAT_MODEL}
           selectedVisibilityType={chat.visibility}
@@ -56,6 +69,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <>
       <Chat
         id={chat.id}
+        agentId={agentId}
         initialMessages={convertToUIMessages(messagesFromDb)}
         selectedChatModel={chatModelFromCookie.value}
         selectedVisibilityType={chat.visibility}

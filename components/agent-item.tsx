@@ -251,8 +251,8 @@ export const AgentItem: FC = () => {
       // 跳转到聊天页面
       // 新增状态存储
       setSelectedAgent(agent);
-
-      router.push(`/chat/${chatId}?agent=${agent.id}`);
+      
+      router.push(`/chat/${chatId}-${agent.id}?agent=${agent.id}`);
     } catch (error) {
       console.error("Failed to create chat:", error);
       // 可以添加错误提示

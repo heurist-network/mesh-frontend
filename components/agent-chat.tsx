@@ -26,6 +26,7 @@ export function Chat({
   selectedChatModel,
   selectedVisibilityType,
   isReadonly,
+  agentId,
   user,
 }: {
   id: string;
@@ -33,12 +34,14 @@ export function Chat({
   selectedChatModel: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
+  agentId: string;
   user?: any;
 }) {
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
-  const { selectedAgent } = useAgent();
+
+
   const {
     messages,
     setMessages,
@@ -51,7 +54,7 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel, activeAgent: selectedAgent },
+    body: { id, selectedChatModel: selectedChatModel, activeAgent: agentId },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,

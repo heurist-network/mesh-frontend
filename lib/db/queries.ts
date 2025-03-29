@@ -1,22 +1,23 @@
 import 'server-only';
 
 import { genSaltSync, hashSync } from 'bcrypt-ts';
+import crypto from 'crypto';
 import { and, asc, desc, eq, gt, gte, inArray } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
+import type { ArtifactKind } from '@/components/artifact';
 import {
-  user,
   chat,
-  type User,
   document,
-  type Suggestion,
-  suggestion,
   type Message,
   message,
+  type Suggestion,
+  suggestion,
+  user,
+  type User,
   vote,
 } from './schema';
-import type { ArtifactKind } from '@/components/artifact';
 
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth
@@ -40,7 +41,7 @@ export async function createUser(email: string, password: string) {
   const hash = hashSync(password, salt);
 
   try {
-    return await db.insert(user).values({ email, password: hash });
+    return await db.insert(user).values({ id: crypto.randomUUID(), email, password: hash });
   } catch (error) {
     console.error('Failed to create user in database');
     throw error;

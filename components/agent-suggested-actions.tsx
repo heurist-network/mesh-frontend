@@ -1,17 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Button } from "./ui/button";
 import type { ChatRequestOptions, CreateMessage, Message } from "ai";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { memo } from "react";
 import { Card, CardContent } from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Badge } from "./ui/badge";
-import { ArrowRight } from "lucide-react";
 
 import { useAgent } from "@/lib/context/agent-context";
 
-import { ArrowUpIcon, PaperclipIcon, StopIcon } from "./icons";
 
 interface SuggestedActionsProps {
   chatId: string;
@@ -25,11 +21,12 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const { selectedAgent } = useAgent();
   console.log("agent-suggested-actions selectedAgent", selectedAgent);
   const { examples = [] } = selectedAgent;
-  const suggestedActions: any = examples.map((example: any) => ({
+  const suggestedActions: any = examples.slice(0, 3).map((example: any) => ({
     title: example,
     label: example,
     action: example,
   }));
+  
 
   return (
     <div className="pb-4">
