@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { memo } from 'react';
 import { PlusIcon } from './icons';
 
+import { useAgent } from '@/lib/context/agent-context';
 import { ExternalLink, MessageSquareMore } from 'lucide-react';
 import Image from 'next/image';
 import { useSidebar } from './ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { type VisibilityType } from './visibility-selector';
+
 
 function PureChatHeader({
   chatId,
@@ -27,6 +29,7 @@ function PureChatHeader({
   const { open } = useSidebar();
 
   const { width: windowWidth } = useWindowSize();
+  const { selectedAgent } = useAgent();
 
   return (
     <header className="flex sticky top-4 bg-background items-center px-2 md:px-2 gap-2">
@@ -49,12 +52,12 @@ function PureChatHeader({
         </Tooltip>
       ):(
         <div className="flex flex-row justify-between items-center w-full">
-          <div>
+          <div className="flex flex-row gap-2">
             <Button
               variant="outline"
-              className=" "
+              className=""
               onClick={() => {
-                router.push('/');
+                router.push(`/${selectedAgent.id}`);
                 router.refresh();
               }}
             >
