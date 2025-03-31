@@ -93,12 +93,12 @@ const AgentItemCard: FC<AgentItemProps> = ({
   author = "Heurist",
   description = "A cutting-edge AI agent designed to scour blockchain networks for emerging memecoins. Leveraging real-time data analysis, it identifies potential opportunities before they gain mainstream attention.",
   price = 1,
-  usageCount = 1123329,
+  usageCount = 0,
   apiCount = 2,
-  tags = ["Tag", "Tag"],
+  tags = ["Tag"],
   onClick,
   image_url,
-  total_calls = 1123329,
+  total_calls = 0,
 }) => {
   return (
     <Card className="p-1 border-none h-full max-w-[500px]">
