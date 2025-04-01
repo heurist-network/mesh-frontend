@@ -8,7 +8,14 @@ import {
 } from '../agents/bitquery-solana';
 import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
 import { ExaSearchAgent, exaSearchAgentTools } from '../agents/exa-search';
-import { MasaTwitterSearchAgent, masaTwitterSearchAgentTools } from '../agents/masa';
+import {
+  MasaTwitterSearchAgent,
+  masaTwitterSearchAgentTools,
+} from '../agents/masa';
+import {
+  AlloraPricePredictionAgent,
+  alloraPricePredictionAgentTools,
+} from '../agents/allora-price-prediction';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -28,6 +35,10 @@ export const exaSearchAgent = new ExaSearchAgent({
 
 export const masaTwitterSearchAgent = new MasaTwitterSearchAgent({
   agentId: 'MasaTwitterSearchAgent',
+});
+
+export const alloraPricePredictionAgent = new AlloraPricePredictionAgent({
+  agentId: 'AlloraPricePredictionAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -149,6 +160,14 @@ const agentTools = {
     category: 'agent' as const,
     toolFn: masaTwitterSearchAgent.twitterSearch,
     agentId: 'MasaTwitterSearchAgent',
+  },
+
+  // allora price prediction agent
+  getAlloraPrediction: {
+    ...alloraPricePredictionAgentTools.getAlloraPrediction,
+    category: 'agent' as const,
+    toolFn: alloraPricePredictionAgent.getAlloraPrediction,
+    agentId: 'AlloraPricePredictionAgent',
   },
 } satisfies Record<string, ToolConfig>;
 

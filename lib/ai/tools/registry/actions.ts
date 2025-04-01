@@ -12,6 +12,7 @@ import {
   dexScreenerAgent,
   exaSearchAgent,
   masaTwitterSearchAgent,
+  alloraPricePredictionAgent
 } from '../configs';
 
 const agentTools = {
@@ -37,6 +38,9 @@ const agentTools = {
 
   // masa search tools
   searchTwitter: masaTwitterSearchAgent.twitterSearch,
+
+  // allora tools
+  getAlloraPrediction: alloraPricePredictionAgent.getAlloraPrediction,
 };
 
 const documentTools = {
