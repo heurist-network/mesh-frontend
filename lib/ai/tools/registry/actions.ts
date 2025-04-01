@@ -13,6 +13,7 @@ import {
   exaSearchAgent,
   masaTwitterSearchAgent,
   alloraPricePredictionAgent,
+  carvOnchainDataAgent,
 } from '../configs';
 
 const agentTools = {
@@ -41,6 +42,9 @@ const agentTools = {
 
   // allora tools
   getAlloraPrediction: alloraPricePredictionAgent.getAlloraPrediction,
+
+  // carv tools
+  queryOnchainData: carvOnchainDataAgent.queryOnchainData,
 };
 
 const documentTools = {

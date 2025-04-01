@@ -16,6 +16,10 @@ import {
   AlloraPricePredictionAgent,
   alloraPricePredictionAgentTools,
 } from '../agents/allora-price-prediction';
+import {
+  CarvOnchainDataAgent,
+  carvOnchainDataAgentTools,
+} from '../agents/carv-onchain-data';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -39,6 +43,10 @@ export const masaTwitterSearchAgent = new MasaTwitterSearchAgent({
 
 export const alloraPricePredictionAgent = new AlloraPricePredictionAgent({
   agentId: 'AlloraPricePredictionAgent',
+});
+
+export const carvOnchainDataAgent = new CarvOnchainDataAgent({
+  agentId: 'CarvOnchainDataAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -168,6 +176,14 @@ const agentTools = {
     category: 'agent' as const,
     toolFn: alloraPricePredictionAgent.getAlloraPrediction,
     agentId: 'AlloraPricePredictionAgent',
+  },
+
+  // carv onchain data agent
+  queryOnchainData: {
+    ...carvOnchainDataAgentTools.queryOnchainData,
+    category: 'agent' as const,
+    toolFn: carvOnchainDataAgent.queryOnchainData,
+    agentId: 'CarvOnchainDataAgent',
   },
 } satisfies Record<string, ToolConfig>;
 
