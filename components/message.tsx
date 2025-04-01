@@ -44,7 +44,7 @@ const PurePreviewMessage = ({
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const { selectedAgent } = useAgent();
   let image_url = '';
-  if(selectedAgent){
+  if (selectedAgent) {
     image_url = selectedAgent.image_url;
   }
   return (
@@ -67,8 +67,14 @@ const PurePreviewMessage = ({
           {message.role === 'assistant' && (
             <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border bg-background">
               <div className="translate-y-px">
-              {image_url && <img src={image_url} alt="agent" className="size-8 rounded-full" />}
-              {!image_url && <SparklesIcon size={14} />}
+                {image_url && (
+                  <img
+                    src={image_url}
+                    alt="agent"
+                    className="size-8 rounded-full"
+                  />
+                )}
+                {!image_url && <SparklesIcon size={14} />}
               </div>
             </div>
           )}
@@ -209,7 +215,7 @@ export const ThinkingMessage = () => {
   const role = 'assistant';
   const { selectedAgent } = useAgent();
   let image_url = '';
-  if(selectedAgent){
+  if (selectedAgent) {
     image_url = selectedAgent.image_url;
   }
 
@@ -229,7 +235,9 @@ export const ThinkingMessage = () => {
         )}
       >
         <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-          {image_url && <img src={image_url} alt="agent" className="size-8 rounded-full" />}
+          {image_url && (
+            <img src={image_url} alt="agent" className="size-8 rounded-full" />
+          )}
           {!image_url && <SparklesIcon size={14} />}
         </div>
 

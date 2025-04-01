@@ -56,7 +56,10 @@ export class BaseAgent {
 
     const data = await response.json();
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[${this.agentId}] ${tool} response:`, JSON.stringify(data, null, 2));
+      console.log(
+        `[${this.agentId}] ${tool} response:`,
+        JSON.stringify(data, null, 2),
+      );
     }
     if (data.error) {
       console.error(`[${this.agentId}] ${tool} failed:`, data.error);

@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import { Toaster } from "sonner";
+import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { ToolsProvider } from "@/lib/ai/tools/registry";
-import { AgentProvider } from "@/lib/context/agent-context";
+import { ThemeProvider } from '@/components/theme-provider';
+import { ToolsProvider } from '@/lib/ai/tools/registry';
+import { AgentProvider } from '@/lib/context/agent-context';
 
-import "./globals.css";
+import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chat.heurist.ai"),
-  title: "Heurist Agent Chatbot",
-  description: "Heurist agent chatbot using the AI SDK.",
+  metadataBase: new URL('https://chat.heurist.ai'),
+  title: 'Heurist Agent Chatbot',
+  description: 'Heurist agent chatbot using the AI SDK.',
 };
 
 export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
 };
 
-const LIGHT_THEME_COLOR = "hsl(0 0% 100%)";
-const DARK_THEME_COLOR = "hsl(240deg 10% 3.92%)";
+const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
+const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
 const THEME_COLOR_SCRIPT = `\
 (function() {
   var html = document.documentElement;

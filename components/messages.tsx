@@ -40,7 +40,6 @@ function PureMessages({
         messages.length > 0 ? 'custom-scrollbar' : 'scrollbar-none'
       }`}
     >
-      
       {messages.length === 0 && <Overview />}
 
       {messages.map((message, index) => (

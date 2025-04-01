@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { genSaltSync, hashSync } from 'bcrypt-ts';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { and, asc, desc, eq, gt, gte, inArray } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -41,7 +41,9 @@ export async function createUser(email: string, password: string) {
   const hash = hashSync(password, salt);
 
   try {
-    return await db.insert(user).values({ id: crypto.randomUUID(), email, password: hash });
+    return await db
+      .insert(user)
+      .values({ id: crypto.randomUUID(), email, password: hash });
   } catch (error) {
     console.error('Failed to create user in database');
     throw error;

@@ -47,7 +47,6 @@ function PureChatHeader({
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
       )}
-
     </header>
   );
 }

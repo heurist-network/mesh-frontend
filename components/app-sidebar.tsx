@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type { User } from "next-auth";
+import type { User } from 'next-auth';
 
-import { SidebarHistory } from "@/components/sidebar-history";
-import { SidebarToggle } from "@/components/sidebar-toggle";
-import { SidebarUserNav } from "@/components/sidebar-user-nav";
-import { Button } from "@/components/ui/button";
+import { SidebarHistory } from '@/components/sidebar-history';
+import { SidebarToggle } from '@/components/sidebar-toggle';
+import { SidebarUserNav } from '@/components/sidebar-user-nav';
+import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -14,11 +14,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { Users } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Separator } from "./ui/separator";
+} from '@/components/ui/sidebar';
+import { Users } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Separator } from './ui/separator';
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const { setOpenMobile, state, isMobile } = useSidebar();
@@ -31,7 +31,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       <SidebarHeader>
         <SidebarMenu className="">
           <div className="flex flex-row justify-between items-center">
-            {state === "expanded" && (
+            {state === 'expanded' && (
               <Link
                 href="/"
                 onClick={() => {

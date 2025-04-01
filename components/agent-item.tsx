@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useAgent } from "@/lib/context/agent-context";
-import { generateUUID } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Trophy, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
-import { SidebarToggle } from "./sidebar-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { useAgent } from '@/lib/context/agent-context';
+import { generateUUID } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowRight, Trophy, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { type FC, useEffect, useState } from 'react';
+import { SidebarToggle } from './sidebar-toggle';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // 定义单个代理项的属性接口
 interface AgentItemProps {
@@ -44,25 +44,25 @@ export interface Agent {
 const fetchAgents = async (): Promise<any[]> => {
   try {
     // 替换为通过自己的API端点请求数据
-    const response = await fetch("/api/agents");
+    const response = await fetch('/api/agents');
     const data = await response.json();
 
     // 如果您的API返回格式与原始格式相同，则保持以下处理逻辑
     const agents = data.agents;
 
     // 将获取的数据转换为Agent对象数组
-    if (agents && typeof agents === "object") {
+    if (agents && typeof agents === 'object') {
       // 如果data是一个对象而不是数组，需要将其转换为数组
       const agentsArray = Object.keys(agents).map((key) => {
         const agent = agents[key];
         // 确保metadata存在，并包含所需的字段
         const metadata = {
           id: key,
-          name: "Unnamed Agent",
-          author: "Heurist",
-          description: "",
+          name: 'Unnamed Agent',
+          author: 'Heurist',
+          description: '',
           tags: [],
-          image_url: "",
+          image_url: '',
           recommended: false,
         };
         return Object.assign(metadata, agent.metadata);
@@ -74,27 +74,27 @@ const fetchAgents = async (): Promise<any[]> => {
         return callsB - callsA;
       });
       const filteredAgents = agentsArray.filter(
-        (item) => item.name && !(item as any).hidden
+        (item) => item.name && !(item as any).hidden,
       );
-      console.log("filteredAgents --", filteredAgents);
+      console.log('filteredAgents --', filteredAgents);
       return filteredAgents;
     }
     return [];
   } catch (error) {
-    console.error("Failed to fetch agents:", error);
+    console.error('Failed to fetch agents:', error);
     return [];
   }
 };
 
 // 单个代理项组件
 const AgentItemCard: FC<AgentItemProps> = ({
-  name = "Name",
-  author = "Heurist",
-  description = "A cutting-edge AI agent designed to scour blockchain networks for emerging memecoins. Leveraging real-time data analysis, it identifies potential opportunities before they gain mainstream attention.",
+  name = 'Name',
+  author = 'Heurist',
+  description = 'A cutting-edge AI agent designed to scour blockchain networks for emerging memecoins. Leveraging real-time data analysis, it identifies potential opportunities before they gain mainstream attention.',
   price = 1,
   usageCount = 0,
   apiCount = 2,
-  tags = ["Tag"],
+  tags = ['Tag'],
   onClick,
   image_url,
   total_calls = 0,
@@ -121,9 +121,9 @@ const AgentItemCard: FC<AgentItemProps> = ({
             </div>
 
             <div className="flex gap-1">
-              {tags.map((tag, index) => (
+              {tags.map((tag) => (
                 <motion.div
-                  key={index}
+                  key={tag}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -148,12 +148,12 @@ const AgentItemCard: FC<AgentItemProps> = ({
             <div className="grow-[4]">
               <p className="text-muted-foreground">Price per Use</p>
               <p className="font-medium text-foreground">
-                {price} {price == 1 ? "Credit" : "Credits"}
+                {price} {price === 1 ? 'Credit' : 'Credits'}
               </p>
             </div>
 
             {/* 第一个分隔线 */}
-            <div className="h-8 w-px bg-secondary"></div>
+            <div className="h-8 w-px bg-secondary" />
 
             <div className="grow-[3]">
               <p className="text-muted-foreground">Used</p>
@@ -181,7 +181,7 @@ const AgentItemCard: FC<AgentItemProps> = ({
             </div> */}
 
             {/* 第三个分隔线 */}
-            <div className="h-8 w-px bg-secondary"></div>
+            <div className="h-8 w-px bg-secondary" />
 
             <div className="shrink-0">
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -217,7 +217,7 @@ export const AgentItem: FC = () => {
         setAgents(data);
         setRecommendedAgents(data.filter((agent) => agent.recommended));
       } catch (err) {
-        console.error("Failed to load agents:", err);
+        console.error('Failed to load agents:', err);
       } finally {
         setLoading(false);
       }
@@ -231,10 +231,10 @@ export const AgentItem: FC = () => {
     const chatId = generateUUID();
     try {
       // 创建新的聊天记录
-      const response = await fetch("/api/chat/create", {
-        method: "POST",
+      const response = await fetch('/api/chat/create', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id: `${chatId}-${agent.id}`,
@@ -244,16 +244,16 @@ export const AgentItem: FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create chat");
+        throw new Error('Failed to create chat');
       }
-      console.log("agent --", agent);
+      console.log('agent --', agent);
       // 跳转到聊天页面
       // 新增状态存储
       setSelectedAgent(agent);
-      
+
       router.push(`/chat/${chatId}-${agent.id}?agent=${agent.id}`);
     } catch (error) {
-      console.error("Failed to create chat:", error);
+      console.error('Failed to create chat:', error);
       // 可以添加错误提示
     }
   };
@@ -272,7 +272,8 @@ export const AgentItem: FC = () => {
         <TabsList className="grid grid-cols-2 w-full md:w-[300px]">
           <TabsTrigger value="all agent">
             <Users className="size-4 mr-2" />
-            All Agents</TabsTrigger>
+            All Agents
+          </TabsTrigger>
           <TabsTrigger value="recommended">
             <Trophy className="size-4 mr-2" />
             Recommended
@@ -290,7 +291,7 @@ export const AgentItem: FC = () => {
                   whileHover={{ scale: 1.02 }}
                   transition={{
                     duration: 0.1,
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 300,
                     damping: 20,
                   }}
@@ -321,7 +322,7 @@ export const AgentItem: FC = () => {
                   whileHover={{ scale: 1.02 }}
                   transition={{
                     duration: 0.1,
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 300,
                     damping: 20,
                   }}
