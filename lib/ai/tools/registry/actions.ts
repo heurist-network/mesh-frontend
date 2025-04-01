@@ -14,6 +14,7 @@ import {
   masaTwitterSearchAgent,
   alloraPricePredictionAgent,
   carvOnchainDataAgent,
+  zerionWalletAnalysisAgent,
 } from '../configs';
 
 const agentTools = {
@@ -45,6 +46,10 @@ const agentTools = {
 
   // carv tools
   queryOnchainData: carvOnchainDataAgent.queryOnchainData,
+
+  // zerion tools
+  fetchWalletTokens: zerionWalletAnalysisAgent.fetchWalletTokens,
+  fetchWalletNfts: zerionWalletAnalysisAgent.fetchWalletNfts,
 };
 
 const documentTools = {

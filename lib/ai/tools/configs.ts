@@ -20,6 +20,10 @@ import {
   CarvOnchainDataAgent,
   carvOnchainDataAgentTools,
 } from '../agents/carv-onchain-data';
+import {
+  ZerionWalletAnalysisAgent,
+  zerionWalletAnalysisAgentTools,
+} from '../agents/zerion-wallet-analysis';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -47,6 +51,10 @@ export const alloraPricePredictionAgent = new AlloraPricePredictionAgent({
 
 export const carvOnchainDataAgent = new CarvOnchainDataAgent({
   agentId: 'CarvOnchainDataAgent',
+});
+
+export const zerionWalletAnalysisAgent = new ZerionWalletAnalysisAgent({
+  agentId: 'ZerionWalletAnalysisAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -184,6 +192,20 @@ const agentTools = {
     category: 'agent' as const,
     toolFn: carvOnchainDataAgent.queryOnchainData,
     agentId: 'CarvOnchainDataAgent',
+  },
+
+  // zerion wallet analysis agent
+  fetchWalletTokens: {
+    ...zerionWalletAnalysisAgentTools.fetchWalletTokens,
+    category: 'agent' as const,
+    toolFn: zerionWalletAnalysisAgent.fetchWalletTokens,
+    agentId: 'ZerionWalletAnalysisAgent',
+  },
+  fetchWalletNfts: {
+    ...zerionWalletAnalysisAgentTools.fetchWalletNfts,
+    category: 'agent' as const,
+    toolFn: zerionWalletAnalysisAgent.fetchWalletNfts,
+    agentId: 'ZerionWalletAnalysisAgent',
   },
 } satisfies Record<string, ToolConfig>;
 
