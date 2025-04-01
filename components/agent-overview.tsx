@@ -1,14 +1,14 @@
-import { useAgent } from "@/lib/context/agent-context";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useAgent } from '@/lib/context/agent-context';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export const Overview = () => {
   const { selectedAgent } = useAgent();
-  const [displayText, setDisplayText] = useState("");
+  const [displayText, setDisplayText] = useState('');
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const text = selectedAgent?.greeting_message || "What can I do for you?";
+    const text = selectedAgent?.greeting_message || 'What can I do for you?';
 
     if (index < text.length) {
       const timeout = setTimeout(() => {
@@ -22,7 +22,7 @@ export const Overview = () => {
 
   // 当 selectedAgent 改变时，重置打字机效果
   useEffect(() => {
-    setDisplayText("");
+    setDisplayText('');
     setIndex(0);
   }, [selectedAgent]);
 

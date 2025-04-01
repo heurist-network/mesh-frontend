@@ -8,7 +8,22 @@ import {
 } from '../agents/bitquery-solana';
 import { DexScreenerAgent, dexScreenerAgentTools } from '../agents/dexscreener';
 import { ExaSearchAgent, exaSearchAgentTools } from '../agents/exa-search';
-import { MasaTwitterSearchAgent, masaTwitterSearchAgentTools } from '../agents/masa';
+import {
+  MasaTwitterSearchAgent,
+  masaTwitterSearchAgentTools,
+} from '../agents/masa';
+import {
+  AlloraPricePredictionAgent,
+  alloraPricePredictionAgentTools,
+} from '../agents/allora-price-prediction';
+import {
+  CarvOnchainDataAgent,
+  carvOnchainDataAgentTools,
+} from '../agents/carv-onchain-data';
+import {
+  ZerionWalletAnalysisAgent,
+  zerionWalletAnalysisAgentTools,
+} from '../agents/zerion-wallet-analysis';
 
 export const coinGeckoAgent = new CoinGeckoAgent({
   agentId: 'CoinGeckoTokenInfoAgent',
@@ -28,6 +43,18 @@ export const exaSearchAgent = new ExaSearchAgent({
 
 export const masaTwitterSearchAgent = new MasaTwitterSearchAgent({
   agentId: 'MasaTwitterSearchAgent',
+});
+
+export const alloraPricePredictionAgent = new AlloraPricePredictionAgent({
+  agentId: 'AlloraPricePredictionAgent',
+});
+
+export const carvOnchainDataAgent = new CarvOnchainDataAgent({
+  agentId: 'CarvOnchainDataAgent',
+});
+
+export const zerionWalletAnalysisAgent = new ZerionWalletAnalysisAgent({
+  agentId: 'ZerionWalletAnalysisAgent',
 });
 
 // TODO: fetch description and parameters from the tool itself instead of hardcoding
@@ -149,6 +176,36 @@ const agentTools = {
     category: 'agent' as const,
     toolFn: masaTwitterSearchAgent.twitterSearch,
     agentId: 'MasaTwitterSearchAgent',
+  },
+
+  // allora price prediction agent
+  getAlloraPrediction: {
+    ...alloraPricePredictionAgentTools.getAlloraPrediction,
+    category: 'agent' as const,
+    toolFn: alloraPricePredictionAgent.getAlloraPrediction,
+    agentId: 'AlloraPricePredictionAgent',
+  },
+
+  // carv onchain data agent
+  queryOnchainData: {
+    ...carvOnchainDataAgentTools.queryOnchainData,
+    category: 'agent' as const,
+    toolFn: carvOnchainDataAgent.queryOnchainData,
+    agentId: 'CarvOnchainDataAgent',
+  },
+
+  // zerion wallet analysis agent
+  fetchWalletTokens: {
+    ...zerionWalletAnalysisAgentTools.fetchWalletTokens,
+    category: 'agent' as const,
+    toolFn: zerionWalletAnalysisAgent.fetchWalletTokens,
+    agentId: 'ZerionWalletAnalysisAgent',
+  },
+  fetchWalletNfts: {
+    ...zerionWalletAnalysisAgentTools.fetchWalletNfts,
+    category: 'agent' as const,
+    toolFn: zerionWalletAnalysisAgent.fetchWalletNfts,
+    agentId: 'ZerionWalletAnalysisAgent',
   },
 } satisfies Record<string, ToolConfig>;
 

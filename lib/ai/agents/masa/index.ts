@@ -6,7 +6,8 @@ import type { TwitterSearchResponse } from './types';
 export const masaTwitterSearchAgentTools = {
   twitterSearch: {
     name: 'search_twitter',
-    description: 'Search on Twitter to identify what people are saying about a topic. The search term must be a single word or a short phrase, or an account name or hashtag.',
+    description:
+      'Search on Twitter to identify what people are saying about a topic. The search term must be a single word or a short phrase, or an account name or hashtag.',
     parameters: z
       .object({
         search_term: z.string().describe('The search term to find tweets'),

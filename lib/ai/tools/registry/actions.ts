@@ -12,6 +12,9 @@ import {
   dexScreenerAgent,
   exaSearchAgent,
   masaTwitterSearchAgent,
+  alloraPricePredictionAgent,
+  carvOnchainDataAgent,
+  zerionWalletAnalysisAgent,
 } from '../configs';
 
 const agentTools = {
@@ -37,6 +40,16 @@ const agentTools = {
 
   // masa search tools
   searchTwitter: masaTwitterSearchAgent.twitterSearch,
+
+  // allora tools
+  getAlloraPrediction: alloraPricePredictionAgent.getAlloraPrediction,
+
+  // carv tools
+  queryOnchainData: carvOnchainDataAgent.queryOnchainData,
+
+  // zerion tools
+  fetchWalletTokens: zerionWalletAnalysisAgent.fetchWalletTokens,
+  fetchWalletNfts: zerionWalletAnalysisAgent.fetchWalletNfts,
 };
 
 const documentTools = {

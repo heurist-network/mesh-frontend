@@ -11,8 +11,7 @@ import { ExternalLink, MessageSquareMore } from 'lucide-react';
 import Image from 'next/image';
 import { useSidebar } from './ui/sidebar';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { type VisibilityType } from './visibility-selector';
-
+import type { VisibilityType } from './visibility-selector';
 
 function PureChatHeader({
   chatId,
@@ -33,7 +32,7 @@ function PureChatHeader({
 
   return (
     <header className="flex sticky top-4 bg-background items-center px-2 md:px-2 gap-2">
-      {(!open || windowWidth < 768) ? (
+      {!open || windowWidth < 768 ? (
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -50,7 +49,7 @@ function PureChatHeader({
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
-      ):(
+      ) : (
         <div className="flex flex-row justify-between items-center w-full">
           <div className="flex flex-row gap-2">
             <Button
@@ -68,23 +67,29 @@ function PureChatHeader({
               variant="outline"
               className=""
               onClick={() => {
-                window.open('https://docs.heurist.ai/dev-guide/heurist-mesh/endpoint', '_blank');
-              }}  
+                window.open(
+                  'https://docs.heurist.ai/dev-guide/heurist-mesh/endpoint',
+                  '_blank',
+                );
+              }}
             >
               <ExternalLink />
               API Key
             </Button>
           </div>
           <div>
-          <div className="logo">
-          <Image src="/images/logo-white.svg" width="100" height="41" alt="Logo" />
-        </div>
+            <div className="logo">
+              <Image
+                src="/images/logo-white.svg"
+                width="100"
+                height="41"
+                alt="Logo"
+              />
+            </div>
           </div>
-          <div className="w-60"></div>
+          <div className="w-60" />
         </div>
-
       )}
-      
     </header>
   );
 }

@@ -11,7 +11,8 @@ import type {
 export const dexScreenerAgentTools = {
   searchPairs: {
     name: 'search_pairs',
-    description: 'Search for trading pairs by token name, symbol, or address on DexScreener',
+    description:
+      'Search for trading pairs by token name, symbol, or address on DexScreener',
     parameters: z
       .object({
         query: z
@@ -36,7 +37,8 @@ export const dexScreenerAgentTools = {
   },
   getTokenPairs: {
     name: 'get_token_pairs',
-    description: 'Get the trading pairs by chain and token address on DexScreener',
+    description:
+      'Get the trading pairs by chain and token address on DexScreener',
     parameters: z
       .object({
         chain: z

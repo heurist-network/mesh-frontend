@@ -34,14 +34,14 @@ export function getAgentTool(name: string): ToolRegistryEntry | undefined {
 // get all available tools (base + current agent's tools)
 export function getAvailableTools(agentId?: string): ToolRegistryEntry[] {
   const baseTools = Object.values(registry.base);
-  
+
   if (!agentId) {
     return baseTools;
   }
 
   // Only include agent tools that belong to the current agent
   const agentTools = Object.values(registry.agent).filter(
-    tool => tool.config.agentId === agentId
+    (tool) => tool.config.agentId === agentId,
   );
 
   return [...baseTools, ...agentTools];

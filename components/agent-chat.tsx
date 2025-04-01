@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
 import { useChat } from '@ai-sdk/react';
-import type { Attachment, Message } from "ai";
+import type { Attachment, Message } from 'ai';
 
-import { useEffect, useState } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import { useEffect, useState } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 
-import { ChatHeader } from "@/components/agent-chat-header";
-import type { Vote } from "@/lib/db/schema";
-import { fetcher, generateUUID } from "@/lib/utils";
+import { ChatHeader } from '@/components/agent-chat-header';
+import type { Vote } from '@/lib/db/schema';
+import { fetcher, generateUUID } from '@/lib/utils';
 
-import { useArtifactSelector } from "@/hooks/use-artifact";
-import { useAgent } from "@/lib/context/agent-context";
-import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Messages } from "./agent-messages";
-import { Artifact } from "./artifact";
-import { MultimodalInput } from "./multimodal-input";
-import { Button } from "./ui/button";
-import type { VisibilityType } from "./visibility-selector";
+import { useArtifactSelector } from '@/hooks/use-artifact';
+import { useAgent } from '@/lib/context/agent-context';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Messages } from './agent-messages';
+import { Artifact } from './artifact';
+import { MultimodalInput } from './multimodal-input';
+import { Button } from './ui/button';
+import type { VisibilityType } from './visibility-selector';
 
 export function Chat({
   id,
@@ -55,22 +55,26 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel, activeAgent: selectedAgent },
+    body: {
+      id,
+      selectedChatModel: selectedChatModel,
+      activeAgent: selectedAgent,
+    },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
     generateId: generateUUID,
     onFinish: () => {
-      mutate("/api/history");
+      mutate('/api/history');
     },
     onError: (error) => {
-      toast.error("An error occurred, please try again!");
+      toast.error('An error occurred, please try again!');
     },
   });
 
   const { data: votes } = useSWR<Array<Vote>>(
     `/api/vote?chatId=${id}`,
-    fetcher
+    fetcher,
   );
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
@@ -78,7 +82,7 @@ export function Chat({
 
   const handleMessageSubmit = (
     event?: { preventDefault?: () => void },
-    chatRequestOptions?: any
+    chatRequestOptions?: any,
   ) => {
     event?.preventDefault?.();
     if (!user) {
@@ -102,26 +106,28 @@ export function Chat({
             // console.log("==得到数据 -- == --", agent);
             const metadata = {
               id: agentId,
-              name: "Unnamed Agent",
-              author: "Heurist",
-              description: "",
+              name: 'Unnamed Agent',
+              author: 'Heurist',
+              description: '',
               tags: [],
-              image_url: "",
+              image_url: '',
               recommended: false,
             };
             const newAgent = Object.assign(metadata, agent.metadata);
             setSelectedAgent(newAgent);
           }
         } catch (error) {
-          console.error("无法加载代理信息:", error);
+          console.error('无法加载代理信息:', error);
         }
       }
     };
-    
+
     loadAgentInfo();
   }, [agentId, setSelectedAgent, selectedAgent]);
   if (!selectedAgent) {
-    return <div className="flex justify-center items-center h-dvh">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-dvh">Loading...</div>
+    );
   }
 
   return (
@@ -152,12 +158,12 @@ export function Chat({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             >
               <p className="text-sm font-medium">Sign in to start chatting</p>
               <Button
                 size="sm"
-                onClick={() => router.push("/login")}
+                onClick={() => router.push('/login')}
                 className="bg-white text-black hover:bg-white/90 ml-4 whitespace-nowrap"
               >
                 Sign in

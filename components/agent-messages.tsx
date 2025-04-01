@@ -1,10 +1,10 @@
-import type { ChatRequestOptions, Message } from "ai";
-import { PreviewMessage, ThinkingMessage } from "./message";
-import { useScrollToBottom } from "./use-scroll-to-bottom";
-import { Overview } from "./agent-overview";
-import { memo } from "react";
-import type { Vote } from "@/lib/db/schema";
-import equal from "fast-deep-equal";
+import type { ChatRequestOptions, Message } from 'ai';
+import { PreviewMessage, ThinkingMessage } from './message';
+import { useScrollToBottom } from './use-scroll-to-bottom';
+import { Overview } from './agent-overview';
+import { memo } from 'react';
+import type { Vote } from '@/lib/db/schema';
+import equal from 'fast-deep-equal';
 
 interface MessagesProps {
   chatId: string;
@@ -12,10 +12,10 @@ interface MessagesProps {
   votes: Array<Vote> | undefined;
   messages: Array<Message>;
   setMessages: (
-    messages: Message[] | ((messages: Message[]) => Message[])
+    messages: Message[] | ((messages: Message[]) => Message[]),
   ) => void;
   reload: (
-    chatRequestOptions?: ChatRequestOptions
+    chatRequestOptions?: ChatRequestOptions,
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
   isArtifactVisible: boolean;
@@ -37,7 +37,7 @@ function PureMessages({
     <div
       ref={messagesContainerRef}
       className={`flex flex-col min-w-0 gap-6 pt-10 flex-1 overflow-y-auto ${
-        messages.length > 0 ? "custom-scrollbar" : "scrollbar-none"
+        messages.length > 0 ? 'custom-scrollbar' : 'scrollbar-none'
       }`}
     >
       {messages.length === 0 && <Overview />}
@@ -61,7 +61,7 @@ function PureMessages({
 
       {isLoading &&
         messages.length > 0 &&
-        messages[messages.length - 1].role === "user" && <ThinkingMessage />}
+        messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
 
       <div
         ref={messagesEndRef}

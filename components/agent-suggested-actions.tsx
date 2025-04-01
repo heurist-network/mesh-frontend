@@ -1,38 +1,36 @@
-"use client";
+'use client';
 
-import type { ChatRequestOptions, CreateMessage, Message } from "ai";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { memo } from "react";
-import { Card, CardContent } from "./ui/card";
+import type { ChatRequestOptions, CreateMessage, Message } from 'ai';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { memo } from 'react';
+import { Card, CardContent } from './ui/card';
 
-import { useAgent } from "@/lib/context/agent-context";
-
+import { useAgent } from '@/lib/context/agent-context';
 
 interface SuggestedActionsProps {
   chatId: string;
   append: (
     message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions
+    chatRequestOptions?: ChatRequestOptions,
   ) => Promise<string | null | undefined>;
 }
 
 function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
   const { selectedAgent } = useAgent();
-  console.log("agent-suggested-actions selectedAgent", selectedAgent);
+  console.log('agent-suggested-actions selectedAgent', selectedAgent);
   const { examples = [] } = selectedAgent;
   const suggestedActions: any = examples.slice(0, 3).map((example: any) => ({
     title: example,
     label: example,
     action: example,
   }));
-  
 
   return (
     <div className="pb-4">
       <div
         className={`grid gap-4 w-full mb-2 ${
-          suggestedActions.length > 3 ? "grid-cols-1" : "grid-cols-1"
+          suggestedActions.length > 3 ? 'grid-cols-1' : 'grid-cols-1'
         }`}
       >
         {suggestedActions.map((suggestedAction: any, index: number) => (
@@ -42,14 +40,14 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
             exit={{ opacity: 0, y: 20 }}
             transition={{ delay: 0.05 * index }}
             key={`suggested-action-${suggestedAction.title}-${index}`}
-            className={index > 1 ? "hidden sm:block" : "block"}
+            className={index > 1 ? 'hidden sm:block' : 'block'}
           >
             <Card
               className="p-1 border-none h-full rounded-2xl cursor-pointer group"
               onClick={async () => {
                 // 直接调用append函数发送消息，不进行页面跳转
                 append({
-                  role: "user",
+                  role: 'user',
                   content: suggestedAction.action,
                 });
               }}

@@ -34,9 +34,9 @@ export async function POST(request: Request) {
     messages,
     selectedChatModel,
     activeAgent,
-  }: { 
-    id: string; 
-    messages: Array<Message>; 
+  }: {
+    id: string;
+    messages: Array<Message>;
     selectedChatModel: string;
     activeAgent?: { id: string };
   } = await request.json();
