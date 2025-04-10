@@ -54,7 +54,7 @@ export function ApiKeyInput() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Step 1: API Key</CardTitle>
+        <CardTitle>Step 1. API Key</CardTitle>
         <CardDescription>
           Enter your Heurist API key to get started
         </CardDescription>
@@ -62,7 +62,7 @@ export function ApiKeyInput() {
       <CardContent>
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="apiKey">Step 1. Input your Heurist API key</Label>
+            <Label htmlFor="apiKey">Input your Heurist API key</Label>
             <div className="flex">
               <Input
                 id="apiKey"
@@ -81,13 +81,13 @@ export function ApiKeyInput() {
             </div>
             <div className="text-sm text-muted-foreground mt-2 space-y-1">
               <div>
-                <Link href="https://dev-api-form.heurist.ai/" target="_blank" className="text-primary hover:underline">
-                  Apply for a free API key
+                <Link href="https://dev-api-form.heurist.ai/" target="_blank" className="text-primary hover:underline flex items-center gap-1">
+                  <span>🔑</span> Apply for a free API key
                 </Link>
               </div>
               <div>
-                <Link href="https://www.heurist.ai/credits" target="_blank" className="text-primary hover:underline">
-                  Top up credits with crypto
+                <Link href="https://www.heurist.ai/credits" target="_blank" className="text-primary hover:underline flex items-center gap-1">
+                  <span>💰</span> Top up credits with crypto
                 </Link>
               </div>
             </div>
