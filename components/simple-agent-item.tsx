@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useProvisioner } from "@/lib/provisioner-context";
 import { AnimatePresence, motion } from "framer-motion";
 import { Trophy, Users } from "lucide-react";
@@ -109,7 +110,16 @@ const AgentItemCard: FC<AgentItemProps> = ({
             </div>
           </div>
 
-          <p className="text-sm text-foreground line-clamp-2">{description}</p>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="text-sm text-foreground line-clamp-2">{description}</p>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-[300px] break-words">
+                {description}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </CardContent>
 
         <CardFooter className="m-3 p-3 rounded-lg flex justify-between items-center bg-muted">

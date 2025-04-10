@@ -52,7 +52,7 @@ export default function Home() {
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-3">
-                        <li className="flex items-center">
+                        {/* <li className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           <Link 
                             href="https://playground.ai.cloudflare.com/" 
@@ -61,7 +61,7 @@ export default function Home() {
                           >
                             Cloudflare AI Playground
                           </Link>
-                        </li>
+                        </li> */}
                         <li className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           <Link 
