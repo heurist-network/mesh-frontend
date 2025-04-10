@@ -3,11 +3,11 @@ import { SimpleAgentItem } from "@/components/simple-agent-item";
 import { ApiKeyInput } from "@/components/api-key-input";
 import { ServerManagement } from "@/components/server-management";
 import { ProvisionerProvider } from "@/lib/provisioner-context";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Github, ExternalLink } from "lucide-react";
-import { useSidebar } from "@/components/ui/sidebar";
+import { AnimatedTitle } from "@/components/animated-title";
+
 
 export default function Home() {
   return (
@@ -18,8 +18,7 @@ export default function Home() {
           <div className="w-full p-2 md:p-6">
             <div className="mx-auto space-y-8">
               <div className="p-2">
-                <h1 className="text-3xl font-bold mb-4">Customize an agent swarm that works for you</h1>
-                <p className="text-muted-foreground">Create and manage MCP servers to access Heurist Mesh</p>
+                <AnimatedTitle />
               </div>
               
               <div className="grid grid-cols-1 gap-8">
