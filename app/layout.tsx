@@ -2,15 +2,14 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { ToolsProvider } from "@/lib/ai/tools/registry";
-import { AgentProvider } from "@/lib/context/agent-context";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chat.heurist.ai"),
-  title: "Heurist Agent Chatbot",
-  description: "Heurist agent chatbot using the AI SDK.",
+  metadataBase: new URL("https://agents.heurist.ai"),
+  title: "Heurist Mesh MCP Provisioner",
+  description: "Create and manage MCP servers to access Heurist Mesh",
 };
 
 export const viewport = {
@@ -59,19 +58,17 @@ export default async function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <AgentProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <ToolsProvider>
-              <Toaster position="top-center" />
-              {children}
-            </ToolsProvider>
-          </ThemeProvider>
-        </AgentProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider>
+            <Toaster position="top-center" />
+            {children}
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,9 +1,11 @@
-import NextAuth from 'next-auth';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-import { authConfig } from '@/app/(auth)/auth.config';
-
-export default NextAuth(authConfig).auth;
+export function middleware(request: NextRequest) {
+  // Add your middleware logic here
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ['/', '/chat/:id', '/:agentId', '/api/:path*', '/login', '/register'],
+  matcher: ['/', '/api/agents/:path*'],
 };
