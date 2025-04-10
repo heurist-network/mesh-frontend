@@ -7,15 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Github, ExternalLink } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export default function Home() {
   return (
     <ProvisionerProvider>
-      <div className="flex h-screen">
+      <div className="flex h-screen overflow-hidden">
         <SimpleSidebar />
-        <main className="flex-1 overflow-auto">
-          <div className="w-full p-2 md:p-10">
-            <div className="max-w-[1200px] mx-auto space-y-8">
+        <main className="flex-1 overflow-auto w-full">
+          <div className="w-full p-2 md:p-6">
+            <div className="mx-auto space-y-8">
               <div className="p-2">
                 <h1 className="text-3xl font-bold mb-4">Customize an agent swarm that works for you</h1>
                 <p className="text-muted-foreground">Create and manage MCP servers to access Heurist Mesh</p>
@@ -52,16 +53,6 @@ export default function Home() {
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-3">
-                        {/* <li className="flex items-center">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          <Link 
-                            href="https://playground.ai.cloudflare.com/" 
-                            target="_blank"
-                            className="text-primary hover:underline"
-                          >
-                            Cloudflare AI Playground
-                          </Link>
-                        </li> */}
                         <li className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           <Link 

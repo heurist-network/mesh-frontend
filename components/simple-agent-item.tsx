@@ -10,6 +10,7 @@ import { Trophy, Users } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { SidebarToggle } from "./sidebar-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSidebar } from "@/components/ui/sidebar"; // Import the useSidebar hook
 
 interface AgentItemProps {
   name?: string;
@@ -191,6 +192,7 @@ export const SimpleAgentItem: FC = () => {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [recommendedAgents, setRecommendedAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
+  const { state } = useSidebar(); // Get the sidebar state
 
   useEffect(() => {
     const loadAgents = async () => {
@@ -213,14 +215,36 @@ export const SimpleAgentItem: FC = () => {
     return <div className="text-center py-10 text-white">Loading...</div>;
   }
 
+  // Determine the grid column classes based on sidebar state
+  const getGridColumns = () => {
+    const isExpanded = state === "expanded";
+    
+    // Base columns for the 'All Agents' tab
+    return {
+      all: isExpanded 
+        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3" 
+        : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+      recommended: isExpanded
+        ? "grid-cols-1 lg:grid-cols-1 xl:grid-cols-2" 
+        : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+    };
+  };
+
+  const gridColumns = getGridColumns();
+
+  // This class helps with transitions when the sidebar state changes
+  const containerClass = state === "expanded" 
+    ? "flex-1 transition-all duration-300" 
+    : "w-full transition-all duration-300";
+
   return (
-    <div className="flex flex-col gap-4 p-2 md:p-10 pt-14">
+    <div className={`flex flex-col gap-4 p-0 md:p-6 ${containerClass}`}>
       <div className="absolute top-2 left-2 flex md:hidden flex-row justify-end items-center">
         <SidebarToggle />
       </div>
 
-      <Tabs defaultValue="all agent" className="w-full p-2">
-        <TabsList className="grid grid-cols-2 w-full md:w-[300px]">
+      <Tabs defaultValue="all agent" className="w-full">
+        <TabsList className="grid grid-cols-2 w-full md:w-[300px] mx-2">
           <TabsTrigger value="all agent">
             <Users className="size-4 mr-2" />
             All Agents
@@ -231,7 +255,7 @@ export const SimpleAgentItem: FC = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="all agent" className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+          <div className={`grid ${gridColumns.all} gap-4 w-full p-2`}>
             <AnimatePresence>
               {agents.map((agent: Agent) => (
                 <motion.div
@@ -246,6 +270,7 @@ export const SimpleAgentItem: FC = () => {
                     stiffness: 300,
                     damping: 20,
                   }}
+                  className="w-full"
                 >
                   <AgentItemCard
                     name={agent.name}
@@ -262,7 +287,7 @@ export const SimpleAgentItem: FC = () => {
           </div>
         </TabsContent>
         <TabsContent value="recommended" className="w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className={`grid ${gridColumns.recommended} gap-4 w-full p-2`}>
             <AnimatePresence>
               {recommendedAgents.map((agent: Agent) => (
                 <motion.div
@@ -277,6 +302,7 @@ export const SimpleAgentItem: FC = () => {
                     stiffness: 300,
                     damping: 20,
                   }}
+                  className="w-full"
                 >
                   <AgentItemCard
                     name={agent.name}
