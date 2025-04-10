@@ -6,10 +6,35 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 
 import "./globals.css";
 
+const description = "Build your personalized AI swarm with Heurist Mesh — configure dedicated MCP servers for 100+ Web3 tools tailored to your specific use cases."
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://agents.heurist.ai"),
+  metadataBase: new URL("https://mcp.heurist.ai"),
   title: "Heurist Mesh MCP Provisioner",
-  description: "Create and manage MCP servers to access Heurist Mesh",
+  description: description,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://mcp.heurist.ai",
+    title: "Heurist Mesh MCP Provisioner",
+    description: description,
+    siteName: "Heurist Mesh MCP Provisioner",
+    images: [
+      {
+        url: "/images/og-image.png", // Path to your image in the public directory
+        width: 1200,
+        height: 630,
+        alt: "Heurist Mesh MCP Provisioner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Heurist Mesh MCP Provisioner",
+    description: description,
+    images: ["/images/og-image.png"], // Path to your image in the public directory
+    creator: "@heurist_ai", // Replace with your Twitter handle
+  },
 };
 
 export const viewport = {
