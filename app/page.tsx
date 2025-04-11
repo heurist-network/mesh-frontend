@@ -55,7 +55,7 @@ export default function Home() {
                         <li className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           <Link 
-                            href="https://claude.ai/download" 
+                            href="https://modelcontextprotocol.io/quickstart/user" 
                             target="_blank"
                             className="text-primary hover:underline"
                           >
@@ -65,7 +65,7 @@ export default function Home() {
                         <li className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           <Link 
-                            href="https://www.cursor.com/" 
+                            href="https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers" 
                             target="_blank"
                             className="text-primary hover:underline"
                           >
