@@ -1,16 +1,21 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useProvisioner } from "@/lib/provisioner-context";
-import { AnimatePresence, motion } from "framer-motion";
-import { Trophy, Users } from "lucide-react";
-import { FC, useEffect, useState } from "react";
-import { SidebarToggle } from "./sidebar-toggle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSidebar } from "@/components/ui/sidebar"; // Import the useSidebar hook
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { useProvisioner } from '@/lib/provisioner-context';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Trophy, Users } from 'lucide-react';
+import { type FC, useEffect, useState } from 'react';
+import { SidebarToggle } from './sidebar-toggle';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface AgentItemProps {
   name?: string;
@@ -36,20 +41,20 @@ export interface Agent {
 
 const fetchAgents = async (): Promise<Agent[]> => {
   try {
-    const response = await fetch("/api/agents");
+    const response = await fetch('/api/agents');
     const data = await response.json();
     const agents = data.agents;
 
-    if (agents && typeof agents === "object") {
+    if (agents && typeof agents === 'object') {
       const agentsArray = Object.keys(agents).map((key) => {
         const agent = agents[key];
         const metadata = {
           id: key,
-          name: "Unnamed Agent",
-          author: "Heurist",
-          description: "",
+          name: 'Unnamed Agent',
+          author: 'Heurist',
+          description: '',
           tags: [],
-          image_url: "",
+          image_url: '',
           recommended: false,
         };
         return Object.assign(metadata, agent.metadata);
@@ -59,24 +64,24 @@ const fetchAgents = async (): Promise<Agent[]> => {
     }
     return [];
   } catch (error) {
-    console.error("Failed to fetch agents:", error);
+    console.error('Failed to fetch agents:', error);
     return [];
   }
 };
 
 const AgentItemCard: FC<AgentItemProps> = ({
-  name = "Name",
-  author = "Heurist",
-  description = "A cutting-edge AI agent",
-  tags = ["Tag"],
-  image_url = "",
+  name = 'Name',
+  author = 'Heurist',
+  description = 'A cutting-edge AI agent',
+  tags = ['Tag'],
+  image_url = '',
   total_calls = 0,
-  agentId = "",
+  agentId = '',
 }) => {
   const { isAgentSelected, toggleAgentSelection } = useProvisioner();
   return (
-    <Card className="p-1 border-none h-full w-full">
-      <div className="rounded-md border-solid h-full flex flex-col justify-between border text-white overflow-hidden w-full">
+    <Card className="p-1 border-none size-full">
+      <div className="rounded-md border-solid flex flex-col justify-between border text-white overflow-hidden size-full">
         <CardContent className="p-3">
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-2">
@@ -97,13 +102,11 @@ const AgentItemCard: FC<AgentItemProps> = ({
             <div className="flex gap-1">
               {tags.map((tag, index) => (
                 <motion.div
-                  key={index}
+                  key={tag}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Badge
-                    className="bg-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-300"
-                  >
+                  <Badge className="bg-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-300">
                     {tag}
                   </Badge>
                 </motion.div>
@@ -114,9 +117,14 @@ const AgentItemCard: FC<AgentItemProps> = ({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <p className="text-sm text-foreground line-clamp-2">{description}</p>
+                <p className="text-sm text-foreground line-clamp-2">
+                  {description}
+                </p>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-[300px] break-words">
+              <TooltipContent
+                side="bottom"
+                className="max-w-[300px] break-words"
+              >
                 {description}
               </TooltipContent>
             </Tooltip>
@@ -127,12 +135,10 @@ const AgentItemCard: FC<AgentItemProps> = ({
           <div className="flex flex-1 gap-4 text-xs items-center">
             <div className="grow-[4]">
               <p className="text-muted-foreground">Price per Use</p>
-              <p className="font-medium text-foreground">
-                1 Credit
-              </p>
+              <p className="font-medium text-foreground">1 Credit</p>
             </div>
 
-            <div className="h-8 w-px bg-secondary"></div>
+            <div className="h-8 w-px bg-secondary" />
 
             <div className="grow-[3]">
               <p className="text-muted-foreground">Used</p>
@@ -141,44 +147,42 @@ const AgentItemCard: FC<AgentItemProps> = ({
               </p>
             </div>
 
-            <div className="h-8 w-px bg-secondary"></div>
+            <div className="h-8 w-px bg-secondary" />
 
             <div className="shrink-0">
-                <motion.div 
-                  whileHover={{ scale: 1.1 }} 
-                  whileTap={{ scale: 0.9 }}
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    toggleAgentSelection(agentId);
-                  }}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  toggleAgentSelection(agentId);
+                }}
+              >
+                <div
+                  className={`size-8 group -rotate-45 ${
+                    isAgentSelected(agentId) ? 'bg-[#cdf138]' : 'bg-zinc-600'
+                  } rounded-full flex items-center justify-center cursor-pointer transition-colors duration-200`}
                 >
-                  <div
-                    className={`size-8 group -rotate-45 ${
-                      isAgentSelected(agentId) 
-                        ? "bg-[#cdf138]" 
-                        : "bg-zinc-600"
-                    } rounded-full flex items-center justify-center cursor-pointer transition-colors duration-200`}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`${
+                      isAgentSelected(agentId)
+                        ? 'text-zinc-600'
+                        : 'text-zinc-300'
+                    } duration-150 group-hover:rotate-45`}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`${
-                        isAgentSelected(agentId) 
-                          ? "text-zinc-600" 
-                          : "text-zinc-300"
-                      } duration-150 group-hover:rotate-45`}
-                    >
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </motion.div>
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </motion.div>
             </div>
           </div>
         </CardFooter>
@@ -202,7 +206,7 @@ export const SimpleAgentItem: FC = () => {
         setAgents(data);
         setRecommendedAgents(data.filter((agent) => agent.recommended));
       } catch (err) {
-        console.error("Failed to load agents:", err);
+        console.error('Failed to load agents:', err);
       } finally {
         setLoading(false);
       }
@@ -217,25 +221,26 @@ export const SimpleAgentItem: FC = () => {
 
   // Determine the grid column classes based on sidebar state
   const getGridColumns = () => {
-    const isExpanded = state === "expanded";
-    
+    const isExpanded = state === 'expanded';
+
     // Base columns for the 'All Agents' tab
     return {
-      all: isExpanded 
-        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3" 
-        : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+      all: isExpanded
+        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
       recommended: isExpanded
-        ? "grid-cols-1 lg:grid-cols-1 xl:grid-cols-2" 
-        : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        ? 'grid-cols-1 lg:grid-cols-1 xl:grid-cols-2'
+        : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4',
     };
   };
 
   const gridColumns = getGridColumns();
 
   // This class helps with transitions when the sidebar state changes
-  const containerClass = state === "expanded" 
-    ? "flex-1 transition-all duration-300" 
-    : "w-full transition-all duration-300";
+  const containerClass =
+    state === 'expanded'
+      ? 'flex-1 transition-all duration-300'
+      : 'w-full transition-all duration-300';
 
   return (
     <div className={`flex flex-col gap-4 p-0 md:p-6 ${containerClass}`}>
@@ -266,7 +271,7 @@ export const SimpleAgentItem: FC = () => {
                   whileHover={{ scale: 1.02 }}
                   transition={{
                     duration: 0.1,
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 300,
                     damping: 20,
                   }}
@@ -298,7 +303,7 @@ export const SimpleAgentItem: FC = () => {
                   whileHover={{ scale: 1.02 }}
                   transition={{
                     duration: 0.1,
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 300,
                     damping: 20,
                   }}

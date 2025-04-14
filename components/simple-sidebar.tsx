@@ -1,24 +1,21 @@
-"use client";
+'use client';
 
-import { SidebarToggle } from "@/components/sidebar-toggle";
-import { Button } from "@/components/ui/button";
+import { SidebarToggle } from '@/components/sidebar-toggle';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { useProvisioner } from "@/lib/provisioner-context";
-import { Agent } from "@/lib/provisioner-context";
-import { Code, Server, Wrench, Users } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Separator } from "./ui/separator";
-import { useEffect, useState } from "react";
-import { Badge } from "./ui/badge";
+} from '@/components/ui/sidebar';
+import { useProvisioner } from '@/lib/provisioner-context';
+import type { Agent } from '@/lib/provisioner-context';
+import { Code, Server, Wrench, Users } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Separator } from './ui/separator';
+import { useEffect, useState } from 'react';
 
 interface AgentTool {
   name: string;
@@ -29,20 +26,21 @@ interface AgentTool {
 export function SimpleSidebar() {
   const { setOpenMobile, state } = useSidebar();
   const { selectedAgents, activeServer } = useProvisioner();
-  const [selectedAgentDetails, setSelectedAgentDetails] = useState<Array<Agent & { tools: AgentTool[] }>>([]);
+  const [selectedAgentDetails, setSelectedAgentDetails] = useState<
+    Array<Agent & { tools: AgentTool[] }>
+  >([]);
 
-  // Fetch agent details for selected agents
   useEffect(() => {
     const fetchAgentDetails = async () => {
       try {
-        const response = await fetch("/api/agents");
+        const response = await fetch('/api/agents');
         const data = await response.json();
         const agents = data.agents;
 
-        if (agents && typeof agents === "object") {
+        if (agents && typeof agents === 'object') {
           const selectedAgentDetails = selectedAgents
-            .filter(id => agents[id])
-            .map(id => {
+            .filter((id) => agents[id])
+            .map((id) => {
               const agent = agents[id];
               return {
                 id,
@@ -50,11 +48,11 @@ export function SimpleSidebar() {
                 tools: agent.tools || [],
               };
             });
-          
+
           setSelectedAgentDetails(selectedAgentDetails);
         }
       } catch (error) {
-        console.error("Failed to fetch agent details:", error);
+        console.error('Failed to fetch agent details:', error);
       }
     };
 
@@ -73,7 +71,7 @@ export function SimpleSidebar() {
       <SidebarHeader>
         <SidebarMenu className="">
           <div className="flex flex-row justify-between items-center">
-            {state === "expanded" && (
+            {state === 'expanded' && (
               <Link
                 href="/"
                 onClick={() => {
@@ -111,7 +109,7 @@ export function SimpleSidebar() {
         {activeServer && (
           <div className="px-3 py-2">
             <div className="flex items-center gap-2 mb-2">
-              <Server className="h-4 w-4 text-green-500" />
+              <Server className="size-4 text-green-500" />
               <span className="text-sm font-medium">Active Server</span>
             </div>
             <div className="text-xs text-muted-foreground mb-1">
@@ -128,23 +126,28 @@ export function SimpleSidebar() {
               {selectedAgentDetails.map((agent) => (
                 <div key={agent.id} className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-xs text-primary-foreground">
+                    <div className="size-6 rounded-full bg-primary flex items-center justify-center text-xs text-primary-foreground">
                       {agent.name?.charAt(0) || 'A'}
                     </div>
                     <span className="text-sm font-medium">{agent.name}</span>
                   </div>
-                  
+
                   {agent.tools && agent.tools.length > 0 && (
                     <div className="pl-8 space-y-2">
                       <h4 className="text-xs font-medium flex items-center gap-1">
-                        <Wrench className="h-3 w-3" /> Tools
+                        <Wrench className="size-3" /> Tools
                       </h4>
                       <div className="space-y-2">
                         {agent.tools.map((tool, index) => (
-                          <div key={index} className="space-y-1">
+                          <div
+                            key={tool.function?.name || tool.name}
+                            className="space-y-1"
+                          >
                             <div className="flex items-center gap-1">
-                              <Code className="h-3 w-3 text-muted-foreground" />
-                              <span className="text-xs font-medium">{tool.function?.name || tool.name}</span>
+                              <Code className="size-3 text-muted-foreground" />
+                              <span className="text-xs font-medium">
+                                {tool.function?.name || tool.name}
+                              </span>
                             </div>
                             <p className="text-xs text-muted-foreground pl-4">
                               {tool.function?.description || tool.description}
@@ -154,7 +157,7 @@ export function SimpleSidebar() {
                       </div>
                     </div>
                   )}
-                  
+
                   <Separator className="my-2" />
                 </div>
               ))}

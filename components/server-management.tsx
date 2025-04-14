@@ -1,21 +1,38 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { useProvisioner } from '@/lib/provisioner-context';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Loader2, ServerCrash, Server, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function ServerManagement() {
-  const { 
-    selectedAgents, 
-    activeServer, 
-    isLoading, 
-    createNewServer, 
+  const {
+    selectedAgents,
+    activeServer,
+    isLoading,
+    createNewServer,
     deleteActiveServer,
-    hasApiKey
+    hasApiKey,
   } = useProvisioner();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -50,18 +67,22 @@ export function ServerManagement() {
         {activeServer ? (
           <div className="rounded-md border p-4">
             <div className="flex items-center gap-4">
-              <Server className="h-8 w-8 text-green-500" />
+              <Server className="size-8 text-green-500" />
               <div className="flex-1">
                 <h3 className="font-medium">Active Server</h3>
                 <p className="text-sm text-muted-foreground">
                   Server ID: {activeServer.server_id}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  MCP Endpoint: <code className="bg-muted p-1 rounded">{activeServer.mcp_endpoint}</code>
+                  MCP Endpoint:{' '}
+                  <code className="bg-muted p-1 rounded">
+                    {activeServer.mcp_endpoint}
+                  </code>
                 </p>
                 {activeServer.supported_agents && (
                   <p className="text-sm text-muted-foreground mt-2">
-                    Agents: {Array.isArray(activeServer.supported_agents) 
+                    Agents:{' '}
+                    {Array.isArray(activeServer.supported_agents)
                       ? activeServer.supported_agents.join(', ')
                       : activeServer.supported_agents.split(',').join(', ')}
                   </p>
@@ -69,20 +90,26 @@ export function ServerManagement() {
               </div>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button className={buttonVariants({ variant: "destructive", size: "icon" })}>
-                    <Trash2 className="h-4 w-4" />
+                  <Button
+                    className={buttonVariants({
+                      variant: 'destructive',
+                      size: 'icon',
+                    })}
+                  >
+                    <Trash2 className="size-4" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Server</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete this server? This action cannot be undone.
+                      Are you sure you want to delete this server? This action
+                      cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction 
+                    <AlertDialogAction
                       onClick={deleteActiveServer}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
@@ -95,7 +122,7 @@ export function ServerManagement() {
           </div>
         ) : (
           <div className="rounded-md border border-dashed p-8 text-center">
-            <ServerCrash className="mx-auto h-10 w-10 text-muted-foreground" />
+            <ServerCrash className="mx-auto size-10 text-muted-foreground" />
             <h3 className="mt-2 font-medium">No Active Server</h3>
             <p className="text-sm text-muted-foreground mt-1">
               Create a server to get started
@@ -104,18 +131,20 @@ export function ServerManagement() {
         )}
       </CardContent>
       <CardFooter>
-        <Button 
-          onClick={handleCreateServer} 
+        <Button
+          onClick={handleCreateServer}
           disabled={isCreating || isLoading || selectedAgents.length === 0}
           className="w-full"
         >
           {isCreating || isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 size-4 animate-spin" />
               {activeServer ? 'Updating Server...' : 'Creating Server...'}
             </>
+          ) : activeServer ? (
+            'Update Server with Selected Agents'
           ) : (
-            activeServer ? 'Update Server with Selected Agents' : 'Create Server'
+            'Create Server'
           )}
         </Button>
       </CardFooter>

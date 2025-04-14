@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL = 'https://sequencer-v2.heurist.xyz/provision';
 

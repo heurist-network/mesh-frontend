@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { getApiKey, hasApiKey } from './utils';
 import { createServer, deleteServer, listServers, getServerDetails } from './mcp-provisioner-api';
 import { toast } from 'sonner';

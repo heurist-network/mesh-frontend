@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const platformNames = [
