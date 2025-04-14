@@ -32,6 +32,7 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
 
 export interface Agent {
   id: string;
@@ -71,12 +72,22 @@ const AgentListItem: FC<AgentListItemProps> = ({
       }`}
     >
       <div className="shrink-0">
-        <Avatar className="size-10 rounded-md border">
-          <AvatarImage src={agent.image_url} />
-          <AvatarFallback className="rounded-md bg-primary/10 text-primary font-medium">
-            {agent.name.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
+        <div className="size-10 rounded-md border overflow-hidden flex items-center justify-center">
+          {agent.image_url ? (
+            <Image
+              src={agent.image_url}
+              alt={agent.name}
+              width={40}
+              height={40}
+              className="size-full object-cover"
+              priority
+            />
+          ) : (
+            <div className="size-full bg-primary/10 flex items-center justify-center text-primary font-medium">
+              {agent.name.charAt(0)}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grow min-w-0 flex flex-col gap-0.5">
@@ -175,12 +186,22 @@ const AgentDetailModal: FC<{
         <div className="p-5">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-3">
-              <Avatar className="size-12 rounded-md">
-                <AvatarImage src={agent.image_url} />
-                <AvatarFallback className="rounded-md bg-primary/10 text-primary">
-                  {agent.name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="size-12 rounded-md overflow-hidden flex items-center justify-center border border-border/30">
+                {agent.image_url ? (
+                  <Image
+                    src={agent.image_url}
+                    alt={agent.name}
+                    width={48}
+                    height={48}
+                    className="size-full object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="size-full bg-primary/10 flex items-center justify-center text-primary font-medium">
+                    {agent.name.charAt(0)}
+                  </div>
+                )}
+              </div>
               <div>
                 <h2 className="text-xl font-bold">{agent.name}</h2>
                 <p className="text-sm text-muted-foreground">
@@ -355,7 +376,10 @@ export const AgentItem: FC = () => {
   }
 
   return (
-    <Card className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card">
+    <Card
+      className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card"
+      data-agent-selection
+    >
       <CardHeader className="p-6 sm:px-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">

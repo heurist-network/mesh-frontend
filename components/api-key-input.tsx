@@ -23,18 +23,15 @@ export function ApiKeyInput() {
   const [inputValue, setInputValue] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
 
-  // Load API key from local storage on mount
   useEffect(() => {
     const storedApiKey = getApiKey();
     setInputValue(storedApiKey);
   }, []);
 
-  // Update input value when apiKey in context changes
   useEffect(() => {
     setInputValue(apiKey);
   }, [apiKey]);
 
-  // Auto-save API key when input changes
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (inputValue.trim() && inputValue !== apiKey) {
@@ -51,11 +48,16 @@ export function ApiKeyInput() {
     return () => clearTimeout(timer);
   }, [inputValue, apiKey, setApiKey, refreshServerStatus]);
 
-  const handleClear = () => {
-    setInputValue('');
-    saveApiKey('');
-    setApiKey('');
-    toast.success('API key cleared');
+  const scrollToAgentSelection = () => {
+    const agentSelectionSection = document.querySelector(
+      '[data-agent-selection]',
+    );
+    if (agentSelectionSection) {
+      agentSelectionSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   };
 
   return (
@@ -141,11 +143,7 @@ export function ApiKeyInput() {
       <CardFooter className="flex justify-end pb-8 pt-2 px-6 sm:px-8">
         <Button
           className="rounded-full px-5 py-2 h-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium"
-          onClick={() => {
-            document
-              .getElementById('agent-selection')
-              ?.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onClick={scrollToAgentSelection}
         >
           <span>Next</span>
           <ArrowRight className="ml-2 size-4" />

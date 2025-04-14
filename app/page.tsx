@@ -21,12 +21,7 @@ export default function Home() {
 
               <div className="grid grid-cols-1 gap-8">
                 <ApiKeyInput />
-
-                {/* div needed for animation */}
-                <div id="agent-selection">
-                  <AgentItem />
-                </div>
-
+                <AgentItem />
                 <ServerManagement />
                 <ConnectGuide />
               </div>
