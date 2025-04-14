@@ -1,16 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch(
-      "https://mesh.heurist.ai/metadata.json",
-      {
-        headers: {
-          Accept: "application/json",
-        },
-        redirect: "follow",
-      }
-    );
+    const response = await fetch('https://mesh.heurist.ai/metadata.json', {
+      headers: {
+        Accept: 'application/json',
+      },
+      redirect: 'follow',
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch agents: ${response.status}`);
@@ -19,10 +16,10 @@ export async function GET() {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("API error:", error);
+    console.error('API error:', error);
     return NextResponse.json(
-      { error: "Failed to fetch agents data" },
-      { status: 500 }
+      { error: 'Failed to fetch agents data' },
+      { status: 500 },
     );
   }
 }

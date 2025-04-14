@@ -37,11 +37,14 @@ const API_BASE_URL = '/api';
 /**
  * Create a new MCP server with specified agents
  */
-export async function createServer(apiKey: string, agents: string[]): Promise<ServerResponse> {
+export async function createServer(
+  apiKey: string,
+  agents: string[],
+): Promise<ServerResponse> {
   const response = await fetch(`${API_BASE_URL}/servers`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -55,7 +58,7 @@ export async function createServer(apiKey: string, agents: string[]): Promise<Se
     throw new Error(
       `Failed to create server: ${response.status} ${response.statusText}${
         errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
+      }`,
     );
   }
 
@@ -65,11 +68,13 @@ export async function createServer(apiKey: string, agents: string[]): Promise<Se
 /**
  * List all active servers for the current user
  */
-export async function listServers(apiKey: string): Promise<ListServersResponse> {
+export async function listServers(
+  apiKey: string,
+): Promise<ListServersResponse> {
   const response = await fetch(`${API_BASE_URL}/servers`, {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
   });
@@ -79,7 +84,7 @@ export async function listServers(apiKey: string): Promise<ListServersResponse> 
     throw new Error(
       `Failed to list servers: ${response.status} ${response.statusText}${
         errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
+      }`,
     );
   }
 
@@ -89,11 +94,14 @@ export async function listServers(apiKey: string): Promise<ListServersResponse> 
 /**
  * Get details for a specific server
  */
-export async function getServerDetails(apiKey: string, serverId: string): Promise<ServerDetailsResponse> {
+export async function getServerDetails(
+  apiKey: string,
+  serverId: string,
+): Promise<ServerDetailsResponse> {
   const response = await fetch(`${API_BASE_URL}/servers/details`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -106,7 +114,7 @@ export async function getServerDetails(apiKey: string, serverId: string): Promis
     throw new Error(
       `Failed to get server details: ${response.status} ${response.statusText}${
         errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
+      }`,
     );
   }
 
@@ -116,11 +124,14 @@ export async function getServerDetails(apiKey: string, serverId: string): Promis
 /**
  * Delete a specific server
  */
-export async function deleteServer(apiKey: string, serverId: string): Promise<DeleteServerResponse> {
+export async function deleteServer(
+  apiKey: string,
+  serverId: string,
+): Promise<DeleteServerResponse> {
   const response = await fetch(`${API_BASE_URL}/servers/delete`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -133,7 +144,7 @@ export async function deleteServer(apiKey: string, serverId: string): Promise<De
     throw new Error(
       `Failed to delete server: ${response.status} ${response.statusText}${
         errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
+      }`,
     );
   }
 

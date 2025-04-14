@@ -1,8 +1,19 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from 'react';
 import { getApiKey, hasApiKey } from './utils';
-import { createServer, deleteServer, listServers, getServerDetails } from './mcp-provisioner-api';
+import {
+  createServer,
+  deleteServer,
+  listServers,
+  getServerDetails,
+} from './mcp-provisioner-api';
 import { toast } from 'sonner';
 
 export interface Agent {
@@ -39,7 +50,9 @@ interface ProvisionerContextType {
   hasApiKey: () => boolean;
 }
 
-const ProvisionerContext = createContext<ProvisionerContextType | undefined>(undefined);
+const ProvisionerContext = createContext<ProvisionerContextType | undefined>(
+  undefined,
+);
 
 export function ProvisionerProvider({ children }: { children: ReactNode }) {
   const [apiKey, setApiKeyState] = useState<string>('');
@@ -53,7 +66,7 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     if (typeof window !== 'undefined') {
       const storedApiKey = getApiKey();
       setApiKeyState(storedApiKey);
-      
+
       if (storedApiKey) {
         refreshServerStatus();
       }
@@ -71,9 +84,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleAgentSelection = (agentId: string) => {
-    setSelectedAgents(prev => {
+    setSelectedAgents((prev) => {
       if (prev.includes(agentId)) {
-        return prev.filter(id => id !== agentId);
+        return prev.filter((id) => id !== agentId);
       } else {
         return [...prev, agentId];
       }
@@ -86,23 +99,26 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
 
   const refreshServerStatus = async () => {
     if (!hasApiKey()) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const apiKey = getApiKey();
       const { servers } = await listServers(apiKey);
-      
+
       if (servers.length > 0) {
         // Get the first server's details
-        const serverDetails = await getServerDetails(apiKey, servers[0].server_id);
+        const serverDetails = await getServerDetails(
+          apiKey,
+          servers[0].server_id,
+        );
         setActiveServer(serverDetails);
-        
+
         // Update selected agents based on the active server
         if (serverDetails.supported_agents) {
-          const supportedAgents = Array.isArray(serverDetails.supported_agents) 
-            ? serverDetails.supported_agents 
+          const supportedAgents = Array.isArray(serverDetails.supported_agents)
+            ? serverDetails.supported_agents
             : serverDetails.supported_agents.split(',');
           setSelectedAgents(supportedAgents);
         }
@@ -111,7 +127,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
       }
     } catch (err) {
       console.error('Failed to refresh server status:', err);
-      setError(err instanceof Error ? err.message : 'Failed to refresh server status');
+      setError(
+        err instanceof Error ? err.message : 'Failed to refresh server status',
+      );
       toast.error('Failed to refresh server status');
     } finally {
       setIsLoading(false);
@@ -121,22 +139,22 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
   const createNewServer = async () => {
     if (!hasApiKey() || selectedAgents.length === 0) {
       toast.error(
-        !hasApiKey() 
-          ? 'Please enter your API key first' 
-          : 'Please select at least one agent'
+        !hasApiKey()
+          ? 'Please enter your API key first'
+          : 'Please select at least one agent',
       );
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // If there's an active server, delete it first
       if (activeServer) {
         await deleteServer(getApiKey(), activeServer.server_id);
       }
-      
+
       // Create a new server with selected agents
       const newServer = await createServer(getApiKey(), selectedAgents);
       setActiveServer(newServer);
@@ -152,10 +170,10 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
 
   const deleteActiveServer = async () => {
     if (!activeServer) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await deleteServer(getApiKey(), activeServer.server_id);
       setActiveServer(null);
