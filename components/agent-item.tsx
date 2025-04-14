@@ -10,29 +10,28 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { useProvisioner } from '@/lib/provisioner-context';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Trophy, Users, PackageOpen } from 'lucide-react';
+import {
+  Trophy,
+  Users,
+  PackageOpen,
+  Search,
+  Filter,
+  Tag,
+  Star,
+  Check,
+  Info,
+  Plus,
+  X,
+  Wrench,
+} from 'lucide-react';
 import { type FC, useEffect, useState, useMemo } from 'react';
 import { SidebarToggle } from './sidebar-toggle';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSidebar } from '@/components/ui/sidebar';
-
-interface AgentItemProps {
-  name?: string;
-  author?: string;
-  description?: string;
-  tags?: string[];
-  image_url?: string;
-  total_calls?: number;
-  agentId: string;
-}
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 
 export interface Agent {
   id: string;
@@ -46,126 +45,209 @@ export interface Agent {
   tools?: any[];
 }
 
-const AgentItemCard: FC<AgentItemProps> = ({
-  name = 'Name',
-  author = 'Heurist',
-  description = 'A cutting-edge AI agent',
-  tags = ['Tag'],
-  image_url = '',
-  total_calls = 0,
-  agentId = '',
+interface AgentListItemProps {
+  agent: Agent;
+  isSelected: boolean;
+  onSelect: (id: string) => void;
+  onShowDetails: (agent: Agent) => void;
+}
+
+const AgentListItem: FC<AgentListItemProps> = ({
+  agent,
+  isSelected,
+  onSelect,
+  onShowDetails,
 }) => {
-  const { isAgentSelected, toggleAgentSelection } = useProvisioner();
   return (
-    <Card className="p-1 border-none size-full">
-      <div className="rounded-md border-solid flex flex-col justify-between border text-white overflow-hidden size-full">
-        <CardContent className="p-3 sm:p-4">
-          <div className="flex flex-wrap sm:flex-nowrap justify-between items-start gap-2 mb-2">
-            <div className="flex items-center gap-2">
-              <motion.div whileHover={{ scale: 1.05 }}>
-                <Avatar className="size-9 sm:size-10 rounded-lg">
-                  <AvatarImage src={image_url} />
-                  <AvatarFallback className="rounded-lg bg-blue-600 text-white">
-                    {name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-              </motion.div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className={`border rounded-md p-3 flex items-center gap-3 group cursor-pointer ${
+        isSelected
+          ? 'bg-primary/5 border-primary/20'
+          : 'bg-card border-border hover:border-primary/20'
+      }`}
+    >
+      <div className="shrink-0">
+        <Avatar className="size-10 rounded-md border">
+          <AvatarImage src={agent.image_url} />
+          <AvatarFallback className="rounded-md bg-primary/10 text-primary font-medium">
+            {agent.name.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+      </div>
+
+      <div className="grow min-w-0 flex flex-col gap-0.5">
+        <div className="flex items-center">
+          <h3 className="text-sm font-medium leading-none truncate mr-2">
+            {agent.name}
+          </h3>
+          {agent.recommended && (
+            <Badge
+              variant="outline"
+              className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4"
+            >
+              <Star className="size-2.5 mr-0.5" /> Recommended
+            </Badge>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground truncate">
+          {agent.description}
+        </p>
+        <div className="flex gap-1 mt-1 flex-wrap">
+          {agent.tags.slice(0, 2).map((tag) => (
+            <Badge
+              key={tag}
+              variant="secondary"
+              className="px-1 py-0 h-4 text-[10px] bg-secondary/50"
+            >
+              {tag}
+            </Badge>
+          ))}
+          {agent.tags.length > 2 && (
+            <Badge variant="outline" className="px-1 py-0 h-4 text-[10px]">
+              +{agent.tags.length - 2}
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 ml-auto">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-7 rounded-full opacity-60 hover:opacity-100"
+          onClick={(e) => {
+            e.stopPropagation();
+            onShowDetails(agent);
+          }}
+        >
+          <Info className="size-3.5" />
+        </Button>
+
+        <Button
+          className={`size-7 rounded-full flex items-center justify-center transition-colors ${
+            isSelected
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary'
+          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(agent.id);
+          }}
+        >
+          {isSelected ? (
+            <Check className="size-4" />
+          ) : (
+            <Plus className="size-4" />
+          )}
+        </Button>
+      </div>
+    </motion.div>
+  );
+};
+
+const AgentDetailModal: FC<{
+  agent: Agent | null;
+  onClose: () => void;
+  onSelect: (id: string) => void;
+  isSelected: boolean;
+}> = ({ agent, onClose, onSelect, isSelected }) => {
+  if (!agent) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.95 }}
+        className="bg-card border rounded-lg shadow-lg w-full max-w-md max-h-[80vh] overflow-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-5">
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex items-center gap-3">
+              <Avatar className="size-12 rounded-md">
+                <AvatarImage src={agent.image_url} />
+                <AvatarFallback className="rounded-md bg-primary/10 text-primary">
+                  {agent.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
               <div>
-                <h3 className="font-medium text-base sm:text-lg">{name}</h3>
-                <p className="text-xs text-muted-foreground">By {author}</p>
+                <h2 className="text-xl font-bold">{agent.name}</h2>
+                <p className="text-sm text-muted-foreground">
+                  By {agent.author}
+                </p>
               </div>
             </div>
-
-            <div className="flex flex-wrap gap-1 mt-1 sm:mt-0">
-              {tags.map((tag, index) => (
-                <motion.div
-                  key={tag}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Badge className="bg-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-300">
-                    {tag}
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={onClose}
+            >
+              <X className="size-4" />
+            </Button>
           </div>
 
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <p className="text-sm text-foreground line-clamp-2">
-                  {description}
-                </p>
-              </TooltipTrigger>
-              <TooltipContent
-                side="bottom"
-                className="max-w-[300px] break-words"
-              >
-                {description}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </CardContent>
+          <p className="text-sm mb-4">{agent.description}</p>
 
-        <CardFooter className="m-2 sm:m-3 p-2 sm:p-3 rounded-lg flex justify-between items-center bg-muted">
-          <div className="flex flex-1 gap-2 sm:gap-4 text-xs items-center">
-            <div className="grow-[4]">
-              <p className="text-muted-foreground">Price per Use</p>
-              <p className="font-medium text-foreground">1 Credit</p>
-            </div>
+          <div className="flex flex-wrap gap-1 mb-4">
+            {agent.tags.map((tag) => (
+              <Badge key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+          </div>
 
-            <div className="h-8 w-px bg-secondary hidden sm:block" />
-            <div className="h-8 w-px bg-secondary sm:hidden" />
-
-            <div className="grow-[3]">
-              <p className="text-muted-foreground">Used</p>
-              <p className="font-medium text-foreground">
-                {total_calls.toLocaleString()}x
-              </p>
-            </div>
-
-            <div className="h-8 w-px bg-secondary" />
-
-            <div className="shrink-0">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
-                  toggleAgentSelection(agentId);
-                }}
-              >
-                <div
-                  className={`size-8 group -rotate-45 ${
-                    isAgentSelected(agentId) ? 'bg-[#cdf138]' : 'bg-zinc-600'
-                  } rounded-full flex items-center justify-center cursor-pointer transition-colors duration-200`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`${
-                      isAgentSelected(agentId)
-                        ? 'text-zinc-600'
-                        : 'text-zinc-300'
-                    } duration-150 group-hover:rotate-45`}
+          {agent.tools && agent.tools.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-medium mb-2 flex items-center gap-1">
+                <span className="bg-primary/10 p-1 rounded-md inline-flex">
+                  <Wrench className="size-4 text-primary" />
+                </span>
+                Tools ({agent.tools.length})
+              </h3>
+              <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                {agent.tools.map((tool: any, toolIndex: number) => (
+                  <div
+                    key={`tool-${toolIndex}-${tool.function?.name || tool.name}`}
+                    className="bg-muted/50 rounded-md p-2.5 text-xs"
                   >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </motion.div>
+                    <div className="font-medium mb-1">
+                      {tool.function?.name || tool.name}
+                    </div>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {tool.function?.description || tool.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
+          )}
+
+          <div className="flex justify-between items-center pt-3 border-t">
+            <div className="text-xs text-muted-foreground">
+              Used {agent.total_calls?.toLocaleString() || 0} times
+            </div>
+            <Button
+              className={`${isSelected ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
+              onClick={() => onSelect(agent.id)}
+            >
+              {isSelected ? 'Remove Agent' : 'Add Agent'}
+            </Button>
           </div>
-        </CardFooter>
-      </div>
-    </Card>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -175,15 +257,22 @@ export const AgentItem: FC = () => {
     toggleAgentSelection,
     allAgentsArray,
     refreshAgents,
+    selectedAgents,
   } = useProvisioner();
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewType, setViewType] = useState<'all' | 'recommended'>('all');
+  const [detailAgent, setDetailAgent] = useState<Agent | null>(null);
+
   const { state } = useSidebar();
 
   useEffect(() => {
     const loadAgents = async () => {
       try {
         setLoading(true);
-        // Check if we already have agents loaded
         if (allAgentsArray.length === 0) {
           await refreshAgents();
         }
@@ -197,28 +286,45 @@ export const AgentItem: FC = () => {
     loadAgents();
   }, [allAgentsArray.length, refreshAgents]);
 
-  // Memoize recommended agents to avoid recalculation on each render
-  const recommendedAgents = useMemo(() => {
-    return allAgentsArray.filter((agent) => agent.recommended);
+  const uniqueTags = useMemo(() => {
+    const allTags = allAgentsArray.flatMap((agent) => agent.tags);
+    return [...new Set(allTags)].sort();
   }, [allAgentsArray]);
 
-  // Determine the grid column classes based on sidebar state
-  const getGridColumns = () => {
-    const isExpanded = state === 'expanded';
+  const uniqueAuthors = useMemo(() => {
+    const authors = allAgentsArray.map((agent) => agent.author);
+    return [...new Set(authors)].sort();
+  }, [allAgentsArray]);
 
-    // Base columns for the 'All Agents' tab
-    return {
-      all: isExpanded
-        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
-        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
-      recommended: isExpanded
-        ? 'grid-cols-1 lg:grid-cols-1 xl:grid-cols-2'
-        : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4',
-    };
-  };
+  const filteredAgents = useMemo(() => {
+    let result = allAgentsArray;
 
-  // Memoize grid columns to avoid recalculation when not needed
-  const gridColumns = useMemo(getGridColumns, [state]);
+    if (viewType === 'recommended') {
+      result = result.filter((agent) => agent.recommended);
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (agent) =>
+          agent.name.toLowerCase().includes(query) ||
+          agent.description.toLowerCase().includes(query) ||
+          agent.tags.some((tag) => tag.toLowerCase().includes(query)),
+      );
+    }
+
+    if (selectedTag) {
+      result = result.filter((agent) => agent.tags.includes(selectedTag));
+    }
+
+    if (selectedAuthor) {
+      result = result.filter((agent) => agent.author === selectedAuthor);
+    }
+
+    return result;
+  }, [allAgentsArray, searchQuery, selectedTag, selectedAuthor, viewType]);
+
+  const selectedCount = selectedAgents.length;
 
   if (loading) {
     return (
@@ -233,12 +339,16 @@ export const AgentItem: FC = () => {
             </CardTitle>
           </div>
           <CardDescription className="text-base text-muted-foreground/90 pl-[52px]">
-            Click on the arrow button to select/deselect agents for your MCP
-            server
+            Add agents to your MCP server
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 sm:px-8">
-          <div className="text-center py-10">Loading agents...</div>
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-pulse flex flex-col items-center">
+              <div className="h-8 w-52 bg-muted rounded mb-4" />
+              <div className="h-4 w-32 bg-muted rounded" />
+            </div>
+          </div>
         </CardContent>
       </Card>
     );
@@ -256,8 +366,7 @@ export const AgentItem: FC = () => {
           </CardTitle>
         </div>
         <CardDescription className="text-base text-muted-foreground/90 pl-[52px]">
-          Click on the arrow button to select/deselect agents for your MCP
-          server
+          Add agents to your MCP server
         </CardDescription>
       </CardHeader>
 
@@ -266,91 +375,209 @@ export const AgentItem: FC = () => {
           <SidebarToggle />
         </div>
 
-        <Tabs defaultValue="all agent" className="w-full">
-          <TabsList className="grid grid-cols-2 w-full md:w-[300px] mb-6">
-            <TabsTrigger
-              value="all agent"
-              className="flex items-center justify-center"
-            >
-              <Users className="size-4 mr-2" />
-              All Agents
-            </TabsTrigger>
-            <TabsTrigger
-              value="recommended"
-              className="flex items-center justify-center"
-            >
-              <Trophy className="size-4 mr-2" />
-              Recommended
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all agent" className="w-full">
-            <div className={`grid ${gridColumns.all} gap-4 w-full`}>
-              <AnimatePresence>
-                {allAgentsArray.map((agent: Agent) => (
-                  <motion.div
-                    key={agent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{
-                      duration: 0.1,
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 20,
-                    }}
-                    className="w-full"
-                  >
-                    <AgentItemCard
-                      name={agent.name}
-                      author={agent.author}
-                      description={agent.description}
-                      tags={agent.tags}
-                      image_url={agent.image_url}
-                      total_calls={agent.total_calls}
-                      agentId={agent.id}
-                    />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+        <div className="bg-card mb-6 border rounded-lg p-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative grow">
+              <Search className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
+              <Input
+                placeholder="Search agents..."
+                className="pl-9 h-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-          </TabsContent>
-
-          <TabsContent value="recommended" className="w-full">
-            <div className={`grid ${gridColumns.recommended} gap-4 w-full`}>
-              <AnimatePresence>
-                {recommendedAgents.map((agent: Agent) => (
-                  <motion.div
-                    key={agent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{
-                      duration: 0.1,
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 20,
-                    }}
-                    className="w-full"
-                  >
-                    <AgentItemCard
-                      name={agent.name}
-                      author={agent.author}
-                      description={agent.description}
-                      tags={agent.tags}
-                      image_url={agent.image_url}
-                      total_calls={agent.total_calls}
-                      agentId={agent.id}
-                    />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+            <div className="flex gap-2">
+              <Button
+                variant={viewType === 'all' ? 'default' : 'outline'}
+                size="sm"
+                className="h-9"
+                onClick={() => setViewType('all')}
+              >
+                <Users className="mr-1.5 size-3.5" />
+                All
+              </Button>
+              <Button
+                variant={viewType === 'recommended' ? 'default' : 'outline'}
+                size="sm"
+                className="h-9"
+                onClick={() => setViewType('recommended')}
+              >
+                <Trophy className="mr-1.5 size-3.5" />
+                Recommended
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className={`size-9 ${showFilters ? 'bg-primary/10 border-primary/20' : ''}`}
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="size-4" />
+              </Button>
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+
+          {showFilters && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mt-3 pt-3 border-t"
+            >
+              <div className="flex flex-wrap gap-3">
+                <div className="space-y-1">
+                  <div className="text-xs font-medium flex items-center gap-1">
+                    <Tag className="size-3" /> Tags
+                  </div>
+                  <div className="flex flex-wrap gap-1 max-w-[400px]">
+                    {uniqueTags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant={selectedTag === tag ? 'default' : 'outline'}
+                        className="cursor-pointer text-xs"
+                        onClick={() =>
+                          setSelectedTag(selectedTag === tag ? null : tag)
+                        }
+                      >
+                        {tag}
+                        {selectedTag === tag && (
+                          <X
+                            className="ml-1 size-3"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedTag(null);
+                            }}
+                          />
+                        )}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator orientation="vertical" className="h-auto" />
+
+                <div className="space-y-1">
+                  <div className="text-xs font-medium flex items-center gap-1">
+                    <Users className="size-3" /> Authors
+                  </div>
+                  <div className="flex flex-wrap gap-1 max-w-[400px]">
+                    {uniqueAuthors.map((author) => (
+                      <Badge
+                        key={author}
+                        variant={
+                          selectedAuthor === author ? 'default' : 'outline'
+                        }
+                        className="cursor-pointer text-xs"
+                        onClick={() =>
+                          setSelectedAuthor(
+                            selectedAuthor === author ? null : author,
+                          )
+                        }
+                      >
+                        {author}
+                        {selectedAuthor === author && (
+                          <X
+                            className="ml-1 size-3"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedAuthor(null);
+                            }}
+                          />
+                        )}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        <div className="flex justify-between items-center mb-3">
+          <p className="text-sm">
+            {filteredAgents.length} agent
+            {filteredAgents.length !== 1 ? 's' : ''} available
+          </p>
+          <p className="text-sm font-medium">{selectedCount} selected</p>
+        </div>
+
+        <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
+          <AnimatePresence>
+            {filteredAgents.length > 0 ? (
+              filteredAgents.map((agent) => (
+                <AgentListItem
+                  key={agent.id}
+                  agent={agent}
+                  isSelected={isAgentSelected(agent.id)}
+                  onSelect={() => toggleAgentSelection(agent.id)}
+                  onShowDetails={() => setDetailAgent(agent)}
+                />
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-12 px-4 bg-muted/30 rounded-lg"
+              >
+                <div className="mx-auto size-12 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+                  <Search className="size-6 text-muted-foreground" />
+                </div>
+                <h3 className="text-base font-medium mb-1">No agents found</h3>
+                <p className="text-sm text-muted-foreground">
+                  Try adjusting your search or filters
+                </p>
+                {(searchQuery || selectedTag || selectedAuthor) && (
+                  <Button
+                    variant="link"
+                    className="mt-2"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedTag(null);
+                      setSelectedAuthor(null);
+                    }}
+                  >
+                    Clear all filters
+                  </Button>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <AnimatePresence>
+          {detailAgent && (
+            <AgentDetailModal
+              agent={detailAgent}
+              onClose={() => setDetailAgent(null)}
+              onSelect={toggleAgentSelection}
+              isSelected={isAgentSelected(detailAgent.id)}
+            />
+          )}
+        </AnimatePresence>
       </CardContent>
+
+      {selectedCount > 0 && (
+        <CardFooter className="p-4 border-t flex justify-between items-center bg-muted/30">
+          <div className="text-sm">
+            <span className="font-medium">{selectedCount}</span> agent
+            {selectedCount !== 1 ? 's' : ''} selected
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                selectedAgents.forEach((id) => {
+                  if (isAgentSelected(id)) {
+                    toggleAgentSelection(id);
+                  }
+                });
+              }}
+            >
+              Clear Selection
+            </Button>
+          </div>
+        </CardFooter>
+      )}
     </Card>
   );
 };
