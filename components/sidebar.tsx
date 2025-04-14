@@ -10,7 +10,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useProvisioner } from '@/lib/provisioner-context';
-import type { Agent } from '@/lib/provisioner-context';
 import {
   Code,
   Server,
@@ -26,8 +25,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Separator } from './ui/separator';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -223,8 +221,9 @@ export function RealSidebar() {
                         transition={{ duration: 0.2 }}
                         className="border border-border/50 rounded-md overflow-hidden"
                       >
-                        <div
-                          className="p-2 flex items-center gap-2 cursor-pointer hover:bg-muted/30"
+                        <button
+                          type="button"
+                          className="w-full text-left p-2 flex items-center gap-2 cursor-pointer hover:bg-muted/30"
                           onClick={() => toggleExpandedAgent(agent.id)}
                         >
                           <div className="size-9 shrink-0 rounded-md flex items-center justify-center overflow-hidden border border-border/30">
@@ -280,7 +279,7 @@ export function RealSidebar() {
                           >
                             <X className="size-3" />
                           </Button>
-                        </div>
+                        </button>
 
                         <AnimatePresence>
                           {expandedAgent === agent.id &&
