@@ -26,10 +26,11 @@ export function ConnectGuide() {
       description: 'Code editor with AI capabilities supporting MCP',
     },
     {
-      name: 'GitHub Copilot',
+      name: 'MCP Proxy',
       icon: <GitBranch className="size-4" />,
-      link: 'https://docs.github.com/en/copilot/configuring-github-copilot/configuring-github-copilot-settings-on-githubcom',
-      description: 'AI pair programmer with MCP integration',
+      link: 'https://github.com/sparfenyuk/mcp-proxy',
+      description:
+        'Proxy tool to connect MCP servers with different transports',
     },
     {
       name: 'MCP Documentation',
