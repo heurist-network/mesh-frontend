@@ -42,6 +42,7 @@ export interface Agent {
   total_calls?: number;
   recommended?: boolean;
   tools?: any[];
+  // price_per_use?: string;
 }
 
 interface AgentListItemProps {
@@ -93,32 +94,46 @@ const AgentListItem: FC<AgentListItemProps> = ({
           <h3 className="text-sm font-medium leading-none truncate mr-2">
             {agent.name}
           </h3>
+          <Badge
+            variant="outline"
+            className="bg-primary/10 text-primary border-primary/20 px-1.5 py-0 h-4 text-[10px]"
+          >
+            1 credit/use
+          </Badge>
           {agent.recommended && (
             <Badge
               variant="outline"
-              className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4"
+              className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4 ml-1"
             >
               <Star className="size-2.5 mr-0.5" /> Recommended
             </Badge>
           )}
         </div>
+
         <p className="text-xs text-muted-foreground truncate">
           {agent.description}
         </p>
-        <div className="flex gap-1 mt-1 flex-wrap">
-          {agent.tags.slice(0, 2).map((tag) => (
-            <Badge
-              key={tag}
-              variant="secondary"
-              className="px-1 py-0 h-4 text-[10px] bg-secondary/50"
-            >
-              {tag}
-            </Badge>
-          ))}
-          {agent.tags.length > 2 && (
-            <Badge variant="outline" className="px-1 py-0 h-4 text-[10px]">
-              +{agent.tags.length - 2}
-            </Badge>
+        <div className="flex items-center justify-between mt-1">
+          <div className="flex gap-1 flex-wrap">
+            {agent.tags.slice(0, 2).map((tag) => (
+              <Badge
+                key={tag}
+                variant="secondary"
+                className="px-1 py-0 h-4 text-[10px] bg-secondary/50"
+              >
+                {tag}
+              </Badge>
+            ))}
+            {agent.tags.length > 2 && (
+              <Badge variant="outline" className="px-1 py-0 h-4 text-[10px]">
+                +{agent.tags.length - 2}
+              </Badge>
+            )}
+          </div>
+          {agent.total_calls !== undefined && (
+            <span className="text-[10px] text-muted-foreground">
+              {agent.total_calls.toLocaleString()} uses
+            </span>
           )}
         </div>
       </div>
