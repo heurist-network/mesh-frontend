@@ -35,7 +35,7 @@ interface AgentTool {
   parameters?: any;
 }
 
-export function SimpleSidebar() {
+export function RealSidebar() {
   const { setOpenMobile, state } = useSidebar();
   const { selectedAgents, activeServer } = useProvisioner();
   const [selectedAgentDetails, setSelectedAgentDetails] = useState<

@@ -199,12 +199,12 @@ const AgentItemCard: FC<AgentItemProps> = ({
   );
 };
 
-export const SimpleAgentItem: FC = () => {
+export const AgentItem: FC = () => {
   const { isAgentSelected, toggleAgentSelection } = useProvisioner();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [recommendedAgents, setRecommendedAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
-  const { state } = useSidebar(); // Get the sidebar state
+  const { state } = useSidebar();
 
   useEffect(() => {
     const loadAgents = async () => {
