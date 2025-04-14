@@ -31,13 +31,6 @@ export default function Home() {
                 <ApiKeyInput />
 
                 <div id="agent-selection" className="w-full">
-                  <h2 className="text-xl font-semibold mb-4 p-2">
-                    Step 2. Select your agents
-                  </h2>
-                  <p className="text-sm text-muted-foreground mb-4 p-2">
-                    Click on the arrow button to select/deselect agents for your
-                    MCP server
-                  </p>
                   <SimpleAgentItem />
                 </div>
 
