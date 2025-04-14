@@ -1,48 +1,70 @@
+'use client';
+
 import type { ComponentProps } from 'react';
 
 import { type SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
 import { Button } from './ui/button';
-
-export const SidebarLeftIcon = ({ size = 16 }: { size?: number }) => (
-  <svg
-    height={size}
-    strokeLinejoin="round"
-    viewBox="0 0 16 16"
-    width={size}
-    style={{ color: 'currentcolor' }}
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M6.245 2.5H14.5V12.5C14.5 13.0523 14.0523 13.5 13.5 13.5H6.245V2.5ZM4.995 2.5H1.5V12.5C1.5 13.0523 1.94772 13.5 2.5 13.5H4.995V2.5ZM0 1H1.5H14.5H16V2.5V12.5C16 13.8807 14.8807 15 13.5 15H2.5C1.11929 15 0 13.8807 0 12.5V2.5V1Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+import { PanelLeft } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 export function SidebarToggle({
   className,
 }: ComponentProps<typeof SidebarTrigger>) {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, openMobile, state } = useSidebar();
+  const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          onClick={toggleSidebar}
-          variant="outline"
-          className="md:px-2 md:h-fit"
-        >
-          <SidebarLeftIcon size={16} />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent align="start">Toggle Sidebar</TooltipContent>
-    </Tooltip>
-  );
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  if (isMobile) {
+    return (
+      <Button
+        onClick={toggleSidebar}
+        variant="default"
+        size="icon"
+        className={cn(
+          'fixed z-50 rounded-full shadow-lg md:hidden bg-primary hover:bg-primary/90 h-12 w-12 flex items-center justify-center transition-all duration-300',
+          openMobile
+            ? 'bottom-6 left-[calc(var(--sidebar-width-mobile)-4rem)]'
+            : 'bottom-6 right-6 animate-in slide-in-from-bottom-4',
+        )}
+      >
+        <PanelLeft
+          size={20}
+          className={`transition-transform duration-300 ${openMobile ? 'rotate-180' : ''}`}
+        />
+        <span className="sr-only">Toggle sidebar</span>
+        <span
+          className={cn(
+            'absolute inset-0 rounded-full bg-primary/20 opacity-0 transition-opacity',
+            openMobile ? 'opacity-100' : 'opacity-0',
+          )}
+        />
+      </Button>
+    );
+  }
+
+  // for desktop, only to show when collapsed
+  if (state === 'collapsed') {
+    return (
+      <Button
+        type="button"
+        onClick={toggleSidebar}
+        variant="outline"
+        size="icon"
+        className="fixed left-4 top-4 z-40 hidden md:flex size-8 items-center justify-center bg-background/80 backdrop-blur-sm shadow-sm border-primary/20"
+      >
+        <PanelLeft size={16} className="text-primary" />
+        <span className="sr-only">Show sidebar</span>
+      </Button>
+    );
+  }
+
+  return null;
 }

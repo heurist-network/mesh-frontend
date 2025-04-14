@@ -6,6 +6,7 @@ import { ProvisionerProvider } from '@/lib/provisioner-context';
 import { AnimatedTitle } from '@/components/animated-title';
 import { Footer } from '@/components/footer';
 import { ConnectGuide } from '@/components/connect-guide';
+import { SidebarToggle } from '@/components/sidebar-toggle';
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
             </div>
           </div>
         </main>
+        <SidebarToggle />
       </div>
     </ProvisionerProvider>
   );

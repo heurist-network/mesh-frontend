@@ -14,8 +14,7 @@ import {
 } from '@/components/ui/card';
 import { useProvisioner } from '@/lib/provisioner-context';
 import { setApiKey as saveApiKey, getApiKey } from '@/lib/utils';
-import { toast } from 'sonner';
-import { Eye, EyeOff, KeyRound, ArrowRight, Coins } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export function ApiKeyInput() {

@@ -1,6 +1,5 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -27,7 +26,6 @@ import {
   Wrench,
 } from 'lucide-react';
 import { type FC, useEffect, useState, useMemo } from 'react';
-import { SidebarToggle } from './sidebar-toggle';
 import { useSidebar } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -395,10 +393,6 @@ export const AgentItem: FC = () => {
       </CardHeader>
 
       <CardContent className="px-6 sm:px-8 pt-0 pb-6">
-        <div className="absolute top-2 left-2 flex md:hidden flex-row justify-end items-center">
-          <SidebarToggle />
-        </div>
-
         <div className="bg-card mb-6 border rounded-lg p-3">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative grow">

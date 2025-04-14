@@ -1,6 +1,5 @@
 'use client';
 
-import { SidebarToggle } from '@/components/sidebar-toggle';
 import {
   Sidebar,
   SidebarContent,
@@ -15,13 +14,13 @@ import {
   Server,
   Wrench,
   Users,
-  BookOpen,
   ListFilter,
   ChevronRight,
   Plus,
   X,
   CheckCircle,
   ArrowDown,
+  SidebarClose,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -43,7 +42,7 @@ interface AgentTool {
 }
 
 export function RealSidebar() {
-  const { setOpenMobile, state } = useSidebar();
+  const { setOpenMobile, state, toggleSidebar } = useSidebar();
   const {
     selectedAgents,
     activeServer,
@@ -97,35 +96,43 @@ export function RealSidebar() {
 
   return (
     <Sidebar className="border-r border-sidebar-border">
-      <div className="absolute top-5 right-2 flex flex-row justify-end items-center z-10 md:hidden">
-        <SidebarToggle />
-      </div>
-
       <SidebarHeader className="h-16 flex items-center px-3 border-b border-sidebar-border bg-gradient-to-r from-sidebar-accent/20 to-transparent">
         <SidebarMenu className="w-full">
           <div className="flex flex-row justify-between items-center">
             {state === 'expanded' && (
-              <Link
-                href="/"
-                onClick={() => {
-                  setOpenMobile(false);
-                }}
-                className="flex flex-row gap-1 items-center py-2"
-              >
-                <div className="bg-primary/10 p-1.5 rounded-md">
-                  <Image
-                    src="/images/logo.png"
-                    alt="Heurist"
-                    width={24}
-                    height={24}
-                    className="min-w-6"
-                    priority
-                  />
+              <>
+                <Link
+                  href="/"
+                  onClick={() => {
+                    setOpenMobile(false);
+                  }}
+                  className="flex flex-row gap-1 items-center py-2"
+                >
+                  <div className="bg-primary/10 p-1.5 rounded-md">
+                    <Image
+                      src="/images/logo.png"
+                      alt="Heurist"
+                      width={24}
+                      height={24}
+                      className="min-w-6"
+                      priority
+                    />
+                  </div>
+                  <span className="text-base font-semibold px-2 text-primary">
+                    Heurist
+                  </span>
+                </Link>
+                <div className="hidden md:flex">
+                  <button
+                    type="button"
+                    onClick={toggleSidebar}
+                    className="p-1 rounded-md hover:bg-sidebar-accent/30 transition-colors"
+                    aria-label="Toggle sidebar"
+                  >
+                    <SidebarClose className="size-4 text-primary" />
+                  </button>
                 </div>
-                <span className="text-base font-semibold px-2 text-primary">
-                  Heurist
-                </span>
-              </Link>
+              </>
             )}
           </div>
         </SidebarMenu>
