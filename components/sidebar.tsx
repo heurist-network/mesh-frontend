@@ -23,7 +23,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { Separator } from './ui/separator';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Skeleton } from './ui/skeleton';
@@ -33,65 +33,43 @@ interface AgentTool {
   name: string;
   description: string;
   parameters?: any;
+  function?: {
+    name: string;
+    description: string;
+  };
 }
 
 export function RealSidebar() {
   const { setOpenMobile, state } = useSidebar();
-  const { selectedAgents, activeServer } = useProvisioner();
-  const [selectedAgentDetails, setSelectedAgentDetails] = useState<
-    Array<Agent & { tools: AgentTool[] }>
-  >([]);
+  const { selectedAgents, activeServer, allAgents, allAgentsArray } =
+    useProvisioner();
   const [isLoading, setIsLoading] = useState(false);
-  const prevSelectedAgentsRef = useRef<string[]>([]);
 
-  // Optimize agent details fetching to reduce delay
-  useEffect(() => {
-    // Check if selected agents changed to avoid unnecessary fetches
-    const selectedAgentsChanged =
-      selectedAgents.length !== prevSelectedAgentsRef.current.length ||
-      selectedAgents.some((id) => !prevSelectedAgentsRef.current.includes(id));
-
-    // Only fetch if there's an actual change
-    if (selectedAgentsChanged) {
-      const fetchAgentDetails = async () => {
-        try {
-          setIsLoading(true);
-          const response = await fetch('/api/agents');
-          const data = await response.json();
-          const agents = data.agents;
-
-          if (agents && typeof agents === 'object') {
-            const selectedAgentDetails = selectedAgents
-              .filter((id) => agents[id])
-              .map((id) => {
-                const agent = agents[id];
-                return {
-                  id,
-                  ...agent.metadata,
-                  tools: agent.tools || [],
-                };
-              });
-
-            setSelectedAgentDetails(selectedAgentDetails);
-          }
-        } catch (error) {
-          console.error('Failed to fetch agent details:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      if (selectedAgents.length > 0) {
-        fetchAgentDetails();
-      } else {
-        setSelectedAgentDetails([]);
-        setIsLoading(false);
-      }
-
-      // Update ref to current selected agents
-      prevSelectedAgentsRef.current = [...selectedAgents];
+  // Memoize selected agent details based on cached data
+  const selectedAgentDetails = useMemo(() => {
+    if (!allAgents) {
+      setIsLoading(true);
+      return [];
     }
-  }, [selectedAgents]);
+
+    setIsLoading(false);
+
+    return selectedAgents
+      .filter((id) => allAgents[id])
+      .map((id) => {
+        const agent = allAgents[id];
+        return {
+          id,
+          ...agent.metadata,
+          tools: agent.tools || [],
+        };
+      });
+  }, [selectedAgents, allAgents]);
+
+  // Replace the loading skeleton with empty state if no agents are selected
+  const showEmptyState = !isLoading && selectedAgentDetails.length === 0;
+  const showAgentList = !isLoading && selectedAgentDetails.length > 0;
+  const hideLoading = !isLoading || selectedAgentDetails.length > 0;
 
   return (
     <Sidebar className="border-r border-sidebar-border" collapsible="icon">
@@ -177,7 +155,7 @@ export function RealSidebar() {
             </Badge>
           </div>
 
-          {isLoading ? (
+          {isLoading && selectedAgentDetails.length === 0 && (
             <div className="space-y-4 px-1 animate-pulse">
               {[1, 2].map((i) => (
                 <div key={i} className="space-y-2">
@@ -198,7 +176,9 @@ export function RealSidebar() {
                 </div>
               ))}
             </div>
-          ) : selectedAgentDetails.length > 0 ? (
+          )}
+
+          {showAgentList && (
             <AnimatePresence>
               <div className="space-y-4 px-1">
                 {selectedAgentDetails.map((agent) => (
@@ -231,7 +211,7 @@ export function RealSidebar() {
                           <Wrench className="size-3" /> Tools
                         </h4>
                         <div className="space-y-3">
-                          {agent.tools.map((tool, index) => (
+                          {agent.tools.map((tool: AgentTool, index: number) => (
                             <div
                               key={tool.function?.name || tool.name}
                               className="space-y-1 group"
@@ -265,7 +245,9 @@ export function RealSidebar() {
                 ))}
               </div>
             </AnimatePresence>
-          ) : (
+          )}
+
+          {showEmptyState && (
             <div className="py-6 text-center bg-sidebar-accent/10 rounded-lg">
               <div className="size-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-primary/5">
                 <BookOpen className="size-5 text-primary/40" />

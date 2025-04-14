@@ -19,7 +19,7 @@ import {
 import { useProvisioner } from '@/lib/provisioner-context';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Trophy, Users, PackageOpen } from 'lucide-react';
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState, useMemo } from 'react';
 import { SidebarToggle } from './sidebar-toggle';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSidebar } from '@/components/ui/sidebar';
@@ -45,36 +45,6 @@ export interface Agent {
   recommended?: boolean;
   tools?: any[];
 }
-
-const fetchAgents = async (): Promise<Agent[]> => {
-  try {
-    const response = await fetch('/api/agents');
-    const data = await response.json();
-    const agents = data.agents;
-
-    if (agents && typeof agents === 'object') {
-      const agentsArray = Object.keys(agents).map((key) => {
-        const agent = agents[key];
-        const metadata = {
-          id: key,
-          name: 'Unnamed Agent',
-          author: 'Heurist',
-          description: '',
-          tags: [],
-          image_url: '',
-          recommended: false,
-        };
-        return Object.assign(metadata, agent.metadata);
-      });
-      agentsArray.sort((a, b) => (b.total_calls || 0) - (a.total_calls || 0));
-      return agentsArray.filter((item) => item.name && !(item as any).hidden);
-    }
-    return [];
-  } catch (error) {
-    console.error('Failed to fetch agents:', error);
-    return [];
-  }
-};
 
 const AgentItemCard: FC<AgentItemProps> = ({
   name = 'Name',
@@ -200,9 +170,12 @@ const AgentItemCard: FC<AgentItemProps> = ({
 };
 
 export const AgentItem: FC = () => {
-  const { isAgentSelected, toggleAgentSelection } = useProvisioner();
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [recommendedAgents, setRecommendedAgents] = useState<Agent[]>([]);
+  const {
+    isAgentSelected,
+    toggleAgentSelection,
+    allAgentsArray,
+    refreshAgents,
+  } = useProvisioner();
   const [loading, setLoading] = useState(true);
   const { state } = useSidebar();
 
@@ -210,9 +183,10 @@ export const AgentItem: FC = () => {
     const loadAgents = async () => {
       try {
         setLoading(true);
-        const data = await fetchAgents();
-        setAgents(data);
-        setRecommendedAgents(data.filter((agent) => agent.recommended));
+        // Check if we already have agents loaded
+        if (allAgentsArray.length === 0) {
+          await refreshAgents();
+        }
       } catch (err) {
         console.error('Failed to load agents:', err);
       } finally {
@@ -221,7 +195,30 @@ export const AgentItem: FC = () => {
     };
 
     loadAgents();
-  }, []);
+  }, [allAgentsArray.length, refreshAgents]);
+
+  // Memoize recommended agents to avoid recalculation on each render
+  const recommendedAgents = useMemo(() => {
+    return allAgentsArray.filter((agent) => agent.recommended);
+  }, [allAgentsArray]);
+
+  // Determine the grid column classes based on sidebar state
+  const getGridColumns = () => {
+    const isExpanded = state === 'expanded';
+
+    // Base columns for the 'All Agents' tab
+    return {
+      all: isExpanded
+        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
+      recommended: isExpanded
+        ? 'grid-cols-1 lg:grid-cols-1 xl:grid-cols-2'
+        : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4',
+    };
+  };
+
+  // Memoize grid columns to avoid recalculation when not needed
+  const gridColumns = useMemo(getGridColumns, [state]);
 
   if (loading) {
     return (
@@ -246,23 +243,6 @@ export const AgentItem: FC = () => {
       </Card>
     );
   }
-
-  // Determine the grid column classes based on sidebar state
-  const getGridColumns = () => {
-    const isExpanded = state === 'expanded';
-
-    // Base columns for the 'All Agents' tab
-    return {
-      all: isExpanded
-        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
-        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
-      recommended: isExpanded
-        ? 'grid-cols-1 lg:grid-cols-1 xl:grid-cols-2'
-        : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4',
-    };
-  };
-
-  const gridColumns = getGridColumns();
 
   return (
     <Card className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card">
@@ -307,7 +287,7 @@ export const AgentItem: FC = () => {
           <TabsContent value="all agent" className="w-full">
             <div className={`grid ${gridColumns.all} gap-4 w-full`}>
               <AnimatePresence>
-                {agents.map((agent: Agent) => (
+                {allAgentsArray.map((agent: Agent) => (
                   <motion.div
                     key={agent.id}
                     initial={{ opacity: 0, y: 20 }}

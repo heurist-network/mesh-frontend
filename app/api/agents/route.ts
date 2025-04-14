@@ -1,25 +1,18 @@
-import { NextResponse } from 'next/server';
+import { apiCall, handleApiRequest } from '@/lib/api-utils';
 
-export async function GET() {
-  try {
-    const response = await fetch('https://mesh.heurist.ai/metadata.json', {
-      headers: {
-        Accept: 'application/json',
+export const GET = handleApiRequest(
+  async () => {
+    return apiCall({
+      endpoint: 'https://mesh.heurist.ai/metadata.json',
+      cacheOptions: {
+        enabled: true,
+        duration: 5 * 60 * 1000, // 5 minutes cache
+        keyPrefix: 'agents'
       },
-      redirect: 'follow',
+      headers: {
+        Accept: 'application/json'
+      }
     });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch agents: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch agents data' },
-      { status: 500 },
-    );
-  }
-}
+  },
+  'Failed to fetch agents data'
+);
