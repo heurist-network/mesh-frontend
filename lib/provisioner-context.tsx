@@ -109,7 +109,7 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     } else {
       refreshAgents();
     }
-  }, [refreshAgents, hasApiKey]);
+  }, [refreshAgents]);
 
   const setApiKey = (key: string) => {
     setApiKeyState(key);

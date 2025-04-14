@@ -72,8 +72,8 @@ export function RealSidebar() {
   const hideLoading = !isLoading || selectedAgentDetails.length > 0;
 
   return (
-    <Sidebar className="border-r border-sidebar-border" collapsible="icon">
-      <div className="absolute top-5 right-2 flex flex-row justify-end items-center z-10">
+    <Sidebar className="border-r border-sidebar-border">
+      <div className="absolute top-5 right-2 flex flex-row justify-end items-center z-10 md:hidden">
         <SidebarToggle />
       </div>
 

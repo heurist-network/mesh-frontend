@@ -36,13 +36,13 @@ export async function apiCall<T>({
   const cacheKey = cacheOptions?.enabled
     ? `${cacheOptions.keyPrefix || ''}:${endpoint}:${method}`
     : null;
-  
+
   // check cache first
   if (cacheKey && apiCache[cacheKey]) {
     const cached = apiCache[cacheKey];
     const now = Date.now();
     const cacheDuration = cacheOptions?.duration || DEFAULT_CACHE_DURATION;
-    
+
     if (now - cached.timestamp < cacheDuration) {
       return cached.data;
     }
@@ -72,12 +72,12 @@ export async function apiCall<T>({
       throw new Error(
         `API request failed: ${response.status} ${response.statusText}${
           errorData ? ` - ${JSON.stringify(errorData)}` : ''
-        }`
+        }`,
       );
     }
 
     const data = await response.json();
-    
+
     // store in cache if enabled
     if (cacheKey) {
       apiCache[cacheKey] = {
@@ -85,7 +85,7 @@ export async function apiCall<T>({
         timestamp: Date.now(),
       };
     }
-    
+
     return data;
   } catch (error) {
     console.error(`API error (${endpoint}):`, error);
@@ -95,7 +95,7 @@ export async function apiCall<T>({
 
 export function handleApiRequest<T>(
   handler: (request: NextRequest) => Promise<T>,
-  errorMessage: string
+  errorMessage: string,
 ) {
   return async (request: NextRequest) => {
     try {
@@ -104,11 +104,11 @@ export function handleApiRequest<T>(
     } catch (error) {
       console.error('API error:', error);
       const errorResponse: ApiErrorResponse = { error: errorMessage };
-      
+
       if (error instanceof Error) {
         errorResponse.details = error.message;
       }
-      
+
       return NextResponse.json(errorResponse, { status: 500 });
     }
   };
@@ -116,10 +116,10 @@ export function handleApiRequest<T>(
 
 export function validateAuthHeader(request: NextRequest): string {
   const authHeader = request.headers.get('Authorization');
-  
+
   if (!authHeader) {
     throw new Error('Authorization header is required');
   }
-  
+
   return authHeader;
-} 
+}

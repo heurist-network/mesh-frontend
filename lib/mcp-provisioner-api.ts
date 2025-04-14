@@ -58,8 +58,8 @@ export async function getAgents(): Promise<AgentsResponse> {
     cacheOptions: {
       enabled: true,
       duration: 5 * 60 * 1000, // 5 minutes
-      keyPrefix: 'agents'
-    }
+      keyPrefix: 'agents',
+    },
   });
 }
 
