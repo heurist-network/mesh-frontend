@@ -341,7 +341,11 @@ export function RealSidebar() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.25, ease: 'easeInOut' }}
-                className="bg-gradient-to-br from-muted/30 to-transparent rounded-lg border border-dashed border-muted flex flex-col h-[calc(100vh-265px)] md:h-[calc(100vh-190px)]"
+                className={`bg-gradient-to-br from-muted/30 to-transparent rounded-lg border border-dashed border-muted flex flex-col ${
+                  activeServer
+                    ? 'h-[calc(100vh-335px)] md:h-[calc(100vh-250px)]'
+                    : 'h-[calc(100vh-265px)] md:h-[calc(100vh-190px)]'
+                }`}
               >
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
                   <motion.div
