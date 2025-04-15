@@ -153,7 +153,7 @@ export function RealSidebar() {
         </Link>
       </div>
 
-      <SidebarContent className="p-0 flex flex-col">
+      <SidebarContent className="p-0 flex flex-col overflow-hidden">
         {activeServer && (
           <div className="p-3 border-b border-sidebar-border bg-gradient-to-r from-green-500/5 to-transparent">
             <div className="flex items-center gap-2">
@@ -217,7 +217,7 @@ export function RealSidebar() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.25, ease: 'easeInOut' }}
               >
-                <ScrollArea className="flex-1 h-[calc(100vh-220px)]">
+                <ScrollArea className="flex-1 h-[calc(100vh-220px)] overflow-hidden">
                   <div className="pr-3 space-y-2">
                     {selectedAgentDetails.map((agent) => (
                       <motion.div
@@ -228,10 +228,10 @@ export function RealSidebar() {
                         transition={{ duration: 0.2 }}
                         className="border border-border/50 rounded-md overflow-hidden"
                       >
-                        <button
-                          type="button"
+                        <div
                           className="w-full text-left p-2 flex items-center gap-2 cursor-pointer hover:bg-muted/30"
                           onClick={() => toggleExpandedAgent(agent.id)}
+                          role="button"
                         >
                           <div className="size-9 shrink-0 rounded-md flex items-center justify-center overflow-hidden border border-border/30">
                             {agent.image_url ? (
@@ -275,18 +275,17 @@ export function RealSidebar() {
                               )}
                             </div>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-6 rounded-full ml-auto text-muted-foreground hover:text-destructive"
+                          <div
+                            className="size-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-muted/50 cursor-pointer ml-auto"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleAgentSelection(agent.id);
                             }}
+                            role="button"
                           >
                             <X className="size-3" />
-                          </Button>
-                        </button>
+                          </div>
+                        </div>
 
                         <AnimatePresence>
                           {expandedAgent === agent.id &&
