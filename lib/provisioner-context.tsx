@@ -1,8 +1,22 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+  useCallback,
+  useMemo,
+} from 'react';
 import { getApiKey, hasApiKey } from './utils';
-import { createServer, deleteServer, listServers, getServerDetails } from './mcp-provisioner-api';
+import {
+  createServer,
+  deleteServer,
+  listServers,
+  getServerDetails,
+  getAgents,
+} from './mcp-provisioner-api';
 import { toast } from 'sonner';
 
 export interface Agent {
@@ -37,32 +51,68 @@ interface ProvisionerContextType {
   refreshServerStatus: () => Promise<void>;
   error: string | null;
   hasApiKey: () => boolean;
+  allAgents: Record<string, any> | null;
+  allAgentsArray: Agent[];
+  refreshAgents: () => Promise<void>;
 }
 
-const ProvisionerContext = createContext<ProvisionerContextType | undefined>(undefined);
+const ProvisionerContext = createContext<ProvisionerContextType | undefined>(
+  undefined,
+);
 
 export function ProvisionerProvider({ children }: { children: ReactNode }) {
-  const [apiKey, setApiKeyState] = useState<string>('');
-  const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
-  const [activeServer, setActiveServer] = useState<ServerInfo | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeServer, setActiveServer] = useState<ServerInfo | null>(null);
+  const [apiKeyState, setApiKeyState] = useState(() => getApiKey());
+  const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
+  const [allAgents, setAllAgents] = useState<Record<string, any> | null>(null);
 
-  // Load API key and check for existing servers on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedApiKey = getApiKey();
-      setApiKeyState(storedApiKey);
-      
-      if (storedApiKey) {
-        refreshServerStatus();
+  const apiKey = apiKeyState;
+
+  const allAgentsArray = useMemo(() => {
+    if (!allAgents) return [];
+
+    const agentsArray = Object.keys(allAgents).map((key) => {
+      const agent = allAgents[key];
+      const metadata = {
+        id: key,
+        name: 'Unnamed Agent',
+        author: 'Heurist',
+        description: '',
+        tags: [],
+        image_url: '',
+        recommended: false,
+        tools: agent.tools || [],
+      };
+      return Object.assign(metadata, agent.metadata);
+    });
+
+    agentsArray.sort((a, b) => (b.total_calls || 0) - (a.total_calls || 0));
+    return agentsArray.filter((item) => item.name && !(item as any).hidden);
+  }, [allAgents]);
+
+  const refreshAgents = useCallback(async () => {
+    try {
+      const data = await getAgents();
+      if (data.agents && typeof data.agents === 'object') {
+        setAllAgents(data.agents);
       }
+    } catch (err) {
+      console.error('Failed to fetch agents:', err);
     }
   }, []);
 
+  useEffect(() => {
+    if (hasApiKey()) {
+      refreshServerStatus();
+    } else {
+      refreshAgents();
+    }
+  }, [refreshAgents]);
+
   const setApiKey = (key: string) => {
     setApiKeyState(key);
-    // When API key changes, refresh server status
     if (key) {
       refreshServerStatus();
     } else {
@@ -70,39 +120,45 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const toggleAgentSelection = (agentId: string) => {
-    setSelectedAgents(prev => {
+  const toggleAgentSelection = useCallback((agentId: string) => {
+    setSelectedAgents((prev) => {
       if (prev.includes(agentId)) {
-        return prev.filter(id => id !== agentId);
+        return prev.filter((id) => id !== agentId);
       } else {
         return [...prev, agentId];
       }
     });
-  };
+  }, []);
 
-  const isAgentSelected = (agentId: string) => {
-    return selectedAgents.includes(agentId);
-  };
+  const isAgentSelected = useCallback(
+    (agentId: string) => {
+      return selectedAgents.includes(agentId);
+    },
+    [selectedAgents],
+  );
 
   const refreshServerStatus = async () => {
     if (!hasApiKey()) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const apiKey = getApiKey();
       const { servers } = await listServers(apiKey);
-      
+
       if (servers.length > 0) {
         // Get the first server's details
-        const serverDetails = await getServerDetails(apiKey, servers[0].server_id);
+        const serverDetails = await getServerDetails(
+          apiKey,
+          servers[0].server_id,
+        );
         setActiveServer(serverDetails);
-        
+
         // Update selected agents based on the active server
         if (serverDetails.supported_agents) {
-          const supportedAgents = Array.isArray(serverDetails.supported_agents) 
-            ? serverDetails.supported_agents 
+          const supportedAgents = Array.isArray(serverDetails.supported_agents)
+            ? serverDetails.supported_agents
             : serverDetails.supported_agents.split(',');
           setSelectedAgents(supportedAgents);
         }
@@ -111,7 +167,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
       }
     } catch (err) {
       console.error('Failed to refresh server status:', err);
-      setError(err instanceof Error ? err.message : 'Failed to refresh server status');
+      setError(
+        err instanceof Error ? err.message : 'Failed to refresh server status',
+      );
       toast.error('Failed to refresh server status');
     } finally {
       setIsLoading(false);
@@ -121,22 +179,22 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
   const createNewServer = async () => {
     if (!hasApiKey() || selectedAgents.length === 0) {
       toast.error(
-        !hasApiKey() 
-          ? 'Please enter your API key first' 
-          : 'Please select at least one agent'
+        !hasApiKey()
+          ? 'Please enter your API key first'
+          : 'Please select at least one agent',
       );
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // If there's an active server, delete it first
       if (activeServer) {
         await deleteServer(getApiKey(), activeServer.server_id);
       }
-      
+
       // Create a new server with selected agents
       const newServer = await createServer(getApiKey(), selectedAgents);
       setActiveServer(newServer);
@@ -152,10 +210,10 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
 
   const deleteActiveServer = async () => {
     if (!activeServer) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await deleteServer(getApiKey(), activeServer.server_id);
       setActiveServer(null);
@@ -184,6 +242,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
         refreshServerStatus,
         error,
         hasApiKey,
+        allAgents,
+        allAgentsArray,
+        refreshAgents,
       }}
     >
       {children}

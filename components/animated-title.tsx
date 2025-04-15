@@ -1,64 +1,106 @@
-"use client";
+'use client';
 
-import { FC, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
-const platformNames = [
-  "CoinGecko",
-  "GoPlus",
-  "DexScreener",
-  "Elfa AI",
-  "Zerion",
-  "Space and Time",
-  "CARV",
-  "Masa",
-  "Truth Social",
-  "Allora",
-  "Moni"
+const PLATFORMS = [
+  'CoinGecko',
+  'GoPlus',
+  'DexScreener',
+  'Elfa AI',
+  'Zerion',
+  'Space and Time',
+  'CARV',
+  'Masa',
+  'Truth Social',
+  'Allora',
+  'Moni',
 ];
 
-export const AnimatedTitle: FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export function AnimatedTitle() {
+  const [platformIndex, setPlatformIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % platformNames.length);
-    }, 2000); // Change platform name every 2 seconds
+      setPlatformIndex((prev) => (prev + 1) % PLATFORMS.length);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative overflow-hidden">
-      <h1 
-        className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 tracking-tight leading-tight" 
-        style={{ fontFamily: "'Segoe UI Semibold', 'Segoe UI', sans-serif" }}
-      >
-        <span className="text-white">YOUR AGENTS,</span>
-        <br />
-        <span className="text-[#cdf138]">YOUR WAY</span>
-      </h1>
-      
-      <div className="mb-8">
-        <span className="text-lg md:text-xl font-medium align-middle">
-          Create and Customize MCP Servers Connecting to&nbsp;&nbsp;
-        </span>
-        <span className="inline-block align-middle relative" style={{ height: "1.5em", minWidth: "150px" }}>
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={currentIndex}
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -40, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute left-0 whitespace-nowrap font-bold text-[#cdf138] text-lg md:text-xl"
-              style={{ top: "0" }}
-            >
-              {platformNames[currentIndex]}
-            </motion.span>
-          </AnimatePresence>
-        </span>
+    <div className="relative py-4 sm:py-6 md:py-8">
+      <div className="absolute -top-10 -left-10 size-40 bg-purple-500/10 rounded-full blur-2xl" />
+      <div className="absolute -bottom-20 right-10 size-40 bg-blue-500/10 rounded-full blur-2xl" />
+
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center md:gap-3">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 md:mb-0"
+        >
+          <span className="text-white block md:inline">YOUR AGENTS,</span>
+          <span className="text-[#cdf138] block md:inline md:ml-2">
+            YOUR WAY
+          </span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, scaleY: 0 }}
+          animate={{ opacity: 0.4, scaleY: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="hidden md:block h-8 w-px bg-white/30 mx-1"
+        />
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="flex items-center text-lg sm:text-lg md:text-xl"
+        >
+          <span className="text-white/80 font-medium">Connecting to</span>
+
+          <div
+            className="relative ml-2 h-8 sm:h-8 inline-flex items-center overflow-hidden"
+            style={{ width: 'min(180px, 45vw)' }}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            role="presentation"
+            aria-hidden="true"
+          >
+            {PLATFORMS.map((platform, index) => {
+              const isActive = platformIndex === index;
+
+              return (
+                <motion.span
+                  key={platform}
+                  className="absolute left-0 font-bold whitespace-nowrap"
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{
+                    y: isActive ? 0 : 40,
+                    opacity: isActive ? 1 : 0,
+                    color: isHovering && isActive ? '#e2ff56' : '#cdf138',
+                    textShadow:
+                      isHovering && isActive
+                        ? '0 0 8px rgba(205, 241, 56, 0.7)'
+                        : '0 0 3px rgba(205, 241, 56, 0.3)',
+                  }}
+                  transition={{
+                    y: { type: 'spring', stiffness: 300, damping: 25 },
+                    opacity: { duration: 0.2 },
+                    color: { duration: 0.3 },
+                    textShadow: { duration: 0.3 },
+                  }}
+                >
+                  {platform}
+                </motion.span>
+              );
+            })}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
-};
+}

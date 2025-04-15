@@ -1,48 +1,49 @@
-import type { Metadata } from "next";
-import { Toaster } from "sonner";
+import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { ThemeProvider } from '@/components/theme-provider';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
-import "./globals.css";
+import './globals.css';
 
-const description = "Build your personalized AI swarm with Heurist Mesh — configure dedicated MCP servers for 100+ Web3 tools tailored to your specific use cases."
+const description =
+  'Build your personalized AI swarm with Heurist Mesh — configure dedicated MCP servers for 100+ Web3 tools tailored to your specific use cases.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mcp.heurist.ai"),
-  title: "Heurist Mesh MCP Provisioner",
+  metadataBase: new URL('https://mcp.heurist.ai'),
+  title: 'Heurist Mesh MCP Provisioner',
   description: description,
   openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://mcp.heurist.ai",
-    title: "Heurist Mesh MCP Provisioner",
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://mcp.heurist.ai',
+    title: 'Heurist Mesh MCP Provisioner',
     description: description,
-    siteName: "Heurist Mesh MCP Provisioner",
+    siteName: 'Heurist Mesh MCP Provisioner',
     images: [
       {
-        url: "/images/og-image.png", // Path to your image in the public directory
+        url: '/images/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Heurist Mesh MCP Provisioner",
+        alt: 'Heurist Mesh MCP Provisioner',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Heurist Mesh MCP Provisioner",
+    card: 'summary_large_image',
+    title: 'Heurist Mesh MCP Provisioner',
     description: description,
-    images: ["/images/og-image.png"], // Path to your image in the public directory
-    creator: "@heurist_ai", // Replace with your Twitter handle
+    images: ['/images/og-image.png'],
+    creator: '@heurist_ai',
   },
 };
 
 export const viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
+  maximumScale: 1,
 };
 
-const LIGHT_THEME_COLOR = "hsl(0 0% 100%)";
-const DARK_THEME_COLOR = "hsl(240deg 10% 3.92%)";
+const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
+const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
 const THEME_COLOR_SCRIPT = `\
 (function() {
   var html = document.documentElement;

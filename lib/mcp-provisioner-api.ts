@@ -1,4 +1,5 @@
 // MCP Provisioner API service
+import { apiCall } from './api-utils';
 
 interface CreateServerRequest {
   server_type: string;
@@ -31,111 +32,109 @@ interface DeleteServerResponse {
   message: string;
 }
 
+interface Agent {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string;
+  is_new?: boolean;
+  is_updated?: boolean;
+}
+
+export interface AgentsResponse {
+  agents: Agent[];
+}
+
 // Use relative API routes instead of direct external API calls to avoid CORS issues
 const API_BASE_URL = '/api';
 
 /**
+ * Fetch all available agents
+ */
+export async function getAgents(): Promise<AgentsResponse> {
+  return apiCall({
+    endpoint: 'agents',
+    baseUrl: API_BASE_URL,
+    cacheOptions: {
+      enabled: true,
+      duration: 5 * 60 * 1000, // 5 minutes
+      keyPrefix: 'agents',
+    },
+  });
+}
+
+/**
  * Create a new MCP server with specified agents
  */
-export async function createServer(apiKey: string, agents: string[]): Promise<ServerResponse> {
-  const response = await fetch(`${API_BASE_URL}/servers`, {
+export async function createServer(
+  apiKey: string,
+  agents: string[],
+): Promise<ServerResponse> {
+  return apiCall({
+    endpoint: 'servers',
     method: 'POST',
+    baseUrl: API_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
+    body: {
       server_type: 'tool',
       agents,
-    } as CreateServerRequest),
+    },
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      `Failed to create server: ${response.status} ${response.statusText}${
-        errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
-    );
-  }
-
-  return response.json();
 }
 
 /**
  * List all active servers for the current user
  */
-export async function listServers(apiKey: string): Promise<ListServersResponse> {
-  const response = await fetch(`${API_BASE_URL}/servers`, {
-    method: 'GET',
+export async function listServers(
+  apiKey: string,
+): Promise<ListServersResponse> {
+  return apiCall({
+    endpoint: 'servers',
+    baseUrl: API_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
     },
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      `Failed to list servers: ${response.status} ${response.statusText}${
-        errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
-    );
-  }
-
-  return response.json();
 }
 
 /**
  * Get details for a specific server
  */
-export async function getServerDetails(apiKey: string, serverId: string): Promise<ServerDetailsResponse> {
-  const response = await fetch(`${API_BASE_URL}/servers/details`, {
+export async function getServerDetails(
+  apiKey: string,
+  serverId: string,
+): Promise<ServerDetailsResponse> {
+  return apiCall({
+    endpoint: 'servers/details',
     method: 'POST',
+    baseUrl: API_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
+    body: {
       server_id: serverId,
-    }),
+    },
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      `Failed to get server details: ${response.status} ${response.statusText}${
-        errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
-    );
-  }
-
-  return response.json();
 }
 
 /**
  * Delete a specific server
  */
-export async function deleteServer(apiKey: string, serverId: string): Promise<DeleteServerResponse> {
-  const response = await fetch(`${API_BASE_URL}/servers/delete`, {
+export async function deleteServer(
+  apiKey: string,
+  serverId: string,
+): Promise<DeleteServerResponse> {
+  return apiCall({
+    endpoint: 'servers/delete',
     method: 'POST',
+    baseUrl: API_BASE_URL,
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
+    body: {
       server_id: serverId,
-    }),
+    },
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      `Failed to delete server: ${response.status} ${response.statusText}${
-        errorData ? ` - ${JSON.stringify(errorData)}` : ''
-      }`
-    );
-  }
-
-  return response.json();
 }
