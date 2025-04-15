@@ -218,7 +218,7 @@ export function RealSidebar() {
                 transition={{ duration: 0.25, ease: 'easeInOut' }}
               >
                 <ScrollArea className="flex-1 h-[calc(100vh-220px)] overflow-hidden">
-                  <div className="pr-3 space-y-2">
+                  <div className="space-y-3">
                     {selectedAgentDetails.map((agent) => (
                       <motion.div
                         key={agent.id}
@@ -250,13 +250,23 @@ export function RealSidebar() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <h4 className="text-sm font-medium truncate">
+                            <div className="flex items-center gap-1">
+                              <h4 className="text-sm font-medium truncate flex-1">
                                 {agent.name}
                               </h4>
                               <ChevronRight
                                 className={`size-4 text-muted-foreground transition-transform ${expandedAgent === agent.id ? 'rotate-90' : ''}`}
                               />
+                              <div
+                                className="size-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-muted/50 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleAgentSelection(agent.id);
+                                }}
+                                role="button"
+                              >
+                                <X className="size-3" />
+                              </div>
                             </div>
                             <div className="flex items-center gap-1 mt-0.5">
                               {agent.tags.slice(0, 2).map((tag: string) => (
@@ -275,16 +285,6 @@ export function RealSidebar() {
                               )}
                             </div>
                           </div>
-                          <div
-                            className="size-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-muted/50 cursor-pointer ml-auto"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleAgentSelection(agent.id);
-                            }}
-                            role="button"
-                          >
-                            <X className="size-3" />
-                          </div>
                         </div>
 
                         <AnimatePresence>
@@ -302,7 +302,7 @@ export function RealSidebar() {
                                     <Wrench className="size-3" />
                                     <span>Tools ({agent.tools.length})</span>
                                   </div>
-                                  <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
+                                  <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1 custom-scrollbar">
                                     {agent.tools.map(
                                       (tool: AgentTool, index: number) => (
                                         <div
