@@ -110,7 +110,7 @@ export function RealSidebar() {
                 >
                   <div className="bg-primary/10 p-1.5 rounded-md">
                     <Image
-                      src="/images/logo.png"
+                      src="/logo.png"
                       alt="Heurist"
                       width={24}
                       height={24}

@@ -25,7 +25,7 @@ export function Footer() {
             <div className="flex items-center gap-2">
               <div className="bg-primary/10 p-1.5 rounded-md">
                 <Image
-                  src="/images/logo.png"
+                  src="/logo.png"
                   alt="Heurist"
                   width={24}
                   height={24}

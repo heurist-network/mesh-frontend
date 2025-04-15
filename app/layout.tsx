@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'Heurist Mesh MCP Provisioner',
     images: [
       {
-        url: '/images/og-image.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Heurist Mesh MCP Provisioner',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Heurist Mesh MCP Provisioner',
     description: description,
-    images: ['/images/og-image.png'],
+    images: ['/og-image.png'],
     creator: '@heurist_ai',
   },
   keywords: 'AI agents, Web3 MCP, Heurist Mesh, MCP, MCP Server, Crypto MCP',
