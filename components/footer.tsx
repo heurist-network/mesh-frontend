@@ -9,13 +9,15 @@ import {
   TrendingUp,
   ChevronRight,
   FileText,
+  ExternalLink,
+  Star,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-12 pb-8 relative overflow-hidden">
+    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-12 pb-8 relative overflow-hidden -mx-6">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
 
@@ -24,12 +26,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="bg-primary/10 p-1.5 rounded-md">
-                <Image
-                  src="/logo.png"
-                  alt="Heurist"
-                  width={24}
-                  height={24}
-                />
+                <Image src="/logo.png" alt="Heurist" width={24} height={24} />
               </div>
               <span className="text-lg font-semibold text-primary">
                 Heurist
@@ -171,6 +168,17 @@ export function Footer() {
                   <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="https://github.com/heurist-network"
+                  target="_blank"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <Github className="size-3.5" />
+                  GitHub
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -196,6 +204,26 @@ export function Footer() {
                 >
                   <TrendingUp className="size-3.5" />
                   CoinGecko
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://www.heurist.ai/whitepaper"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <ExternalLink className="size-3.5" />
+                  Whitepaper
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.heurist.ai/protocol-overview/tokenomics"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <Star className="size-3.5" />
+                  Tokenomics
                   <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
