@@ -170,7 +170,6 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
       setError(
         err instanceof Error ? err.message : 'Failed to refresh server status',
       );
-      toast.error('Failed to refresh server status');
     } finally {
       setIsLoading(false);
     }

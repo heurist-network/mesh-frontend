@@ -17,6 +17,11 @@ import { setApiKey as saveApiKey, getApiKey } from '@/lib/utils';
 import { Eye, EyeOff, KeyRound, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+const isValidApiKey = (key: string): boolean => {
+  if (!key || key.trim().length < 8) return false;
+  return key.includes('#') || key.includes('-');
+};
+
 export function ApiKeyInput() {
   const { apiKey, setApiKey, refreshServerStatus } = useProvisioner();
   const [inputValue, setInputValue] = useState('');
@@ -32,19 +37,24 @@ export function ApiKeyInput() {
   }, [apiKey]);
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (inputValue.trim() && inputValue !== apiKey) {
-        saveApiKey(inputValue);
-        setApiKey(inputValue);
+    if (inputValue.trim() && inputValue !== apiKey) {
+      const timer = setTimeout(async () => {
         try {
-          await refreshServerStatus();
+          if (isValidApiKey(inputValue)) {
+            saveApiKey(inputValue);
+            setApiKey(inputValue);
+            await refreshServerStatus();
+          }
         } catch (error) {
           console.error('Error refreshing server status:', error);
+        } finally {
         }
-      }
-    }, 500);
+      }, 1500);
 
-    return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
   }, [inputValue, apiKey, setApiKey, refreshServerStatus]);
 
   const scrollToAgentSelection = () => {
