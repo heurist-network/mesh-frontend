@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/card';
 import { useProvisioner } from '@/lib/provisioner-context';
 import { setApiKey as saveApiKey, getApiKey } from '@/lib/utils';
-import { Eye, EyeOff, KeyRound, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, KeyRound, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 export function ApiKeyInput() {
@@ -104,44 +104,65 @@ export function ApiKeyInput() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-              <Link
-                href="https://dev-api-form.heurist.ai/"
-                target="_blank"
-                className={buttonVariants({
-                  variant: 'outline',
-                  className:
-                    'justify-start border-primary/20 bg-background/50 backdrop-blur hover:bg-primary/10 h-12 text-base',
-                })}
-              >
-                <div className="size-7 rounded-full bg-[#cdf138]/20 flex items-center justify-center mr-3">
-                  <span className="text-lg">🔑</span>
-                </div>
-                <span>Apply for a free API key</span>
-              </Link>
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:flex-1">
+                <Link
+                  href="https://dev-api-form.heurist.ai/"
+                  target="_blank"
+                  className={buttonVariants({
+                    variant: 'outline',
+                    className:
+                      'justify-start border-primary/20 bg-gradient-to-r from-background/80 to-background/40 backdrop-blur hover:bg-primary/10 h-14 text-sm shadow-sm transition-all hover:shadow w-full sm:w-auto',
+                  })}
+                >
+                  <div className="size-7 rounded-full bg-gradient-to-br from-[#cdf138]/40 to-[#cdf138]/20 flex items-center justify-center mr-2">
+                    <span className="text-base">🔑</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">Get Free API Key</span>
+                    <span className="text-xs text-muted-foreground">
+                      Quick registration
+                    </span>
+                  </div>
+                  <ExternalLink className="ml-auto size-3 text-muted-foreground/70" />
+                </Link>
 
-              <Link
-                href="https://www.heurist.ai/credits"
-                target="_blank"
-                className={buttonVariants({
-                  variant: 'outline',
-                  className:
-                    'justify-start border-primary/20 bg-background/50 backdrop-blur hover:bg-primary/10 h-12 text-base',
-                })}
+                <Link
+                  href="https://www.heurist.ai/credits"
+                  target="_blank"
+                  className={buttonVariants({
+                    variant: 'outline',
+                    className:
+                      'justify-start border-primary/20 bg-gradient-to-r from-background/80 to-background/40 backdrop-blur hover:bg-primary/10 h-14 text-sm shadow-sm transition-all hover:shadow w-full sm:w-auto',
+                  })}
+                >
+                  <div className="size-7 rounded-full bg-gradient-to-br from-[#cdf138]/40 to-[#cdf138]/20 flex items-center justify-center mr-2">
+                    <span className="text-base">💰</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">Add More Credits</span>
+                    <span className="text-xs text-muted-foreground">
+                      Pay with crypto
+                    </span>
+                  </div>
+                  <ExternalLink className="ml-auto size-3 text-muted-foreground/70" />
+                </Link>
+              </div>
+
+              <Button
+                className="rounded-full px-5 py-2 h-11 bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium ml-auto mt-1.5 hidden sm:flex"
+                onClick={scrollToAgentSelection}
               >
-                <div className="size-7 rounded-full bg-[#cdf138]/20 flex items-center justify-center mr-3">
-                  <span className="text-lg">💰</span>
-                </div>
-                <span>Top up credits with crypto</span>
-              </Link>
+                <span>Next</span>
+                <ArrowRight className="ml-2 size-4" />
+              </Button>
             </div>
           </div>
         </div>
       </CardContent>
-
-      <CardFooter className="flex justify-end pb-8 pt-2 px-6 sm:px-8">
+      <CardFooter className="px-6 sm:hidden">
         <Button
-          className="rounded-full px-5 py-2 h-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium"
+          className="rounded-full px-5 h-11 bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium w-full"
           onClick={scrollToAgentSelection}
         >
           <span>Next</span>
