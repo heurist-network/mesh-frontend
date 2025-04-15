@@ -39,7 +39,7 @@ export function AnimatedTitle() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-3 md:mb-0"
+          className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 md:mb-0"
         >
           <span className="text-white block md:inline">YOUR AGENTS,</span>
           <span className="text-[#cdf138] block md:inline md:ml-2">
@@ -58,13 +58,13 @@ export function AnimatedTitle() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="flex items-center text-base sm:text-lg md:text-xl"
+          className="flex items-center text-lg sm:text-lg md:text-xl"
         >
           <span className="text-white/80 font-medium">Connecting to</span>
 
           <div
-            className="relative ml-2 h-7 sm:h-8 inline-flex items-center overflow-hidden"
-            style={{ width: 'min(180px, 40vw)' }}
+            className="relative ml-2 h-8 sm:h-8 inline-flex items-center overflow-hidden"
+            style={{ width: 'min(180px, 45vw)' }}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
             role="presentation"
