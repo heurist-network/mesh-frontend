@@ -1,13 +1,26 @@
 import Link from 'next/link';
-import { Github, ExternalLink, Home, MessageCircle, Send } from 'lucide-react';
+import {
+  Github,
+  Home,
+  MessageCircle,
+  Send,
+  BookOpen,
+  Coins,
+  TrendingUp,
+  ChevronRight,
+  FileText,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-12 pb-8">
-      <div className="container px-4 mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-12 pb-8 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
+
+      <div className="container px-4 mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="bg-primary/10 p-1.5 rounded-md">
@@ -25,12 +38,12 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Building the future of AI agent infrastructure.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9"
+                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link href="https://github.com/heurist-network" target="_blank">
                   <Github className="size-4" />
@@ -40,7 +53,7 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9"
+                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link
                   href="https://discord.com/invite/heuristai"
@@ -53,10 +66,20 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9"
+                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link href="https://t.me/heurist_ai" target="_blank">
                   <Send className="size-4" />
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                asChild
+                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
+              >
+                <Link href="https://heuristai.medium.com/" target="_blank">
+                  <BookOpen className="size-4" />
                 </Link>
               </Button>
             </div>
@@ -64,27 +87,49 @@ export function Footer() {
 
           <div className="space-y-3">
             <h3 className="text-sm font-semibold mb-3">Resources</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               <li>
                 <Link
                   href="https://github.com/heurist-network/heurist-agent-framework"
                   target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5"
+                  className="text-sm font-medium text-primary flex items-center gap-1.5 group"
                 >
                   <Github className="size-3.5" />
                   Agent Framework
-                  <ExternalLink className="size-3 ml-0.5 opacity-70" />
+                  <ChevronRight className="size-3 ml-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://docs.heurist.ai/"
+                  target="_blank"
+                  className="text-sm font-medium text-primary flex items-center gap-1.5 group"
+                >
+                  <FileText className="size-3.5" />
+                  Documentation
+                  <ChevronRight className="size-3 ml-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
                 </Link>
               </li>
               <li>
                 <Link
                   href="https://github.com/heurist-network/heurist-mesh-mcp-server"
                   target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
                   <Github className="size-3.5" />
                   MCP Server
-                  <ExternalLink className="size-3 ml-0.5 opacity-70" />
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://heuristai.medium.com/"
+                  target="_blank"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <BookOpen className="size-3.5" />
+                  Blog
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
             </ul>
@@ -92,35 +137,66 @@ export function Footer() {
 
           <div className="space-y-3">
             <h3 className="text-sm font-semibold mb-3">Links</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               <li>
                 <Link
                   href="https://heurist.ai/"
                   target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
                   <Home className="size-3.5" />
                   Homepage
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
               <li>
                 <Link
                   href="https://discord.com/invite/heuristai"
                   target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
                   <MessageCircle className="size-3.5" />
                   Discord
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
               <li>
                 <Link
                   href="https://t.me/heurist_ai"
                   target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
                   <Send className="size-3.5" />
                   Telegram
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold mb-3">Token</h3>
+            <ul className="space-y-2.5">
+              <li>
+                <Link
+                  href="https://coinmarketcap.com/currencies/heurist-ai/"
+                  target="_blank"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <Coins className="size-3.5" />
+                  CoinMarketCap
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://www.coingecko.com/en/coins/heurist"
+                  target="_blank"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <TrendingUp className="size-3.5" />
+                  CoinGecko
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
             </ul>
