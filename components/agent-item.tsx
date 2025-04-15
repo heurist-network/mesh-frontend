@@ -42,7 +42,6 @@ export interface Agent {
   total_calls?: number;
   recommended?: boolean;
   tools?: any[];
-  // price_per_use?: string;
 }
 
 interface AgentListItemProps {
@@ -90,8 +89,8 @@ const AgentListItem: FC<AgentListItemProps> = ({
       </div>
 
       <div className="grow min-w-0 flex flex-col gap-0.5">
-        <div className="flex items-center">
-          <h3 className="text-sm font-medium leading-none truncate mr-2">
+        <div className="flex items-center flex-wrap gap-1">
+          <h3 className="text-sm font-medium leading-none truncate mr-1">
             {agent.name}
           </h3>
           <Badge
@@ -103,14 +102,14 @@ const AgentListItem: FC<AgentListItemProps> = ({
           {agent.recommended && (
             <Badge
               variant="outline"
-              className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4 ml-1"
+              className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4"
             >
               <Star className="size-2.5 mr-0.5" /> Recommended
             </Badge>
           )}
         </div>
 
-        <p className="text-xs text-muted-foreground truncate">
+        <p className="text-xs text-muted-foreground truncate mt-0.5">
           {agent.description}
         </p>
         <div className="flex items-center justify-between mt-1">
@@ -131,7 +130,7 @@ const AgentListItem: FC<AgentListItemProps> = ({
             )}
           </div>
           {agent.total_calls !== undefined && (
-            <span className="text-[10px] text-muted-foreground">
+            <span className="text-[10px] text-muted-foreground shrink-0">
               {agent.total_calls.toLocaleString()} uses
             </span>
           )}
