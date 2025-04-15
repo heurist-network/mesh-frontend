@@ -36,6 +36,13 @@ export const metadata: Metadata = {
     images: ['/images/og-image.png'],
     creator: '@heurist_ai',
   },
+  keywords: "AI agents, Web3 MCP, Heurist Mesh, MCP, MCP Server, Crypto MCP",
+  robots: "index, follow",
+  alternates: {
+    canonical: "https://mcp.heurist.ai"
+  },
+  authors: [{ name: "Heurist AI" }],
+  category: "Technology",
 };
 
 export const viewport = {
