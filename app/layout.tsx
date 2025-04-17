@@ -11,27 +11,27 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mcp.heurist.ai'),
-  title: 'Heurist Mesh MCP Provisioner',
+  title: 'Heurist MCP Portal',
   description: description,
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://mcp.heurist.ai',
-    title: 'Heurist Mesh MCP Provisioner',
+    title: 'Heurist MCP Portal',
     description: description,
-    siteName: 'Heurist Mesh MCP Provisioner',
+    siteName: 'Heurist MCP Portal',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Heurist Mesh MCP Provisioner',
+        alt: 'Heurist MCP Portal',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Heurist Mesh MCP Provisioner',
+    title: 'Heurist MCP Portal',
     description: description,
     images: ['/og-image.png'],
     creator: '@heurist_ai',
