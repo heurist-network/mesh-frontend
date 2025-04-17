@@ -17,13 +17,13 @@ import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-12 pb-8 relative overflow-hidden -mx-6">
+    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-8 pb-6 relative overflow-hidden mx-0">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
 
       <div className="container px-4 mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-          <div className="space-y-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 mb-8">
+          <div className="space-y-3 col-span-2 sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
               <div className="bg-primary/10 p-1.5 rounded-md">
                 <Image src="/logo.png" alt="Heurist" width={24} height={24} />
@@ -40,7 +40,7 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
+                className="rounded-full size-8 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link href="https://github.com/heurist-network" target="_blank">
                   <Github className="size-4" />
@@ -50,7 +50,7 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
+                className="rounded-full size-8 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link
                   href="https://discord.com/invite/heuristai"
@@ -63,7 +63,7 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
+                className="rounded-full size-8 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link href="https://t.me/heurist_ai" target="_blank">
                   <Send className="size-4" />
@@ -73,7 +73,7 @@ export function Footer() {
                 variant="outline"
                 size="icon"
                 asChild
-                className="rounded-full size-9 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
+                className="rounded-full size-8 hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-all"
               >
                 <Link href="https://heuristai.medium.com/" target="_blank">
                   <BookOpen className="size-4" />
@@ -82,9 +82,9 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold mb-3">Resources</h3>
-            <ul className="space-y-2.5">
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold mb-2">Resources</h3>
+            <ul className="space-y-2">
               <li>
                 <Link
                   href="https://github.com/heurist-network/heurist-agent-framework"
@@ -132,9 +132,9 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold mb-3">Links</h3>
-            <ul className="space-y-2.5">
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold mb-2">Links</h3>
+            <ul className="space-y-2">
               <li>
                 <Link
                   href="https://heurist.ai/"
@@ -182,9 +182,9 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold mb-3">Token</h3>
-            <ul className="space-y-2.5">
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold mb-2">Token</h3>
+            <ul className="space-y-2">
               <li>
                 <Link
                   href="https://coinmarketcap.com/currencies/heurist-ai/"
@@ -231,7 +231,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border/30 pt-6 mt-8 flex justify-center items-center">
+        <div className="border-t border-border/30 pt-4 mt-6 flex justify-center items-center">
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Heurist Network. All rights reserved.
           </p>
