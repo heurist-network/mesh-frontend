@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-8 pb-6 relative overflow-hidden mx-0">
+    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-8 pb-6 relative overflow-hidden -mx-6">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
 
