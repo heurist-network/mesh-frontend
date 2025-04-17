@@ -17,11 +17,11 @@ import Image from 'next/image';
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-8 pb-6 relative overflow-hidden -mx-6">
+    <footer className="mt-16 border-t border-border bg-gradient-to-b from-background to-background/80 pt-8 pb-6 relative overflow-hidden lg:-mx-6">
       <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent" />
 
-      <div className="container px-4 mx-auto relative z-10">
+      <div className="container px-6 lg:px-10 mx-auto relative z-10">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 mb-8">
           <div className="space-y-3 col-span-2 sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
