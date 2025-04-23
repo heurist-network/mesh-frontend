@@ -55,11 +55,6 @@ export async function getAgents(): Promise<AgentsResponse> {
   return apiCall({
     endpoint: 'agents',
     baseUrl: API_BASE_URL,
-    cacheOptions: {
-      enabled: true,
-      duration: 5 * 60 * 1000, // 5 minutes
-      keyPrefix: 'agents',
-    },
   });
 }
 
@@ -71,7 +66,7 @@ export async function createServer(
   agents: string[],
 ): Promise<ServerResponse> {
   return apiCall({
-    endpoint: 'servers',
+    endpoint: 'servers/create',
     method: 'POST',
     baseUrl: API_BASE_URL,
     headers: {
@@ -91,7 +86,7 @@ export async function listServers(
   apiKey: string,
 ): Promise<ListServersResponse> {
   return apiCall({
-    endpoint: 'servers',
+    endpoint: 'servers/list',
     baseUrl: API_BASE_URL,
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -107,14 +102,10 @@ export async function getServerDetails(
   serverId: string,
 ): Promise<ServerDetailsResponse> {
   return apiCall({
-    endpoint: 'servers/details',
-    method: 'POST',
+    endpoint: `servers/details/${serverId}`,
     baseUrl: API_BASE_URL,
     headers: {
       Authorization: `Bearer ${apiKey}`,
-    },
-    body: {
-      server_id: serverId,
     },
   });
 }
@@ -127,14 +118,11 @@ export async function deleteServer(
   serverId: string,
 ): Promise<DeleteServerResponse> {
   return apiCall({
-    endpoint: 'servers/delete',
-    method: 'POST',
+    endpoint: `servers/delete/${serverId}`,
+    method: 'DELETE',
     baseUrl: API_BASE_URL,
     headers: {
       Authorization: `Bearer ${apiKey}`,
-    },
-    body: {
-      server_id: serverId,
     },
   });
 }
