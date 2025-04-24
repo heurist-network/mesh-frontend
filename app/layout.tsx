@@ -98,7 +98,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <Toaster position="top-center" />
+            <Toaster position="bottom-right" />
             {children}
           </SidebarProvider>
         </ThemeProvider>
