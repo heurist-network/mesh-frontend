@@ -9,7 +9,7 @@ import {
   Sparkles,
   ExternalLink,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -47,6 +47,7 @@ export function ConnectGuide() {
   const [isClient, setIsClient] = useState(false);
   const [selectedClient, setSelectedClient] = useState('auto');
   const [packageManager, setPackageManager] = useState<'npx' | 'pnpm'>('npx');
+  const [copySuccess, setCopySuccess] = useState(false);
 
   // fix hydration issues by waiting for client-side render
   useEffect(() => {
@@ -110,8 +111,15 @@ export function ConnectGuide() {
     }
     navigator.clipboard.writeText(installCommand);
     setHasCopied(true);
-    toast.success('Command copied to clipboard!');
-    setTimeout(() => setHasCopied(false), 2000);
+    setCopySuccess(true);
+
+    setTimeout(() => {
+      setHasCopied(false);
+    }, 2000);
+
+    setTimeout(() => {
+      setCopySuccess(false);
+    }, 3000);
   };
 
   return (
@@ -214,9 +222,37 @@ export function ConnectGuide() {
                     backgroundSize: '400% 400%',
                   }}
                 />
+                {copySuccess && (
+                  <motion.div
+                    className="absolute inset-0 bg-[#cdf138]/10 z-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
                 <code className="relative z-10 whitespace-pre-wrap break-all sm:break-normal">
                   {displayCommand}
                 </code>
+
+                <AnimatePresence>
+                  {copySuccess && (
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.5 }}
+                      transition={{ duration: 0.5, type: 'spring' }}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="bg-[#cdf138] text-black font-medium px-4 py-2 rounded-full flex items-center gap-2">
+                          <Check className="size-4" />
+                          <span>Copied!</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </pre>
 
               <Button
@@ -254,8 +290,33 @@ export function ConnectGuide() {
               onClick={handleCopy}
               disabled={!isReady}
             >
-              <span>Copy Command</span>
-              <ArrowRight className="ml-2 size-4" />
+              <AnimatePresence mode="wait">
+                {hasCopied ? (
+                  <motion.div
+                    key="copied"
+                    className="flex items-center"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Check className="mr-2 size-4" />
+                    <span>Copied!</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="copy"
+                    className="flex items-center"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span>Copy Command</span>
+                    <ArrowRight className="ml-2 size-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Button>
             <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5 w-full sm:w-auto">
               <ExternalLink className="size-3.5" />
