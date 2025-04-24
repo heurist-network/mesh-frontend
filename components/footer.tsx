@@ -11,6 +11,8 @@ import {
   FileText,
   ExternalLink,
   Star,
+  Terminal,
+  Server,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
@@ -113,7 +115,7 @@ export function Footer() {
                   target="_blank"
                   className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
-                  <Github className="size-3.5" />
+                  <Terminal className="size-3.5" />
                   MCP Installer
                   <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
@@ -124,7 +126,7 @@ export function Footer() {
                   target="_blank"
                   className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
-                  <Github className="size-3.5" />
+                  <Server className="size-3.5" />
                   MCP Server
                   <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
