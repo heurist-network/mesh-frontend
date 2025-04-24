@@ -78,8 +78,8 @@ export function ConnectGuide() {
     (maskKey: boolean) => {
       const base =
         packageManager === 'npx'
-          ? 'npx -y github:heurist-network/mcp-cli'
-          : 'pnpm dlx github:heurist-network/mcp-cli';
+          ? 'npx -y heurist-mcp-cli'
+          : 'pnpm dlx heurist-mcp-cli';
 
       const sid = isClient ? serverId : '<SERVER_ID>';
       let key = isClient && currentApiKey ? currentApiKey : '<YOUR_API_KEY>';
