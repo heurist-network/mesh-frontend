@@ -7,7 +7,7 @@ import {
   Check,
   ArrowRight,
   Sparkles,
-  Code,
+  ExternalLink,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -214,13 +214,15 @@ export function ConnectGuide() {
                     backgroundSize: '400% 400%',
                   }}
                 />
-                <code className="relative z-10">{displayCommand}</code>
+                <code className="relative z-10 whitespace-pre-wrap break-all sm:break-normal">
+                  {displayCommand}
+                </code>
               </pre>
 
               <Button
                 onClick={handleCopy}
                 size="icon"
-                className="absolute top-2.5 right-2.5 size-8 bg-[#cdf138]/90 hover:bg-[#cdf138] text-black rounded-md transition-all"
+                className="hidden sm:flex absolute top-2.5 right-2.5 size-8 bg-[#cdf138]/90 hover:bg-[#cdf138] text-black rounded-md transition-all"
                 disabled={!isReady}
               >
                 {hasCopied ? (
@@ -246,18 +248,18 @@ export function ConnectGuide() {
             )}
           </div>
 
-          <div className="flex items-center gap-2 pt-2 relative z-10">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10">
             <Button
-              className="rounded-full px-5 py-2 h-auto bg-gradient-to-r from-[#cdf138] to-[#b1e745] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto rounded-full px-5 py-2 h-auto bg-gradient-to-r from-[#cdf138] to-[#b1e745] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleCopy}
               disabled={!isReady}
             >
               <span>Copy Command</span>
               <ArrowRight className="ml-2 size-4" />
             </Button>
-            <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-              <Code className="size-3.5" />
-              Run in your terminal to install
+            <p className="text-sm text-muted-foreground flex items-center justify-center gap-1.5 w-full sm:w-auto">
+              <ExternalLink className="size-3.5" />
+              <span>Run in your terminal to install</span>
             </p>
           </div>
 
