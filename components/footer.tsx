@@ -111,7 +111,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://github.com/heurist-network/mcp-installer"
+                  href="https://github.com/heurist-network/mcp-cli"
                   target="_blank"
                   className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
