@@ -109,23 +109,23 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="https://github.com/heurist-network/mcp-installer"
+                  target="_blank"
+                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
+                >
+                  <Github className="size-3.5" />
+                  MCP Installer
+                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="https://github.com/heurist-network/heurist-mesh-mcp-server"
                   target="_blank"
                   className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
                 >
                   <Github className="size-3.5" />
                   MCP Server
-                  <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="https://heuristai.medium.com/"
-                  target="_blank"
-                  className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1.5 group"
-                >
-                  <BookOpen className="size-3.5" />
-                  Blog
                   <ChevronRight className="size-3 ml-0.5 opacity-0 group-hover:opacity-70 transition-opacity" />
                 </Link>
               </li>
