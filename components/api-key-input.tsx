@@ -13,7 +13,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useProvisioner } from '@/lib/provisioner-context';
-import { setApiKey as saveApiKey, getApiKey } from '@/lib/utils';
+import {
+  setApiKey as saveApiKey,
+  getApiKey,
+  scrollToAgentSelection,
+} from '@/lib/utils';
 import { Eye, EyeOff, KeyRound, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
@@ -56,18 +60,6 @@ export function ApiKeyInput() {
       };
     }
   }, [inputValue, apiKey, setApiKey, refreshServerStatus]);
-
-  const scrollToAgentSelection = () => {
-    const agentSelectionSection = document.querySelector(
-      '[data-agent-selection]',
-    );
-    if (agentSelectionSection) {
-      agentSelectionSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  };
 
   return (
     <Card className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card">
@@ -161,7 +153,7 @@ export function ApiKeyInput() {
 
               <Button
                 className="rounded-full px-5 py-2 h-11 bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium ml-auto mt-1.5 hidden sm:flex"
-                onClick={scrollToAgentSelection}
+                onClick={() => scrollToAgentSelection()}
               >
                 <span>Next</span>
                 <ArrowRight className="ml-2 size-4" />
@@ -173,7 +165,7 @@ export function ApiKeyInput() {
       <CardFooter className="px-6 sm:hidden">
         <Button
           className="rounded-full px-5 h-11 bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium w-full"
-          onClick={scrollToAgentSelection}
+          onClick={() => scrollToAgentSelection()}
         >
           <span>Next</span>
           <ArrowRight className="ml-2 size-4" />

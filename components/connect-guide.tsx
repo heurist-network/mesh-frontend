@@ -6,8 +6,9 @@ import {
   Copy,
   Check,
   ArrowRight,
-  Sparkles,
   ExternalLink,
+  AlertCircle,
+  ChevronRight,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -27,7 +28,7 @@ import {
 } from '@/components/ui/select';
 import { useProvisioner } from '@/lib/provisioner-context';
 import { toast } from 'sonner';
-
+import { scrollToAgentSelection } from '@/lib/utils';
 const CLIENT_OPTIONS = [
   { value: 'auto', label: 'Auto-Detect (Recommended)', cliValue: '' },
   { value: 'claude', label: 'Claude Desktop', cliValue: 'claude' },
@@ -57,6 +58,7 @@ export function ConnectGuide() {
   const extractServerId = (endpoint: string | undefined): string => {
     if (!endpoint) return '<SERVER_ID>';
 
+    // return short server id as the url was too long
     const match = endpoint.match(/tool([^\/]+)/);
     return match ? match[1] : '<SERVER_ID>';
   };
@@ -150,6 +152,50 @@ export function ConnectGuide() {
         >
           <div className="absolute -right-6 -bottom-6 size-40 bg-gradient-to-br from-[#cdf138]/5 via-purple-500/5 to-blue-500/5 rounded-full blur-2xl" />
           <div className="absolute -left-4 -top-4 size-24 bg-gradient-to-br from-[#cdf138]/10 to-transparent rounded-full blur-3xl" />
+
+          {!isReady && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-amber-500/10 rounded-lg border border-amber-400/30 p-3 mb-3 relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_107%,rgba(255,214,0,0.05)_0%,rgba(255,122,0,0.1)_5%,rgba(255,122,0,0)_60%)]" />
+              <motion.div
+                className="absolute -left-20 -top-20 size-40 bg-amber-400/10 rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  repeatType: 'reverse',
+                }}
+              />
+              <div className="flex items-start gap-3 relative z-10">
+                <div className="mt-0.5 size-8 rounded-full bg-amber-400/20 flex items-center justify-center shrink-0">
+                  <AlertCircle className="size-4 text-amber-400" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-medium text-amber-400">Setup Required</h4>
+                  <p className="text-xs leading-normal text-amber-300/90">
+                    Complete Steps 1-3 first to generate your custom
+                    installation command.
+                  </p>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-amber-400 hover:text-amber-300 p-0 h-auto text-xs font-medium flex items-center gap-1 group"
+                    onClick={() => scrollToAgentSelection()}
+                  >
+                    Go to previous steps
+                    <ChevronRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 z-10 relative">
             <div className="space-y-2">
@@ -268,20 +314,6 @@ export function ConnectGuide() {
                 )}
               </Button>
             </div>
-
-            {!isReady && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xs text-orange-300 mt-2 pl-1 flex items-center gap-1.5"
-              >
-                <Sparkles className="size-3.5" />
-                <span>
-                  Complete Steps 1-3 first to generate your custom installation
-                  command.
-                </span>
-              </motion.div>
-            )}
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10">

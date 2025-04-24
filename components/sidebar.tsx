@@ -9,6 +9,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useProvisioner } from '@/lib/provisioner-context';
+import { scrollToAgentSelection } from '@/lib/utils';
 import {
   Code,
   Server,
@@ -79,19 +80,6 @@ export function RealSidebar() {
 
   const toggleExpandedAgent = (id: string) => {
     setExpandedAgent(expandedAgent === id ? null : id);
-  };
-
-  const scrollToAgentSelection = () => {
-    const agentSelectionSection = document.querySelector(
-      '[data-agent-selection]',
-    );
-    if (agentSelectionSection) {
-      agentSelectionSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      setOpenMobile(false);
-    }
   };
 
   return (
@@ -381,7 +369,7 @@ export function RealSidebar() {
                       variant="outline"
                       size="sm"
                       className="h-8 border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary flex items-center"
-                      onClick={scrollToAgentSelection}
+                      onClick={() => scrollToAgentSelection(setOpenMobile)}
                     >
                       Browse Agents <ArrowDown className="ml-1 size-3" />
                     </Button>

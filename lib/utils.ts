@@ -71,3 +71,20 @@ export function setApiKey(apiKey: string): void {
 export function hasApiKey(): boolean {
   return !!getApiKey();
 }
+
+export const scrollToAgentSelection = (
+  setOpenMobile?: (open: boolean) => void,
+) => {
+  const agentSelectionSection = document.querySelector(
+    '[data-agent-selection]',
+  );
+  if (agentSelectionSection) {
+    agentSelectionSection.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+    if (setOpenMobile) {
+      setOpenMobile(false);
+    }
+  }
+};
