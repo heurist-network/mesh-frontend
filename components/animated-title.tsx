@@ -41,8 +41,8 @@ export function AnimatedTitle() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 md:mb-0"
         >
-          <span className="text-white block md:inline">YOUR AGENTS,</span>
-          <span className="text-[#cdf138] block md:inline md:ml-2">
+          <span className="text-white block lg:inline">YOUR AGENTS,</span>
+          <span className="text-[#cdf138] block lg:inline lg:ml-2">
             YOUR WAY
           </span>
         </motion.h1>
@@ -60,7 +60,9 @@ export function AnimatedTitle() {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex items-center text-lg sm:text-lg md:text-xl"
         >
-          <span className="text-white/80 font-medium">Connecting to</span>
+          <span className="text-white/80 font-medium whitespace-nowrap">
+            Connecting to
+          </span>
 
           <div
             className="relative ml-2 h-8 sm:h-8 inline-flex items-center overflow-hidden"
