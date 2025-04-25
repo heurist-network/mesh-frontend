@@ -47,7 +47,9 @@ export function ConnectGuide() {
   const [hasCopied, setHasCopied] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [selectedClient, setSelectedClient] = useState('auto');
-  const [packageManager, setPackageManager] = useState<'npx' | 'pnpm'>('npx');
+  const [packageManager, setPackageManager] = useState<'npx' | 'pnpm' | 'bunx'>(
+    'npx',
+  );
   const [copySuccess, setCopySuccess] = useState(false);
 
   // fix hydration issues by waiting for client-side render
@@ -76,10 +78,20 @@ export function ConnectGuide() {
 
   const buildCommandString = useCallback(
     (maskKey: boolean) => {
-      const base =
-        packageManager === 'npx'
-          ? 'npx -y heurist-mcp-cli'
-          : 'pnpm dlx heurist-mcp-cli';
+      let base: string;
+      switch (packageManager) {
+        case 'npx':
+          base = 'npx -y heurist-mcp-cli';
+          break;
+        case 'pnpm':
+          base = 'pnpm dlx heurist-mcp-cli';
+          break;
+        case 'bunx':
+          base = 'bunx heurist-mcp-cli';
+          break;
+        default:
+          base = 'npx -y heurist-mcp-cli'; // Default to npx
+      }
 
       const sid = isClient ? serverId : '<SERVER_ID>';
       let key = isClient && currentApiKey ? currentApiKey : '<YOUR_API_KEY>';
@@ -221,6 +233,14 @@ export function ConnectGuide() {
                   className="text-xs h-9 px-3"
                 >
                   pnpm
+                </Button>
+                <Button
+                  variant={packageManager === 'bunx' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPackageManager('bunx')}
+                  className="text-xs h-9 px-3"
+                >
+                  bun
                 </Button>
               </div>
             </div>
