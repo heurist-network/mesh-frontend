@@ -189,15 +189,25 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     setError(null);
 
     try {
+      // Check if we are updating an existing server
+      const isUpdating = !!activeServer;
+
       // If there's an active server, delete it first
       if (activeServer) {
         await deleteServer(getApiKey(), activeServer.server_id);
       }
 
       // Create a new server with selected agents
-      const newServer = await createServer(getApiKey(), selectedAgents);
-      setActiveServer(newServer);
-      toast.success('Server created successfully');
+      await createServer(getApiKey(), selectedAgents);
+
+      // Refresh the server status to fetch the latest details and update state
+      await refreshServerStatus();
+
+      toast.success(
+        isUpdating
+          ? 'Server updated successfully'
+          : 'Server created successfully',
+      );
     } catch (err) {
       console.error('Failed to create server:', err);
       setError(err instanceof Error ? err.message : 'Failed to create server');
