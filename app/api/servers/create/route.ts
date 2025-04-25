@@ -22,4 +22,4 @@ export async function POST(request: NextRequest) {
       body,
     });
   }, 'Failed to create server');
-} 
+}

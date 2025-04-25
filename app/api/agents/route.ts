@@ -8,12 +8,18 @@ export async function GET(request: NextRequest) {
     });
 
     if (!res.ok) {
-      return NextResponse.json({ error: 'Failed to fetch agents data' }, { status: res.status });
+      return NextResponse.json(
+        { error: 'Failed to fetch agents data' },
+        { status: res.status },
+      );
     }
 
     return NextResponse.json(await res.json());
   } catch (error) {
     console.error('Error fetching agents:', error);
-    return NextResponse.json({ error: 'Failed to fetch agents data' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch agents data' },
+      { status: 500 },
+    );
   }
 }

@@ -19,4 +19,4 @@ export async function GET(request: NextRequest) {
       },
     });
   }, 'Failed to list servers');
-} 
+}

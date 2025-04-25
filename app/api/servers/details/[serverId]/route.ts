@@ -27,4 +27,4 @@ export async function GET(
       },
     });
   }, 'Failed to get server details');
-} 
+}
