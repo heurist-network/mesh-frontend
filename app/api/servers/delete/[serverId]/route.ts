@@ -28,4 +28,4 @@ export async function DELETE(
       },
     });
   }, 'Failed to delete server');
-} 
+}

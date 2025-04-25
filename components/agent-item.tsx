@@ -49,6 +49,8 @@ interface AgentListItemProps {
   isSelected: boolean;
   onSelect: (id: string) => void;
   onShowDetails: (agent: Agent) => void;
+  willBeAdded?: boolean;
+  willBeRemoved?: boolean;
 }
 
 const AgentListItem: FC<AgentListItemProps> = ({
@@ -56,6 +58,8 @@ const AgentListItem: FC<AgentListItemProps> = ({
   isSelected,
   onSelect,
   onShowDetails,
+  willBeAdded,
+  willBeRemoved,
 }) => {
   return (
     <motion.div
@@ -67,7 +71,7 @@ const AgentListItem: FC<AgentListItemProps> = ({
         isSelected
           ? 'bg-primary/5 border-primary/20'
           : 'bg-card border-border hover:border-primary/20'
-      }`}
+      } ${willBeAdded ? 'ring-2 ring-green-500/30' : ''} ${willBeRemoved ? 'ring-2 ring-red-500/30' : ''}`}
     >
       <div className="shrink-0">
         <div className="size-10 rounded-md border overflow-hidden flex items-center justify-center">
@@ -153,8 +157,12 @@ const AgentListItem: FC<AgentListItemProps> = ({
         <Button
           className={`size-7 rounded-full flex items-center justify-center transition-colors ${
             isSelected
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary'
+              ? willBeRemoved
+                ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-primary text-primary-foreground'
+              : willBeAdded
+                ? 'bg-green-500 text-white hover:bg-green-600'
+                : 'bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary'
           }`}
           onClick={(e) => {
             e.stopPropagation();
@@ -162,7 +170,11 @@ const AgentListItem: FC<AgentListItemProps> = ({
           }}
         >
           {isSelected ? (
-            <Check className="size-4" />
+            willBeRemoved ? (
+              <X className="size-4" />
+            ) : (
+              <Check className="size-4" />
+            )
           ) : (
             <Plus className="size-4" />
           )}
@@ -177,7 +189,9 @@ const AgentDetailModal: FC<{
   onClose: () => void;
   onSelect: (id: string) => void;
   isSelected: boolean;
-}> = ({ agent, onClose, onSelect, isSelected }) => {
+  willBeAdded?: boolean;
+  willBeRemoved?: boolean;
+}> = ({ agent, onClose, onSelect, isSelected, willBeAdded, willBeRemoved }) => {
   if (!agent) return null;
 
   return (
@@ -272,10 +286,24 @@ const AgentDetailModal: FC<{
               Used {agent.total_calls?.toLocaleString() || 0} times
             </div>
             <Button
-              className={`${isSelected ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
+              className={`${
+                isSelected
+                  ? willBeRemoved
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-red-500 hover:bg-red-600'
+                  : willBeAdded
+                    ? 'bg-green-500 hover:bg-green-600'
+                    : 'bg-primary hover:bg-primary/90'
+              }`}
               onClick={() => onSelect(agent.id)}
             >
-              {isSelected ? 'Remove Agent' : 'Add Agent'}
+              {isSelected
+                ? willBeRemoved
+                  ? 'Confirm Removal'
+                  : 'Remove Agent'
+                : willBeAdded
+                  ? 'Cancel Addition'
+                  : 'Add Agent'}
             </Button>
           </div>
         </div>
@@ -291,6 +319,9 @@ export const AgentItem: FC = () => {
     allAgentsArray,
     refreshAgents,
     selectedAgents,
+    activeServer,
+    agentsToAdd,
+    agentsToRemove,
   } = useProvisioner();
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -535,15 +566,26 @@ export const AgentItem: FC = () => {
         <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
           <AnimatePresence>
             {filteredAgents.length > 0 ? (
-              filteredAgents.map((agent) => (
-                <AgentListItem
-                  key={agent.id}
-                  agent={agent}
-                  isSelected={isAgentSelected(agent.id)}
-                  onSelect={() => toggleAgentSelection(agent.id)}
-                  onShowDetails={() => setDetailAgent(agent)}
-                />
-              ))
+              filteredAgents.map((agent) => {
+                const isBeingAdded = activeServer
+                  ? agentsToAdd.includes(agent.id)
+                  : undefined;
+                const isBeingRemoved = activeServer
+                  ? agentsToRemove.includes(agent.id)
+                  : undefined;
+
+                return (
+                  <AgentListItem
+                    key={agent.id}
+                    agent={agent}
+                    isSelected={isAgentSelected(agent.id)}
+                    onSelect={() => toggleAgentSelection(agent.id)}
+                    onShowDetails={() => setDetailAgent(agent)}
+                    willBeAdded={isBeingAdded}
+                    willBeRemoved={isBeingRemoved}
+                  />
+                );
+              })
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -582,6 +624,14 @@ export const AgentItem: FC = () => {
               onClose={() => setDetailAgent(null)}
               onSelect={toggleAgentSelection}
               isSelected={isAgentSelected(detailAgent.id)}
+              willBeAdded={
+                activeServer ? agentsToAdd.includes(detailAgent.id) : undefined
+              }
+              willBeRemoved={
+                activeServer
+                  ? agentsToRemove.includes(detailAgent.id)
+                  : undefined
+              }
             />
           )}
         </AnimatePresence>

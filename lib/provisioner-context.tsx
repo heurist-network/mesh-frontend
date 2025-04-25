@@ -54,6 +54,9 @@ interface ProvisionerContextType {
   allAgents: Record<string, any> | null;
   allAgentsArray: Agent[];
   refreshAgents: () => Promise<void>;
+  serverAgents: string[];
+  agentsToAdd: string[];
+  agentsToRemove: string[];
 }
 
 const ProvisionerContext = createContext<ProvisionerContextType | undefined>(
@@ -92,6 +95,32 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     return agentsArray.filter((item) => item.name && !(item as any).hidden);
   }, [allAgents]);
 
+  // Centralized calculation for server agents
+  const serverAgents = useMemo(() => {
+    if (!activeServer || !activeServer.supported_agents) {
+      return [];
+    }
+    return (
+      Array.isArray(activeServer.supported_agents)
+        ? activeServer.supported_agents
+        : activeServer.supported_agents.split(',')
+    )
+      .map((a) => a.trim())
+      .filter(Boolean);
+  }, [activeServer]);
+
+  // Centralized calculation for agents to add
+  const agentsToAdd = useMemo(() => {
+    // Agents selected but not on the server
+    return selectedAgents.filter((id) => !serverAgents.includes(id));
+  }, [selectedAgents, serverAgents]);
+
+  // Centralized calculation for agents to remove
+  const agentsToRemove = useMemo(() => {
+    // Agents on the server but not selected
+    return serverAgents.filter((id) => !selectedAgents.includes(id));
+  }, [selectedAgents, serverAgents]);
+
   const refreshAgents = useCallback(async () => {
     try {
       const data = await getAgents();
@@ -104,12 +133,32 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (hasApiKey()) {
-      refreshServerStatus();
-    } else {
-      refreshAgents();
-    }
-  }, [refreshAgents]);
+    const initialLoad = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        if (hasApiKey()) {
+          // run both fetches in parallel if we have a key
+          await Promise.all([refreshServerStatus(), refreshAgents()]);
+        } else {
+          // otherwise, just fetch the agents list
+          await refreshAgents();
+        }
+      } catch (err) {
+        console.error('Failed during initial load:', err);
+        if (!error) {
+          setError(
+            err instanceof Error ? err.message : 'Failed during initial setup',
+          );
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshAgents]); // refreshServerStatus is stable, refreshAgents covers agent list changes
 
   const setApiKey = (key: string) => {
     setApiKeyState(key);
@@ -189,15 +238,25 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     setError(null);
 
     try {
+      // Check if we are updating an existing server
+      const isUpdating = !!activeServer;
+
       // If there's an active server, delete it first
       if (activeServer) {
         await deleteServer(getApiKey(), activeServer.server_id);
       }
 
       // Create a new server with selected agents
-      const newServer = await createServer(getApiKey(), selectedAgents);
-      setActiveServer(newServer);
-      toast.success('Server created successfully');
+      await createServer(getApiKey(), selectedAgents);
+
+      // Refresh the server status to fetch the latest details and update state
+      await refreshServerStatus();
+
+      toast.success(
+        isUpdating
+          ? 'Server updated successfully'
+          : 'Server created successfully',
+      );
     } catch (err) {
       console.error('Failed to create server:', err);
       setError(err instanceof Error ? err.message : 'Failed to create server');
@@ -244,6 +303,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
         allAgents,
         allAgentsArray,
         refreshAgents,
+        serverAgents,
+        agentsToAdd,
+        agentsToRemove,
       }}
     >
       {children}
