@@ -272,9 +272,17 @@ export function ConnectGuide() {
 
           <div className="pt-2 relative z-10">
             <div className="relative group">
-              <pre className="bg-black/30 border border-white/10 rounded-lg p-4 overflow-x-auto text-sm font-mono text-white/90 tracking-tight">
+              <pre
+                onClick={handleCopy}
+                className="bg-black/30 border border-white/10 rounded-lg p-4 overflow-x-auto text-sm font-mono text-white/90 tracking-tight cursor-pointer select-none group"
+                style={{
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                }}
+              >
                 <motion.div
-                  className="absolute top-0 left-0 size-full opacity-10"
+                  className="absolute top-0 left-0 size-full opacity-10 pointer-events-none"
                   initial={{ backgroundPosition: '0% 0%' }}
                   animate={{ backgroundPosition: '100% 100%' }}
                   transition={{
@@ -290,14 +298,14 @@ export function ConnectGuide() {
                 />
                 {copySuccess && (
                   <motion.div
-                    className="absolute inset-0 bg-[#cdf138]/10 z-0"
+                    className="absolute inset-0 bg-[#cdf138]/10 z-0 pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   />
                 )}
-                <code className="relative z-10 whitespace-pre-wrap break-all sm:break-normal">
+                <code className="relative z-10 whitespace-pre-wrap break-all sm:break-normal pointer-events-none">
                   {displayCommand}
                 </code>
 
