@@ -227,20 +227,20 @@ export function ConnectGuide() {
                   npx
                 </Button>
                 <Button
-                  variant={packageManager === 'pnpm' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setPackageManager('pnpm')}
-                  className="text-xs h-9 px-3"
-                >
-                  pnpm
-                </Button>
-                <Button
                   variant={packageManager === 'bunx' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setPackageManager('bunx')}
                   className="text-xs h-9 px-3"
                 >
                   bun
+                </Button>
+                <Button
+                  variant={packageManager === 'pnpm' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPackageManager('pnpm')}
+                  className="text-xs h-9 px-3"
+                >
+                  pnpm
                 </Button>
               </div>
             </div>
