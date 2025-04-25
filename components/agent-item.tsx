@@ -142,16 +142,6 @@ const AgentListItem: FC<AgentListItemProps> = ({
       </div>
 
       <div className="flex items-center gap-2 ml-auto">
-        {willBeAdded && (
-          <Badge className="bg-green-500/20 text-green-500 border-0 mr-1 text-[10px] px-2">
-            <Plus className="size-3 mr-0.5" /> Will Add
-          </Badge>
-        )}
-        {willBeRemoved && (
-          <Badge className="bg-red-500/20 text-red-500 border-0 mr-1 text-[10px] px-2">
-            <X className="size-3 mr-0.5" /> Will Remove
-          </Badge>
-        )}
         <Button
           variant="ghost"
           size="icon"
