@@ -44,47 +44,15 @@ export function ServerManagement() {
     createNewServer,
     deleteActiveServer,
     hasApiKey,
+    serverAgents,
+    agentsToAdd,
+    agentsToRemove,
   } = useProvisioner();
   const [isCreating, setIsCreating] = useState(false);
 
-  const serverAgents = useMemo(() => {
-    if (!activeServer || !activeServer.supported_agents) {
-      return [];
-    }
-
-    return (
-      Array.isArray(activeServer.supported_agents)
-        ? activeServer.supported_agents
-        : activeServer.supported_agents.split(',')
-    )
-      .map((a) => a.trim())
-      .filter(Boolean);
-  }, [activeServer]);
-
-  const willBeRemoved = useCallback(
-    (agentId: string): boolean => {
-      return (
-        !selectedAgents.includes(agentId) && serverAgents.includes(agentId)
-      );
-    },
-    [selectedAgents, serverAgents],
-  );
-
-  const agentsBeingAdded = useMemo(() => {
-    if (!activeServer) return selectedAgents;
-    return selectedAgents.filter((id) => !serverAgents.includes(id));
-  }, [activeServer, selectedAgents, serverAgents]);
-
   const hasAgentChanges = useMemo(() => {
-    if (!activeServer || !activeServer.supported_agents) {
-      return selectedAgents.length > 0;
-    }
-
-    const sortedSelected = [...selectedAgents].sort();
-    const sortedServer = [...serverAgents].sort();
-
-    return JSON.stringify(sortedSelected) !== JSON.stringify(sortedServer);
-  }, [selectedAgents, serverAgents, activeServer]);
+    return agentsToAdd.length > 0 || agentsToRemove.length > 0;
+  }, [agentsToAdd, agentsToRemove]);
 
   const handleCreateServer = async () => {
     if (selectedAgents.length === 0) {
@@ -185,18 +153,15 @@ export function ServerManagement() {
                         Agents:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
-                        {(Array.isArray(activeServer.supported_agents)
-                          ? activeServer.supported_agents
-                          : activeServer.supported_agents.split(',')
-                        ).map((agent, index) => {
-                          const isRemoved = willBeRemoved(agent.trim());
+                        {serverAgents.map((agent) => {
+                          const isRemoved = agentsToRemove.includes(agent);
                           return (
                             <Badge
-                              key={`agent-${agent.trim()}-${index}`}
+                              key={`agent-${agent}`}
                               variant="secondary"
                               className={`text-xs ${isRemoved ? 'line-through opacity-50 border-red-500/30 bg-red-500/10' : ''}`}
                             >
-                              {agent.trim()}
+                              {agent}
                               {isRemoved && (
                                 <X className="ml-1 size-3 text-red-500" />
                               )}
@@ -204,8 +169,8 @@ export function ServerManagement() {
                           );
                         })}
 
-                        {agentsBeingAdded.length > 0 &&
-                          agentsBeingAdded.map((agent) => (
+                        {agentsToAdd.length > 0 &&
+                          agentsToAdd.map((agent) => (
                             <Badge
                               key={`new-agent-${agent}`}
                               variant="outline"

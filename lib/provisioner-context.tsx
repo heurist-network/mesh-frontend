@@ -54,6 +54,9 @@ interface ProvisionerContextType {
   allAgents: Record<string, any> | null;
   allAgentsArray: Agent[];
   refreshAgents: () => Promise<void>;
+  serverAgents: string[];
+  agentsToAdd: string[];
+  agentsToRemove: string[];
 }
 
 const ProvisionerContext = createContext<ProvisionerContextType | undefined>(
@@ -91,6 +94,32 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
     agentsArray.sort((a, b) => (b.total_calls || 0) - (a.total_calls || 0));
     return agentsArray.filter((item) => item.name && !(item as any).hidden);
   }, [allAgents]);
+
+  // Centralized calculation for server agents
+  const serverAgents = useMemo(() => {
+    if (!activeServer || !activeServer.supported_agents) {
+      return [];
+    }
+    return (
+      Array.isArray(activeServer.supported_agents)
+        ? activeServer.supported_agents
+        : activeServer.supported_agents.split(',')
+    )
+      .map((a) => a.trim())
+      .filter(Boolean);
+  }, [activeServer]);
+
+  // Centralized calculation for agents to add
+  const agentsToAdd = useMemo(() => {
+    // Agents selected but not on the server
+    return selectedAgents.filter((id) => !serverAgents.includes(id));
+  }, [selectedAgents, serverAgents]);
+
+  // Centralized calculation for agents to remove
+  const agentsToRemove = useMemo(() => {
+    // Agents on the server but not selected
+    return serverAgents.filter((id) => !selectedAgents.includes(id));
+  }, [selectedAgents, serverAgents]);
 
   const refreshAgents = useCallback(async () => {
     try {
@@ -254,6 +283,9 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
         allAgents,
         allAgentsArray,
         refreshAgents,
+        serverAgents,
+        agentsToAdd,
+        agentsToRemove,
       }}
     >
       {children}

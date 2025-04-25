@@ -25,7 +25,7 @@ import {
   X,
   Wrench,
 } from 'lucide-react';
-import { type FC, useEffect, useState, useMemo, useCallback } from 'react';
+import { type FC, useEffect, useState, useMemo } from 'react';
 import { useSidebar } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -330,6 +330,8 @@ export const AgentItem: FC = () => {
     refreshAgents,
     selectedAgents,
     activeServer,
+    agentsToAdd,
+    agentsToRemove,
   } = useProvisioner();
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -397,36 +399,6 @@ export const AgentItem: FC = () => {
   }, [allAgentsArray, searchQuery, selectedTag, selectedAuthor, viewType]);
 
   const selectedCount = selectedAgents.length;
-
-  // Get the current server agents
-  const serverAgents = useMemo(() => {
-    if (!activeServer || !activeServer.supported_agents) {
-      return [];
-    }
-
-    return (
-      Array.isArray(activeServer.supported_agents)
-        ? activeServer.supported_agents
-        : activeServer.supported_agents.split(',')
-    )
-      .map((a) => a.trim())
-      .filter(Boolean);
-  }, [activeServer]);
-
-  // Determine which agents will be added or removed
-  const willBeAdded = useCallback(
-    (agentId: string): boolean => {
-      return isAgentSelected(agentId) && !serverAgents.includes(agentId);
-    },
-    [isAgentSelected, serverAgents],
-  );
-
-  const willBeRemoved = useCallback(
-    (agentId: string): boolean => {
-      return !isAgentSelected(agentId) && serverAgents.includes(agentId);
-    },
-    [isAgentSelected, serverAgents],
-  );
 
   if (loading) {
     return (
@@ -604,19 +576,26 @@ export const AgentItem: FC = () => {
         <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
           <AnimatePresence>
             {filteredAgents.length > 0 ? (
-              filteredAgents.map((agent) => (
-                <AgentListItem
-                  key={agent.id}
-                  agent={agent}
-                  isSelected={isAgentSelected(agent.id)}
-                  onSelect={() => toggleAgentSelection(agent.id)}
-                  onShowDetails={() => setDetailAgent(agent)}
-                  willBeAdded={activeServer ? willBeAdded(agent.id) : undefined}
-                  willBeRemoved={
-                    activeServer ? willBeRemoved(agent.id) : undefined
-                  }
-                />
-              ))
+              filteredAgents.map((agent) => {
+                const isBeingAdded = activeServer
+                  ? agentsToAdd.includes(agent.id)
+                  : undefined;
+                const isBeingRemoved = activeServer
+                  ? agentsToRemove.includes(agent.id)
+                  : undefined;
+
+                return (
+                  <AgentListItem
+                    key={agent.id}
+                    agent={agent}
+                    isSelected={isAgentSelected(agent.id)}
+                    onSelect={() => toggleAgentSelection(agent.id)}
+                    onShowDetails={() => setDetailAgent(agent)}
+                    willBeAdded={isBeingAdded}
+                    willBeRemoved={isBeingRemoved}
+                  />
+                );
+              })
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -656,10 +635,12 @@ export const AgentItem: FC = () => {
               onSelect={toggleAgentSelection}
               isSelected={isAgentSelected(detailAgent.id)}
               willBeAdded={
-                activeServer ? willBeAdded(detailAgent.id) : undefined
+                activeServer ? agentsToAdd.includes(detailAgent.id) : undefined
               }
               willBeRemoved={
-                activeServer ? willBeRemoved(detailAgent.id) : undefined
+                activeServer
+                  ? agentsToRemove.includes(detailAgent.id)
+                  : undefined
               }
             />
           )}
