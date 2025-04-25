@@ -98,7 +98,26 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <Toaster position="bottom-right" />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                classNames: {
+                  toast:
+                    'group toast group-[.toaster]:bg-card group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg font-sans rounded-lg',
+                  description: 'group-[.toast]:text-muted-foreground',
+                  actionButton:
+                    'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
+                  cancelButton:
+                    'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+                  error: '!bg-destructive !text-destructive-foreground',
+                  success:
+                    '!bg-[#cdf138]/10 !text-[#a5c72a] !border-[#cdf138]/20',
+                  warning:
+                    '!bg-orange-400/10 !text-orange-400 !border-orange-400/20',
+                  info: '!bg-blue-400/10 !text-blue-400 !border-blue-400/20',
+                },
+              }}
+            />
             {children}
           </SidebarProvider>
         </ThemeProvider>
