@@ -133,12 +133,32 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (hasApiKey()) {
-      refreshServerStatus();
-    } else {
-      refreshAgents();
-    }
-  }, [refreshAgents]);
+    const initialLoad = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        if (hasApiKey()) {
+          // run both fetches in parallel if we have a key
+          await Promise.all([refreshServerStatus(), refreshAgents()]);
+        } else {
+          // otherwise, just fetch the agents list
+          await refreshAgents();
+        }
+      } catch (err) {
+        console.error('Failed during initial load:', err);
+        if (!error) {
+          setError(
+            err instanceof Error ? err.message : 'Failed during initial setup',
+          );
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshAgents]); // refreshServerStatus is stable, refreshAgents covers agent list changes
 
   const setApiKey = (key: string) => {
     setApiKeyState(key);
