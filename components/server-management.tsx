@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
@@ -22,7 +22,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Loader2, Server, Trash2, ServerOff, AlertCircle } from 'lucide-react';
+import {
+  Loader2,
+  Server,
+  Trash2,
+  ServerOff,
+  AlertCircle,
+  Plus,
+  X,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
@@ -39,26 +47,44 @@ export function ServerManagement() {
   } = useProvisioner();
   const [isCreating, setIsCreating] = useState(false);
 
-  // Check if the current agent selection is different from the active server's agents
-  const hasAgentChanges = useMemo(() => {
+  const serverAgents = useMemo(() => {
     if (!activeServer || !activeServer.supported_agents) {
-      // If no active server or it has no agents listed, any selection is a change
-      return selectedAgents.length > 0;
+      return [];
     }
 
-    const serverAgents = (
+    return (
       Array.isArray(activeServer.supported_agents)
         ? activeServer.supported_agents
         : activeServer.supported_agents.split(',')
     )
       .map((a) => a.trim())
       .filter(Boolean);
+  }, [activeServer]);
+
+  const willBeRemoved = useCallback(
+    (agentId: string): boolean => {
+      return (
+        !selectedAgents.includes(agentId) && serverAgents.includes(agentId)
+      );
+    },
+    [selectedAgents, serverAgents],
+  );
+
+  const agentsBeingAdded = useMemo(() => {
+    if (!activeServer) return selectedAgents;
+    return selectedAgents.filter((id) => !serverAgents.includes(id));
+  }, [activeServer, selectedAgents, serverAgents]);
+
+  const hasAgentChanges = useMemo(() => {
+    if (!activeServer || !activeServer.supported_agents) {
+      return selectedAgents.length > 0;
+    }
 
     const sortedSelected = [...selectedAgents].sort();
     const sortedServer = [...serverAgents].sort();
 
     return JSON.stringify(sortedSelected) !== JSON.stringify(sortedServer);
-  }, [selectedAgents, activeServer]);
+  }, [selectedAgents, serverAgents, activeServer]);
 
   const handleCreateServer = async () => {
     if (selectedAgents.length === 0) {
@@ -120,6 +146,14 @@ export function ServerManagement() {
                     >
                       Online
                     </Badge>
+                    {hasAgentChanges && (
+                      <Badge
+                        variant="outline"
+                        className="ml-2 text-xs px-2 py-0 h-5 border-amber-500/20 text-amber-400 bg-amber-500/10"
+                      >
+                        Changes Pending
+                      </Badge>
+                    )}
                   </h3>
                 </div>
 
@@ -154,15 +188,33 @@ export function ServerManagement() {
                         {(Array.isArray(activeServer.supported_agents)
                           ? activeServer.supported_agents
                           : activeServer.supported_agents.split(',')
-                        ).map((agent, index) => (
-                          <Badge
-                            key={`agent-${agent.trim()}-${index}`}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            {agent.trim()}
-                          </Badge>
-                        ))}
+                        ).map((agent, index) => {
+                          const isRemoved = willBeRemoved(agent.trim());
+                          return (
+                            <Badge
+                              key={`agent-${agent.trim()}-${index}`}
+                              variant="secondary"
+                              className={`text-xs ${isRemoved ? 'line-through opacity-50 border-red-500/30 bg-red-500/10' : ''}`}
+                            >
+                              {agent.trim()}
+                              {isRemoved && (
+                                <X className="ml-1 size-3 text-red-500" />
+                              )}
+                            </Badge>
+                          );
+                        })}
+
+                        {agentsBeingAdded.length > 0 &&
+                          agentsBeingAdded.map((agent) => (
+                            <Badge
+                              key={`new-agent-${agent}`}
+                              variant="outline"
+                              className="text-xs border-green-500/30 bg-green-500/10 text-green-500"
+                            >
+                              {agent}
+                              <Plus className="ml-1 size-3 text-green-500" />
+                            </Badge>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -234,11 +286,25 @@ export function ServerManagement() {
               </span>
             </motion.div>
           )}
+          {activeServer && hasAgentChanges && (
+            <motion.div
+              className="w-full sm:flex-1 bg-amber-500/10 rounded-lg border border-amber-500/20 p-3 flex items-center gap-3 text-xs text-amber-300/90 overflow-hidden"
+              initial={{ opacity: 0, maxHeight: 0 }}
+              animate={{ opacity: 1, maxHeight: '500px' }}
+              exit={{ opacity: 0, maxHeight: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <AlertCircle className="size-4 text-amber-400 shrink-0" />
+              <span>
+                Click &ldquo;Update Server&rdquo; to apply your agent changes.
+              </span>
+            </motion.div>
+          )}
         </AnimatePresence>
         <Button
           onClick={handleCreateServer}
           disabled={isButtonDisabled}
-          className="w-full sm:w-auto rounded-full px-5 py-2.5 size-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto"
+          className={`w-full sm:w-auto rounded-full px-5 py-2.5 size-auto text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto ${hasAgentChanges ? 'bg-amber-500 text-black hover:bg-amber-600 transition-all' : 'bg-[#cdf138] text-black hover:brightness-110 transition-all'}`}
         >
           {isCreating || isLoading ? (
             <div className="flex items-center justify-center">
