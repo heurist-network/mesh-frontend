@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
@@ -38,6 +38,27 @@ export function ServerManagement() {
   } = useProvisioner();
   const [isCreating, setIsCreating] = useState(false);
 
+  // Check if the current agent selection is different from the active server's agents
+  const hasAgentChanges = useMemo(() => {
+    if (!activeServer || !activeServer.supported_agents) {
+      // If no active server or it has no agents listed, any selection is a change
+      return selectedAgents.length > 0;
+    }
+
+    const serverAgents = (
+      Array.isArray(activeServer.supported_agents)
+        ? activeServer.supported_agents
+        : activeServer.supported_agents.split(',')
+    )
+      .map((a) => a.trim())
+      .filter(Boolean);
+
+    const sortedSelected = [...selectedAgents].sort();
+    const sortedServer = [...serverAgents].sort();
+
+    return JSON.stringify(sortedSelected) !== JSON.stringify(sortedServer);
+  }, [selectedAgents, activeServer]);
+
   const handleCreateServer = async () => {
     if (selectedAgents.length === 0) {
       toast.error('Please select at least one agent');
@@ -56,6 +77,13 @@ export function ServerManagement() {
       setIsCreating(false);
     }
   };
+
+  const isButtonDisabled = useMemo(() => {
+    if (isCreating || isLoading) return true;
+    if (selectedAgents.length === 0) return true;
+    if (activeServer) return !hasAgentChanges;
+    return false;
+  }, [isCreating, isLoading, selectedAgents, activeServer, hasAgentChanges]);
 
   return (
     <Card className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card">
@@ -191,7 +219,7 @@ export function ServerManagement() {
       <CardFooter className="px-6 sm:px-8 pb-6">
         <Button
           onClick={handleCreateServer}
-          disabled={isCreating || isLoading || selectedAgents.length === 0}
+          disabled={isButtonDisabled}
           className="rounded-full px-5 py-2 h-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ml-auto w-full sm:w-auto"
         >
           {isCreating || isLoading ? (
