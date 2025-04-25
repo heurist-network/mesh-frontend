@@ -563,7 +563,7 @@ export const AgentItem: FC = () => {
           <p className="text-sm font-medium">{selectedCount} selected</p>
         </div>
 
-        <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
+        <div className="space-y-2 max-h-[60vh] overflow-y-auto px-1 custom-scrollbar">
           <AnimatePresence>
             {filteredAgents.length > 0 ? (
               filteredAgents.map((agent) => {
