@@ -269,7 +269,11 @@ export function ServerManagement() {
         <Button
           onClick={handleCreateServer}
           disabled={isButtonDisabled}
-          className={`w-full sm:w-auto rounded-full px-5 py-2.5 size-auto text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto ${hasAgentChanges ? 'bg-amber-500 text-black hover:bg-amber-600 transition-all' : 'bg-[#cdf138] text-black hover:brightness-110 transition-all'}`}
+          className={`w-full sm:w-auto rounded-full px-5 py-2.5 size-auto text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto transition-all ${
+            activeServer && hasAgentChanges
+              ? 'bg-amber-500 text-black hover:bg-amber-600'
+              : 'bg-[#cdf138] text-black hover:brightness-110'
+          }`}
         >
           {isCreating || isLoading ? (
             <div className="flex items-center justify-center">
