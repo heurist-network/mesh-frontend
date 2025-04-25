@@ -224,7 +224,7 @@ export function ConnectGuide() {
                   onClick={() => setPackageManager('npx')}
                   className="text-xs h-9 px-3"
                 >
-                  npx
+                  npm
                 </Button>
                 <Button
                   variant={packageManager === 'bunx' ? 'default' : 'outline'}
