@@ -22,10 +22,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Loader2, Server, Trash2, ServerOff } from 'lucide-react';
+import { Loader2, Server, Trash2, ServerOff, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function ServerManagement() {
   const {
@@ -216,11 +217,28 @@ export function ServerManagement() {
         )}
       </CardContent>
 
-      <CardFooter className="px-6 sm:px-8 pb-6">
+      <CardFooter className="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <AnimatePresence>
+          {activeServer && !hasAgentChanges && selectedAgents.length > 0 && (
+            <motion.div
+              className="w-full sm:flex-1 bg-blue-500/10 rounded-lg border border-blue-500/20 p-3 flex items-center gap-3 text-xs text-blue-300/90 overflow-hidden"
+              initial={{ opacity: 0, maxHeight: 0 }}
+              animate={{ opacity: 1, maxHeight: '500px' }}
+              exit={{ opacity: 0, maxHeight: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <AlertCircle className="size-4 text-blue-400 shrink-0" />
+              <span>
+                Your current agent selection matches the active server. Add or
+                remove agents to update.
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Button
           onClick={handleCreateServer}
           disabled={isButtonDisabled}
-          className="rounded-full px-5 py-2 h-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ml-auto w-full sm:w-auto"
+          className="w-full sm:w-auto rounded-full px-5 py-2.5 size-auto bg-[#cdf138] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto"
         >
           {isCreating || isLoading ? (
             <div className="flex items-center justify-center">
