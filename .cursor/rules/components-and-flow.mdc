@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Components and UI Flow
+
+This rule describes the main components used in the application and the user flow implemented.
+
+## Main Page Structure ([app/page.tsx](mdc:app/page.tsx))
+
+The main page sets up the overall application layout and workflow:
+
+*   **Layout:** Uses a sidebar ([components/sidebar.tsx](mdc:components/sidebar.tsx)) and a main content area. A toggle ([components/sidebar-toggle.tsx](mdc:components/sidebar-toggle.tsx)) controls the sidebar visibility.
+*   **Context Provider:** Wraps the content with `ProvisionerProvider` ([lib/provisioner-context.tsx](mdc:lib/provisioner-context.tsx)) to manage application state related to the provisioning process.
+*   **Header:** Displays an `AnimatedTitle` ([components/animated-title.tsx](mdc:components/animated-title.tsx)).
+
+## Step-by-Step Workflow Components
+
+The main content area presents components in a sequence that suggests a step-by-step process for the user:
+
+1.  **API Key Input:** The user starts by entering their API key using the `ApiKeyInput` component ([components/api-key-input.tsx](mdc:components/api-key-input.tsx)).
+2.  **Agent Information:** Information about an agent is displayed via the `AgentItem` component ([components/agent-item.tsx](mdc:components/agent-item.tsx)).
+3.  **Server Management:** The `ServerManagement` component ([components/server-management.tsx](mdc:components/server-management.tsx)) allows users to create or modify a server.
+4.  **Connection Guide:** Finally, the `ConnectGuide` ([components/connect-guide.tsx](mdc:components/connect-guide.tsx)) provides instructions on how to connect using the `heurist-mcp-cli`.
+
+## Adding New UI Components
+
+This project uses [shadcn/ui](mdc:components.json) for its UI components, located primarily in `components/ui/`. To add new components from the library, you can use the `shadcn/ui` CLI tool via `pnpm`:
+
+```bash
+pnpm dlx shadcn-ui@latest add <component-name>
+```
+
+For example, to add the `tabs` component, run:
+
+```bash
+pnpm dlx shadcn-ui@latest add tabs
+```
+
+This command will add the necessary component file(s) to the `components/ui/` directory.
+
+## Other Components
+
+
+*   `Footer`: ([components/footer.tsx](mdc:components/footer.tsx)) is displayed at the bottom of the page.
