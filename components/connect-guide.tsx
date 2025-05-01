@@ -29,7 +29,6 @@ import {
 import { useProvisioner } from '@/lib/provisioner-context';
 import { toast } from 'sonner';
 import { scrollToAgentSelection } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 
 const CLIENT_OPTIONS = [
   { value: 'auto', label: 'Auto-Detect (Recommended)', cliValue: '' },
@@ -151,12 +150,6 @@ export function ConnectGuide() {
           <div>
             <CardTitle className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
               Quick Setup with CLI
-              <Badge
-                variant="outline"
-                className="ml-1 text-xs bg-blue-500/10 text-blue-400 border-blue-500/30"
-              >
-                Optional
-              </Badge>
             </CardTitle>
             <CardDescription className="text-base text-muted-foreground/90 mt-1">
               Use the command-line installer to quickly set up your MCP
