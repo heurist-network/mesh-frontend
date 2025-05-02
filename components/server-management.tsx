@@ -52,6 +52,7 @@ export function ServerManagement() {
   } = useProvisioner();
   const [isCreating, setIsCreating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const hasAgentChanges = useMemo(() => {
     return agentsToAdd.length > 0 || agentsToRemove.length > 0;
@@ -123,10 +124,17 @@ export function ServerManagement() {
         </div>
       </CardHeader>
 
-      <CardContent className="px-6 sm:px-8 pt-0 pb-6">
+      <CardContent className="px-6 sm:px-8 pt-0 pb-6 relative z-10">
         {activeServer ? (
-          <div className="rounded-lg border bg-card/50 p-6 backdrop-blur-sm">
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <motion.div
+            className="rounded-lg border bg-card/50 p-6 backdrop-blur-sm relative overflow-hidden"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_107%,rgba(205,241,56,0.03)_0%,rgba(0,255,100,0.05)_5%,rgba(0,255,100,0)_60%)]" />
+
+            <div className="flex flex-col md:flex-row md:items-center gap-4 relative z-10">
               <div className="bg-green-500/10 p-3 rounded-full shrink-0">
                 <Server className="size-8 text-green-500" />
               </div>
@@ -162,7 +170,8 @@ export function ServerManagement() {
                     </code>
                   </div>
 
-                  <div className="border border-green-500/20 rounded-md bg-green-500/5 p-3 mt-2 relative group overflow-hidden">
+                  <div className="border border-green-500/20 rounded-md bg-green-500/5 p-3 mt-2 relative group overflow-hidden hover:border-green-500/30 transition-colors">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_50%,rgba(205,241,56,0.03)_0%,rgba(0,255,100,0.03)_50%,transparent_100%)]" />
                     <AnimatePresence>
                       {copySuccess && (
                         <motion.div
@@ -182,7 +191,7 @@ export function ServerManagement() {
                       )}
                     </AnimatePresence>
                     <div
-                      className={`flex flex-col gap-1 ${copySuccess ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+                      className={`flex flex-col gap-1 ${copySuccess ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 relative z-10`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-green-400">
@@ -256,6 +265,7 @@ export function ServerManagement() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
+                    disabled={isDeleting}
                     className={buttonVariants({
                       variant: 'outline',
                       size: 'icon',
@@ -277,7 +287,14 @@ export function ServerManagement() {
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={deleteActiveServer}
+                      onClick={async () => {
+                        setIsDeleting(true);
+                        try {
+                          await deleteActiveServer();
+                        } finally {
+                          setIsDeleting(false);
+                        }
+                      }}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
                       Delete
@@ -286,9 +303,14 @@ export function ServerManagement() {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-          </div>
+          </motion.div>
         ) : (
-          <div className="rounded-lg border border-dashed p-10 text-center bg-card/50 backdrop-blur-sm">
+          <motion.div
+            className="rounded-lg border border-dashed p-10 text-center bg-card/50 backdrop-blur-sm relative overflow-hidden"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <div className="bg-muted/40 p-4 rounded-full mx-auto w-fit">
               <ServerOff className="size-12 text-muted-foreground/60" />
             </div>
@@ -297,11 +319,11 @@ export function ServerManagement() {
               Create a server with your selected agents to start using them
               through the Model Context Protocol
             </p>
-          </div>
+          </motion.div>
         )}
       </CardContent>
 
-      <CardFooter className="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <CardFooter className="px-6 sm:px-8 pb-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10">
         <AnimatePresence>
           {activeServer && !hasAgentChanges && selectedAgents.length > 0 && (
             <motion.div
@@ -320,7 +342,7 @@ export function ServerManagement() {
           )}
           {activeServer && hasAgentChanges && (
             <motion.div
-              className="w-full sm:flex-1 bg-amber-500/10 rounded-lg border border-amber-500/20 p-3 flex items-center gap-3 text-xs text-amber-300/90 overflow-hidden"
+              className="w-full sm:flex-1 bg-amber-500/10 rounded-lg border border-amber-500/20 p-3 flex items-center gap-3 text-xs text-amber-300/90 overflow-hidden relative"
               initial={{ opacity: 0, maxHeight: 0 }}
               animate={{ opacity: 1, maxHeight: '500px' }}
               exit={{ opacity: 0, maxHeight: 0 }}
@@ -336,7 +358,7 @@ export function ServerManagement() {
         <Button
           onClick={handleCreateServer}
           disabled={isButtonDisabled}
-          className={`w-full sm:w-auto rounded-full px-5 py-2.5 size-auto text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto transition-all ${
+          className={`w-full sm:w-auto rounded-full px-5 py-2.5 size-auto text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 sm:ml-auto transition-all relative overflow-hidden ${
             activeServer && hasAgentChanges
               ? 'bg-amber-500 text-black hover:bg-amber-600'
               : 'bg-[#cdf138] text-black hover:brightness-110'
