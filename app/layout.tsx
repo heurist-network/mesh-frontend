@@ -111,7 +111,7 @@ export default async function RootLayout({
                     'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
                   error: '!bg-destructive !text-destructive-foreground',
                   success:
-                    '!bg-[#cdf138]/10 !text-[#a5c72a] !border-[#cdf138]/20',
+                    '!bg-[#cdf138]/15 !text-[#a5c72a] !border-[#cdf138]/20',
                   warning:
                     '!bg-orange-400/10 !text-orange-400 !border-orange-400/20',
                   info: '!bg-blue-400/10 !text-blue-400 !border-blue-400/20',

@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure Guide
+
+This is a [Next.js](mdc:next.config.ts) project using the App Router convention (see the `app/` directory). It uses [pnpm](mdc:pnpm-lock.yaml) as the package manager.
+
+## Key Directories & API Routes:
+
+*   `app/`: Contains the main application code, including pages (like the main [page.tsx](mdc:app/page.tsx)) and API routes.
+    *   `app/api/`: Holds backend API endpoints, following Next.js App Router conventions.
+        *   `agents/`: API routes related to agents.
+            *   `route.ts`: ([app/api/agents/route.ts](mdc:app/api/agents/route.ts)) - Handles agent-related API requests (likely fetching agent details).
+        *   `servers/`: API routes for managing servers.
+            *   `list/route.ts`: ([app/api/servers/list/route.ts](mdc:app/api/servers/list/route.ts)) - Fetches the list of servers.
+            *   `create/route.ts`: ([app/api/servers/create/route.ts](mdc:app/api/servers/create/route.ts)) - Handles server creation requests.
+            *   `details/[serverId]/route.ts`: ([app/api/servers/details/[serverId]/route.ts](mdc:app/api/servers/details/[serverId]/route.ts)) - Fetches details for a specific server.
+            *   `delete/[serverId]/route.ts`: ([app/api/servers/delete/[serverId]/route.ts](mdc:app/api/servers/delete/[serverId]/route.ts)) - Handles server deletion requests.
+*   `components/`: Reusable React components, structured for clarity.
+    *   `components/ui/`: UI components, likely using [shadcn/ui](mdc:components.json) primitives, configured via `components.json`.
+*   `hooks/`: Custom React hooks to encapsulate stateful logic and side effects.
+*   `lib/`: Utility functions, shared logic (like context providers, e.g., [lib/provisioner-context.tsx](mdc:lib/provisioner-context.tsx)), and potentially constants or type definitions.
+*   `public/`: Static assets (images, fonts like in `public/fonts/`) accessible directly via URL.
+
