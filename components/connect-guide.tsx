@@ -164,12 +164,12 @@ export function ConnectGuide() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-5 rounded-lg border border-border/70 p-5 bg-background/50 backdrop-blur-sm relative overflow-hidden"
+          className="rounded-lg border border-border/70 p-5 bg-background/50 backdrop-blur-sm relative overflow-hidden"
         >
           <div className="absolute -right-6 -bottom-6 size-40 bg-gradient-to-br from-[#cdf138]/5 via-purple-500/5 to-blue-500/5 rounded-full blur-2xl" />
           <div className="absolute -left-4 -top-4 size-24 bg-gradient-to-br from-[#cdf138]/10 to-transparent rounded-full blur-3xl" />
 
-          <div className="bg-blue-500/10 rounded-lg border border-blue-400/30 p-3 mb-3 relative overflow-hidden">
+          <div className="bg-blue-500/10 rounded-lg border border-blue-400/30 p-3 mb-3 relative overflow-hidden mt-1">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_107%,rgba(0,120,255,0.05)_0%,rgba(0,80,255,0.1)_5%,rgba(0,80,255,0)_60%)]" />
             <motion.div
               className="absolute -left-20 -top-20 size-40 bg-blue-400/10 rounded-full blur-3xl"
@@ -204,7 +204,7 @@ export function ConnectGuide() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-amber-500/10 rounded-lg border border-amber-400/30 p-3 mb-3 relative overflow-hidden"
+              className="bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-amber-500/10 rounded-lg border border-amber-400/30 p-3 mb-3 relative overflow-hidden mt-5"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_107%,rgba(255,214,0,0.05)_0%,rgba(255,122,0,0.1)_5%,rgba(255,122,0,0)_60%)]" />
               <motion.div
@@ -243,7 +243,7 @@ export function ConnectGuide() {
             </motion.div>
           )}
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 z-10 relative">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 z-10 relative mt-5">
             <div className="space-y-2">
               <label
                 htmlFor="package-manager"
@@ -304,7 +304,7 @@ export function ConnectGuide() {
             </div>
           </div>
 
-          <div className="pt-2 relative z-10">
+          <div className="pt-2 relative z-10 mt-5">
             <div className="relative group">
               <pre
                 onClick={handleCopy}
@@ -378,7 +378,7 @@ export function ConnectGuide() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10 mt-5">
             <Button
               className="w-full sm:w-auto rounded-full px-5 py-2 h-auto bg-gradient-to-r from-[#cdf138] to-[#b1e745] text-black hover:brightness-110 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleCopy}
@@ -418,7 +418,7 @@ export function ConnectGuide() {
             </p>
           </div>
 
-          <div className="text-xs text-muted-foreground space-y-1 pt-1 relative z-10">
+          <div className="text-xs text-muted-foreground space-y-1 pt-1 relative z-10 mt-5">
             <p className="border-t border-border/40 pt-3">
               The installer will configure your MCP connection automatically. If
               you select Auto-Detect, it will scan for installed clients on your
