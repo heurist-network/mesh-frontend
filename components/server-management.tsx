@@ -100,11 +100,11 @@ export function ServerManagement() {
   return (
     <Card className="w-full overflow-hidden border-0 shadow-lg bg-gradient-to-br from-card/80 to-card">
       <CardHeader className="p-6 sm:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+        <div className="flex items-start gap-3">
           <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
             <Server className="size-5 text-primary" />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
               <CardTitle className="text-2xl sm:text-3xl font-bold">
                 Step 3. Create a dedicated MCP server

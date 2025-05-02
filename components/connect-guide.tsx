@@ -144,10 +144,10 @@ export function ConnectGuide() {
 
       <CardHeader className="p-6 sm:px-8">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-full bg-gradient-to-br from-[#cdf138]/40 to-primary/20 flex items-center justify-center">
-            <Terminal className="size-5 text-primary" />
+          <div className="size-8 sm:size-10 rounded-full bg-gradient-to-br from-[#cdf138]/40 to-primary/20 flex items-center justify-center shrink-0">
+            <Terminal className="size-4 sm:size-5 text-primary" />
           </div>
-          <div>
+          <div className="flex-1 min-w-0">
             <CardTitle className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
               Quick Setup with CLI
             </CardTitle>
