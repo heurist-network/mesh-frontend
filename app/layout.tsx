@@ -7,7 +7,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import './globals.css';
 
 const description =
-  'Build your personalized AI swarm with Heurist Mesh — configure dedicated MCP servers for 100+ Web3 tools tailored to your specific use cases.';
+  'Build your personalized AI swarm with Heurist Mesh - configure dedicated MCP servers for 100+ Web3 tools tailored to your use cases.';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mcp.heurist.ai'),
