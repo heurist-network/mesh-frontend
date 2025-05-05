@@ -6,8 +6,11 @@ import { motion } from 'framer-motion';
 const PLATFORMS = [
   'CoinGecko',
   'GoPlus',
+  'Pond AI',
   'DexScreener',
   'Elfa AI',
+  'UnifAI',
+  'AIXBT',
   'Zerion',
   'Space and Time',
   'CARV',
