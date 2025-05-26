@@ -29,9 +29,10 @@ export interface Agent {
   total_calls?: number;
   recommended?: boolean;
   tools?: any[];
+  credits?: number;
 }
 
-export interface ServerInfo {
+interface ServerInfo {
   server_id: string;
   endpoint: string;
   mcp_endpoint: string;

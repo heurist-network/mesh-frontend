@@ -1,10 +1,4 @@
-// MCP Provisioner API service
 import { apiCall } from './api-utils';
-
-interface CreateServerRequest {
-  server_type: string;
-  agents: string[];
-}
 
 interface ServerResponse {
   server_id: string;
@@ -41,11 +35,10 @@ interface Agent {
   is_updated?: boolean;
 }
 
-export interface AgentsResponse {
+interface AgentsResponse {
   agents: Agent[];
 }
 
-// Use relative API routes instead of direct external API calls to avoid CORS issues
 const API_BASE_URL = '/api';
 
 /**

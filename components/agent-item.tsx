@@ -9,6 +9,7 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
+import type { Agent } from '@/lib/provisioner-context';
 import { useProvisioner } from '@/lib/provisioner-context';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -31,18 +32,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
-
-export interface Agent {
-  id: string;
-  name: string;
-  author: string;
-  description: string;
-  tags: string[];
-  image_url?: string;
-  total_calls?: number;
-  recommended?: boolean;
-  tools?: any[];
-}
 
 interface AgentListItemProps {
   agent: Agent;
@@ -97,12 +86,23 @@ const AgentListItem: FC<AgentListItemProps> = ({
           <h3 className="text-sm font-medium leading-none truncate mr-1">
             {agent.name}
           </h3>
-          <Badge
-            variant="outline"
-            className="bg-primary/10 text-primary border-primary/20 px-1.5 py-0 h-4 text-[10px]"
-          >
-            1 credit/use
-          </Badge>
+          {agent.credits === 0 ? (
+            <Badge
+              variant="outline"
+              className="bg-green-500/10 text-green-600 border-green-500/20 px-1.5 py-0 h-4 text-[10px] font-medium"
+            >
+              Free!
+            </Badge>
+          ) : (
+            <Badge
+              variant="outline"
+              className="bg-primary/10 text-primary border-primary/20 px-1.5 py-0 h-4 text-[10px]"
+            >
+              {agent.credits !== undefined
+                ? `${agent.credits} credit/use${agent.credits !== 1 ? 's' : ''}`
+                : '1 credit/use'}
+            </Badge>
+          )}
           {agent.recommended && (
             <Badge
               variant="outline"
@@ -328,7 +328,9 @@ export const AgentItem: FC = () => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [viewType, setViewType] = useState<'all' | 'recommended'>('all');
+  const [viewType, setViewType] = useState<'all' | 'recommended' | 'free'>(
+    'all',
+  );
   const [detailAgent, setDetailAgent] = useState<Agent | null>(null);
 
   const { state } = useSidebar();
@@ -365,6 +367,8 @@ export const AgentItem: FC = () => {
 
     if (viewType === 'recommended') {
       result = result.filter((agent) => agent.recommended);
+    } else if (viewType === 'free') {
+      result = result.filter((agent) => agent.credits === 0);
     }
 
     if (searchQuery) {
@@ -458,6 +462,15 @@ export const AgentItem: FC = () => {
               >
                 <Users className="mr-1.5 size-3.5" />
                 All
+              </Button>
+              <Button
+                variant={viewType === 'free' ? 'default' : 'outline'}
+                size="sm"
+                className="h-9"
+                onClick={() => setViewType('free')}
+              >
+                <Star className="mr-1.5 size-3.5" />
+                Free
               </Button>
               <Button
                 variant={viewType === 'recommended' ? 'default' : 'outline'}
