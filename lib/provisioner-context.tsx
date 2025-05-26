@@ -29,6 +29,7 @@ export interface Agent {
   total_calls?: number;
   recommended?: boolean;
   tools?: any[];
+  credits?: number;
 }
 
 export interface ServerInfo {
