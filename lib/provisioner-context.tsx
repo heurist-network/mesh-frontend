@@ -32,7 +32,7 @@ export interface Agent {
   credits?: number;
 }
 
-export interface ServerInfo {
+interface ServerInfo {
   server_id: string;
   endpoint: string;
   mcp_endpoint: string;
