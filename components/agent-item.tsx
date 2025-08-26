@@ -108,7 +108,7 @@ const AgentListItem: FC<AgentListItemProps> = ({
               variant="outline"
               className="border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] px-1 py-0 h-4"
             >
-              <Star className="size-2.5 mr-0.5" /> Recommended
+              <Check className="size-2.5 mr-0.5" /> Verified
             </Badge>
           )}
         </div>
@@ -479,7 +479,7 @@ export const AgentItem: FC = () => {
                 onClick={() => setViewType('recommended')}
               >
                 <Trophy className="mr-1.5 size-3.5" />
-                Recommended
+                Verified
               </Button>
               <Button
                 variant="outline"
