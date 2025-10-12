@@ -19,6 +19,13 @@ import {
 } from './mcp-provisioner-api';
 import { toast } from 'sonner';
 
+// Priority agents that should appear at the top with "Recommended" badge
+export const PRIORITY_AGENTS = [
+  'TwitterIntelligenceAgent',
+  'TrendingTokenAgent',
+  'TokenResolverAgent',
+] as const;
+
 export interface Agent {
   id: string;
   name: string;
@@ -30,6 +37,11 @@ export interface Agent {
   recommended?: boolean;
   tools?: any[];
   credits?: number;
+  x402_config?: {
+    enabled: boolean;
+    default_price_usd?: string;
+    tool_prices?: Record<string, string>;
+  };
 }
 
 interface ServerInfo {
@@ -92,7 +104,23 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
       return Object.assign(metadata, agent.metadata);
     });
 
-    agentsArray.sort((a, b) => (b.total_calls || 0) - (a.total_calls || 0));
+    agentsArray.sort((a, b) => {
+      const aIsPriority = PRIORITY_AGENTS.includes(a.id as any);
+      const bIsPriority = PRIORITY_AGENTS.includes(b.id as any);
+
+      // If one is priority and the other isn't, priority comes first
+      if (aIsPriority && !bIsPriority) return -1;
+      if (!aIsPriority && bIsPriority) return 1;
+
+      // If both are priority, maintain their order in the PRIORITY_AGENTS array
+      if (aIsPriority && bIsPriority) {
+        return PRIORITY_AGENTS.indexOf(a.id as any) - PRIORITY_AGENTS.indexOf(b.id as any);
+      }
+
+      // Otherwise, sort by total_calls as before
+      return (b.total_calls || 0) - (a.total_calls || 0);
+    });
+
     return agentsArray.filter((item) => item.name && !(item as any).hidden);
   }, [allAgents]);
 

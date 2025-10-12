@@ -20,6 +20,7 @@ import {
 } from '@/lib/utils';
 import { Eye, EyeOff, KeyRound, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const isValidApiKey = (key: string): boolean => {
   if (!key || key.trim().length < 8) return false;
@@ -108,7 +109,7 @@ export function ApiKeyInput() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mt-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full sm:flex-1">
                   <Link
                     href="https://dev-api-form.heurist.ai/"
                     target="_blank"
@@ -146,6 +147,33 @@ export function ApiKeyInput() {
                       <span className="font-medium">Add More Credits</span>
                       <span className="text-xs text-muted-foreground">
                         Pay with crypto
+                      </span>
+                    </div>
+                    <ExternalLink className="ml-auto size-3 text-muted-foreground/70" />
+                  </Link>
+
+                  <Link
+                    href="https://www.x402scan.com/recipient/0x7d9d1821d15B9e0b8Ab98A058361233E255E405D/resources"
+                    target="_blank"
+                    className={buttonVariants({
+                      variant: 'outline',
+                      className:
+                        'justify-start border-primary/20 bg-gradient-to-r from-background/80 to-background/40 backdrop-blur hover:bg-primary/10 h-14 text-sm shadow-sm transition-all hover:shadow w-full sm:w-auto',
+                    })}
+                  >
+                    <div className="size-7 rounded-full bg-gradient-to-br from-blue-500/40 to-blue-500/20 flex items-center justify-center mr-2 overflow-hidden">
+                      <Image
+                        src="/x402-icon-blue.png"
+                        alt="X402"
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="flex flex-col items-start">
+                      <span className="font-medium">Use X402</span>
+                      <span className="text-xs text-muted-foreground">
+                        Pay per use with USDC on Base
                       </span>
                     </div>
                     <ExternalLink className="ml-auto size-3 text-muted-foreground/70" />

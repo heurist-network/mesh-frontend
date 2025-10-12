@@ -10,7 +10,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import type { Agent } from '@/lib/provisioner-context';
-import { useProvisioner } from '@/lib/provisioner-context';
+import { useProvisioner, PRIORITY_AGENTS } from '@/lib/provisioner-context';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Trophy,
@@ -110,6 +110,25 @@ const AgentListItem: FC<AgentListItemProps> = ({
             >
               <Check className="size-2.5 mr-0.5" /> Verified
             </Badge>
+          )}
+          {PRIORITY_AGENTS.includes(agent.id as any) && (
+            <Badge
+              variant="outline"
+              className="border-[#cdf138]/30 bg-[#cdf138]/10 text-[#cdf138] text-[10px] px-1 py-0 h-4"
+            >
+              <Check className="size-2.5 mr-0.5" /> Recommended
+            </Badge>
+          )}
+          {agent.x402_config?.enabled && (
+            <div className="h-4 border border-blue-500/20 rounded-sm overflow-hidden flex items-center justify-center">
+              <Image
+                src="/x402-button-small.jpg"
+                alt="X402 Payment Accepted"
+                width={52.7}
+                height={10.5}
+                className="h-full w-auto object-cover"
+              />
+            </div>
           )}
         </div>
 
