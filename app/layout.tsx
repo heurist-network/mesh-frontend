@@ -7,39 +7,39 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import './globals.css';
 
 const description =
-  'Build your personalized AI swarm with Heurist Mesh - configure dedicated MCP servers for 100+ Web3 tools tailored to your use cases.';
+  'The Web3 skills library for agents. Equip your AI with crypto market alpha. Create dedicated MCP servers with 100+ Web3 tools.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mcp.heurist.ai'),
-  title: 'Heurist MCP Portal',
+  metadataBase: new URL('https://mesh.heurist.ai'),
+  title: 'Heurist Mesh',
   description: description,
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://mcp.heurist.ai',
-    title: 'Heurist MCP Portal',
+    url: 'https://mesh.heurist.ai',
+    title: 'Heurist Mesh',
     description: description,
-    siteName: 'Heurist MCP Portal',
+    siteName: 'Heurist Mesh',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Heurist MCP Portal',
+        alt: 'Heurist Mesh',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Heurist MCP Portal',
+    title: 'Heurist Mesh',
     description: description,
     images: ['/og-image.png'],
     creator: '@heurist_ai',
   },
-  keywords: 'AI agents, Web3 MCP, Heurist Mesh, MCP, MCP Server, Crypto MCP',
+  keywords: 'AI agents, Web3 MCP, Heurist Mesh, MCP, AI Skills, Crypto Market Alpha, x402',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://mcp.heurist.ai',
+    canonical: 'https://mesh.heurist.ai',
   },
   authors: [{ name: 'Heurist AI' }],
   category: 'Technology',
