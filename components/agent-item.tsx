@@ -379,7 +379,7 @@ export const AgentItem: FC = () => {
   }, [allAgentsArray]);
 
   const uniqueAuthors = useMemo(() => {
-    const authors = allAgentsArray.map((agent) => agent.author);
+    const authors = allAgentsArray.map((agent) => toTitleCase(agent.author));
     return [...new Set(authors)].sort();
   }, [allAgentsArray]);
 
@@ -407,7 +407,9 @@ export const AgentItem: FC = () => {
     }
 
     if (selectedAuthor) {
-      result = result.filter((agent) => agent.author === selectedAuthor);
+      result = result.filter(
+        (agent) => toTitleCase(agent.author) === selectedAuthor,
+      );
     }
 
     return result;
