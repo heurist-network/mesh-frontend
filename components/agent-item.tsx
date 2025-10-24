@@ -32,6 +32,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
+
+const FEATURED_TAG = 'x402';
 
 const TagBadge: FC<{ tag: string; size?: 'sm' | 'md' }> = ({
   tag,
@@ -89,20 +92,34 @@ const FilterButton: FC<{
   isSelected: boolean;
   onClick: () => void;
   icon?: React.ReactNode;
-}> = ({ label, isSelected, onClick, icon }) => (
-  <button
-    type="button"
-    className={`px-2.5 py-1 text-[11px] font-medium rounded-full transition-all duration-200 flex items-center gap-1.5 ${
-      isSelected
-        ? 'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/20 scale-105'
-        : 'bg-secondary/60 text-secondary-foreground hover:bg-secondary hover:scale-105 border border-border/50'
-    }`}
-    onClick={onClick}
-  >
-    {icon}
-    {label}
-  </button>
-);
+}> = ({ label, isSelected, onClick, icon }) => {
+  const isFeatured = label.toLowerCase() === FEATURED_TAG;
+
+  return (
+    <button
+      type="button"
+      className={cn(
+        'px-2.5 py-1 text-[11px] font-medium rounded-full transition-all duration-200 flex items-center gap-1.5',
+        isSelected &&
+          !isFeatured &&
+          'bg-primary text-primary-foreground shadow-md ring-2 ring-primary/20 scale-105',
+        isSelected &&
+          isFeatured &&
+          'bg-blue-600 text-white shadow-md ring-2 ring-blue-500/40 scale-105',
+        !isSelected &&
+          !isFeatured &&
+          'bg-secondary/60 text-secondary-foreground hover:bg-secondary hover:scale-105 border border-border/50',
+        !isSelected &&
+          isFeatured &&
+          'bg-secondary/60 text-blue-400 hover:bg-secondary hover:scale-105 border border-blue-500/40 hover:border-blue-400/60',
+      )}
+      onClick={onClick}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+};
 
 interface AgentListItemProps {
   agent: Agent;
@@ -447,7 +464,13 @@ export const AgentItem: FC = () => {
 
   const uniqueTags = useMemo(() => {
     const allTags = allAgentsArray.flatMap((agent) => agent.tags);
-    return [...new Set(allTags)].sort();
+    return [...new Set(allTags)].sort((a, b) => {
+      const aIsFeatured = a.toLowerCase() === FEATURED_TAG;
+      const bIsFeatured = b.toLowerCase() === FEATURED_TAG;
+      if (aIsFeatured) return -1;
+      if (bIsFeatured) return 1;
+      return a.localeCompare(b);
+    });
   }, [allAgentsArray]);
 
   const uniqueAuthors = useMemo(() => {
