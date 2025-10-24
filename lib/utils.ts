@@ -26,13 +26,6 @@ export const setApiKey = (apiKey: string): void => {
 
 export const hasApiKey = (): boolean => Boolean(getApiKey());
 
-export const toTitleCase = (text: string): string => {
-  return text
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-};
-
 export const scrollToAgentSelection = (
   setOpenMobile?: (open: boolean) => void,
 ) => {

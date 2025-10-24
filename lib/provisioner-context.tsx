@@ -9,7 +9,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { getApiKey, hasApiKey, toTitleCase } from './utils';
+import { getApiKey, hasApiKey } from './utils';
 import {
   createServer,
   deleteServer,
@@ -101,13 +101,7 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
         recommended: false,
         tools: agent.tools || [],
       };
-      const mergedAgent = Object.assign(metadata, agent.metadata);
-      if (Array.isArray(mergedAgent.tags)) {
-        mergedAgent.tags = mergedAgent.tags.map((tag: string) =>
-          toTitleCase(tag),
-        );
-      }
-      return mergedAgent;
+      return Object.assign(metadata, agent.metadata);
     });
 
     agentsArray.sort((a, b) => {

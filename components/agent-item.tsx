@@ -32,7 +32,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
-import { toTitleCase } from '@/lib/utils';
 
 const TagBadge: FC<{ tag: string; size?: 'sm' | 'md' }> = ({
   tag,
@@ -448,8 +447,7 @@ export const AgentItem: FC = () => {
 
   const uniqueTags = useMemo(() => {
     const allTags = allAgentsArray.flatMap((agent) => agent.tags);
-    const titleCaseTags = allTags.map((tag) => toTitleCase(tag));
-    return [...new Set(titleCaseTags)].sort();
+    return [...new Set(allTags)].sort();
   }, [allAgentsArray]);
 
   const uniqueAuthors = useMemo(() => {
@@ -477,11 +475,17 @@ export const AgentItem: FC = () => {
     }
 
     if (selectedTag) {
-      result = result.filter((agent) => agent.tags.includes(selectedTag));
+      result = result.filter((agent) =>
+        agent.tags.some(
+          (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
+        ),
+      );
     }
 
     if (selectedAuthor) {
-      result = result.filter((agent) => agent.author === selectedAuthor);
+      result = result.filter(
+        (agent) => agent.author.toLowerCase() === selectedAuthor.toLowerCase(),
+      );
     }
 
     return result;
