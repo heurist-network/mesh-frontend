@@ -9,7 +9,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { getApiKey, hasApiKey } from './utils';
+import { getApiKey, hasApiKey, toTitleCase } from './utils';
 import {
   createServer,
   deleteServer,
@@ -101,7 +101,13 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
         recommended: false,
         tools: agent.tools || [],
       };
-      return Object.assign(metadata, agent.metadata);
+      const mergedAgent = Object.assign(metadata, agent.metadata);
+      if (Array.isArray(mergedAgent.tags)) {
+        mergedAgent.tags = mergedAgent.tags.map((tag: string) =>
+          toTitleCase(tag),
+        );
+      }
+      return mergedAgent;
     });
 
     agentsArray.sort((a, b) => {
@@ -114,7 +120,10 @@ export function ProvisionerProvider({ children }: { children: ReactNode }) {
 
       // If both are priority, maintain their order in the PRIORITY_AGENTS array
       if (aIsPriority && bIsPriority) {
-        return PRIORITY_AGENTS.indexOf(a.id as any) - PRIORITY_AGENTS.indexOf(b.id as any);
+        return (
+          PRIORITY_AGENTS.indexOf(a.id as any) -
+          PRIORITY_AGENTS.indexOf(b.id as any)
+        );
       }
 
       // Otherwise, sort by total_calls as before

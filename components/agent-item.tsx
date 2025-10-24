@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import { toTitleCase } from '@/lib/utils';
 
 interface AgentListItemProps {
   agent: Agent;
@@ -373,7 +374,8 @@ export const AgentItem: FC = () => {
 
   const uniqueTags = useMemo(() => {
     const allTags = allAgentsArray.flatMap((agent) => agent.tags);
-    return [...new Set(allTags)].sort();
+    const titleCaseTags = allTags.map((tag) => toTitleCase(tag));
+    return [...new Set(titleCaseTags)].sort();
   }, [allAgentsArray]);
 
   const uniqueAuthors = useMemo(() => {
